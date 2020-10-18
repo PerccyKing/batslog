@@ -1,0 +1,37 @@
+<idea-plugin>
+    <id>cn.com.pism.batslog</id>
+    <name>batslog</name>
+    <vendor email="batslog@pism.com.cn" url="http://www.pism.com.cn">PISM</vendor>
+
+    <description><![CDATA[
+    mybatis 日志监控插件，格式化输出mybatis的SQL语句。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <!--<action id="$ShowMe" class="cn.com.pism.batslog.action.ShowMe" text="提取SQL"/>
+
+        <group id="BatsLog" text="格式化">
+            <separator/>
+            <reference ref="$ShowMe"/>
+            <separator/>
+
+            <add-to-group group-id="BasicEditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="Diff.EditorPopupMenu" anchor="first"/>
+        </group>-->
+        <action id="$FormatSql" class="cn.com.pism.batslog.action.FormatSqlAction" text="格式化sql"
+                description="将mybatis打印的SQL进行格式化">
+            <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
