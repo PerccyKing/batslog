@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.util.SqlFormatUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -18,12 +19,11 @@ public class FormatSqlAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        log.info("hello");
         //获取编辑器对象
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         SelectionModel selectionModel = editor.getSelectionModel();
         String selectedText = selectionModel.getSelectedText();
-        System.out.println(selectedText);
+        SqlFormatUtils.format(selectedText);
 
     }
 }
