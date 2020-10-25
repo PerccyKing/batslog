@@ -13,6 +13,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <console.folding implementation="cn.com.pism.batslog.points.BatsLogConsoleFolding"/>
+
+        <toolWindow id="BatsLog" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"/>
     </extensions>
 
     <actions>

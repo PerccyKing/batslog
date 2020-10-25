@@ -19,11 +19,9 @@ public class FormatSqlAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        //获取编辑器对象
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         SelectionModel selectionModel = editor.getSelectionModel();
         String selectedText = selectionModel.getSelectedText();
         SqlFormatUtils.format(selectedText);
-
     }
 }
