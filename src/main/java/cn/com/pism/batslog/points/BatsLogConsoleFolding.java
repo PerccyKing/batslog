@@ -1,21 +1,12 @@
 package cn.com.pism.batslog.points;
 
-import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate;
+import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.SqlFormatUtils;
 import com.intellij.execution.ConsoleFolding;
-import com.intellij.execution.actions.ConsoleActionsPostProcessor;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import static cn.com.pism.batslog.util.BatsLogUtil.*;
 
 /**
  * @author PerccyKing
@@ -31,7 +22,22 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
      */
     @Override
     public boolean shouldFoldLine(@NotNull Project project, @NotNull String line) {
-        System.out.println(line);
+        line = line.replace("\n", "");
+        if (BatsLogUtil.TAIL_STATUS) {
+            if (line.contains(PREPARING) && SOURCE_SQL_LIST.size() == 0) {
+                SOURCE_SQL_LIST.add(line);
+            } else if (SOURCE_SQL_LIST.size() >= 2) {
+                SOURCE_SQL_LIST.clear();
+            }
+
+            if (line.contains(PARAMETERS) && SOURCE_SQL_LIST.size() != 0) {
+                SOURCE_SQL_LIST.add(line);
+                if (SOURCE_SQL_LIST.size() == 2) {
+                    SqlFormatUtils.format(String.join("\n", SOURCE_SQL_LIST));
+                    SOURCE_SQL_LIST.clear();
+                }
+            }
+        }
         return super.shouldFoldLine(project, line);
     }
 }

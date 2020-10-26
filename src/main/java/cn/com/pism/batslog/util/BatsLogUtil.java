@@ -22,6 +22,11 @@ public class BatsLogUtil {
     public static Boolean TAIL_STATUS = Boolean.FALSE;
     public static ConsoleView CONSOLE_VIEW;
 
+    public static String PREPARING = ": ==>  Preparing:";
+    public static String PARAMETERS = ": ==> Parameters:";
+
+    public static List<String> SOURCE_SQL_LIST = new ArrayList<>();
+
     static {
         List<AnAction> anActions = new ArrayList<>();
         anActions.add(new StartTailAction(StringUtil.encoding("启动"), StringUtil.encoding("开启SQL监听"), AllIcons.Actions.Execute));

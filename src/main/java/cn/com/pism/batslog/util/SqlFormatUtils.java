@@ -8,6 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.com.pism.batslog.util.BatsLogUtil.PARAMETERS;
+import static cn.com.pism.batslog.util.BatsLogUtil.PREPARING;
+
 /**
  * @author PerccyKing
  * @version 0.0.1
@@ -17,16 +20,14 @@ import java.util.List;
 public class SqlFormatUtils {
     public static void format(String str) {
         //从第一个====>  Preparing:开始
-        String p = ": ==>  Preparing:";
         int start = StringUtils.indexOf(str, ": ==>  Preparing:");
-        String subStr = str.substring(start + p.getBytes().length);
+        String subStr = str.substring(start + PREPARING.getBytes().length);
         int sqlEnd = StringUtils.indexOf(subStr, "\n");
         String sql = subStr.substring(0, sqlEnd);
         //参数
         subStr = subStr.substring(sqlEnd);
-        String param = ": ==> Parameters:";
-        int paramStart = StringUtils.indexOf(subStr, param);
-        subStr = subStr.substring(paramStart + param.getBytes().length);
+        int paramStart = StringUtils.indexOf(subStr, PARAMETERS);
+        subStr = subStr.substring(paramStart + PARAMETERS.getBytes().length);
         int paramEnd = StringUtils.indexOf(subStr, "\n");
         String params = subStr.substring(0, paramEnd);
 
@@ -47,7 +48,7 @@ public class SqlFormatUtils {
         BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding(formatSql + "\n"), ConsoleViewContentType.USER_INPUT);
 
         String substring = subStr.substring(paramEnd);
-        if (StringUtils.indexOf(substring, p) > 0) {
+        if (StringUtils.indexOf(substring, PREPARING) > 0) {
             format(subStr);
         }
     }
