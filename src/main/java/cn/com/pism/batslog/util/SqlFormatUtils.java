@@ -2,6 +2,7 @@ package cn.com.pism.batslog.util;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -42,8 +43,8 @@ public class SqlFormatUtils {
         }
 
         String formatSql = SQLUtils.format(sql, JdbcConstants.MYSQL, paramList);
-        System.out.println(formatSql);
-        System.out.println("=============");
+        BatsLogUtil.CONSOLE_VIEW.print("*******************************************\n", ConsoleViewContentType.ERROR_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding(formatSql + "\n"), ConsoleViewContentType.USER_INPUT);
 
         String substring = subStr.substring(paramEnd);
         if (StringUtils.indexOf(substring, p) > 0) {

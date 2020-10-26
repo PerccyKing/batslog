@@ -20,12 +20,12 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="2f685" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+              <grid id="61817" binding="sqlPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints/>
-                <properties>
-                  <editable value="false"/>
-                </properties>
-              </component>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </scrollpane>
         </children>

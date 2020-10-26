@@ -1,17 +1,13 @@
 package cn.com.pism.batslog.action;
 
-import cn.com.pism.batslog.util.StringUtil;
-import com.intellij.icons.AllIcons;
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.util.NlsActions;
-import com.intellij.openapi.wm.ToolWindow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author PerccyKing
@@ -21,7 +17,6 @@ import java.util.List;
  */
 public class SuspendTailAction extends AnAction {
 
-    private ToolWindow toolWindow;
 
     /**
      * Implement this method to provide your action handler.
@@ -30,11 +25,8 @@ public class SuspendTailAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        List<AnAction> anActions = new ArrayList<>();
-        StartTailAction suspendTailAction = new StartTailAction(StringUtil.encoding("启动"), StringUtil.encoding("开启SQL监听"), AllIcons.Actions.Execute, toolWindow);
-        anActions.add(suspendTailAction);
-        anActions.add(new ClearAllAction(StringUtil.encoding("清空面板"), StringUtil.encoding("开启SQL监听"), AllIcons.Actions.GC));
-        toolWindow.setTitleActions(anActions);
+        BatsLogUtil.TAIL_STATUS = Boolean.FALSE;
+        BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.START_ACTION);
     }
 
     /**
@@ -46,8 +38,7 @@ public class SuspendTailAction extends AnAction {
      *                    the status bar when presentation has focus
      * @param icon        Action's icon
      */
-    public SuspendTailAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description, @Nullable Icon icon, ToolWindow toolWindow) {
+    public SuspendTailAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description, @Nullable Icon icon) {
         super(text, description, icon);
-        this.toolWindow = toolWindow;
     }
 }
