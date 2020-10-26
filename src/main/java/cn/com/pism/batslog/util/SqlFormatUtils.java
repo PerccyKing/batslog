@@ -19,8 +19,9 @@ import static cn.com.pism.batslog.util.BatsLogUtil.PREPARING;
  */
 public class SqlFormatUtils {
     public static void format(String str) {
+        str = str + "\nend";
         //从第一个====>  Preparing:开始
-        int start = StringUtils.indexOf(str, ": ==>  Preparing:");
+        int start = StringUtils.indexOf(str, PREPARING);
         String subStr = str.substring(start + PREPARING.getBytes().length);
         int sqlEnd = StringUtils.indexOf(subStr, "\n");
         String sql = subStr.substring(0, sqlEnd);
@@ -46,6 +47,7 @@ public class SqlFormatUtils {
         String formatSql = SQLUtils.format(sql, JdbcConstants.MYSQL, paramList);
         BatsLogUtil.CONSOLE_VIEW.print("*******************************************\n", ConsoleViewContentType.ERROR_OUTPUT);
         BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding(formatSql + "\n"), ConsoleViewContentType.USER_INPUT);
+        BatsLogUtil.CONSOLE_VIEW.scrollToEnd();
 
         String substring = subStr.substring(paramEnd);
         if (StringUtils.indexOf(substring, PREPARING) > 0) {
