@@ -37,7 +37,7 @@ public class SqlFormatUtils {
         List<Object> paramList = new ArrayList<>();
         for (String s : paramArr) {
             if (StringUtils.isNotBlank(s)) {
-                String par = s.substring(0, s.trim().indexOf("(") - 1);
+                String par = s.substring(0, s.trim().indexOf("(") + 1);
                 paramList.add(par.trim());
             } else {
                 paramList.add("");
