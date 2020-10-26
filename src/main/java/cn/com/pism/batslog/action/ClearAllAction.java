@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.util.NlsActions;
@@ -22,7 +23,7 @@ public class ClearAllAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-
+        BatsLogUtil.CONSOLE_VIEW.clear();
     }
 
     /**
