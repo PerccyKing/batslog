@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '0.0.1-SNAPSHOT'
+version '0.0.1-1143-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -29,4 +29,8 @@ patchPluginXml {
     changeNotes """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

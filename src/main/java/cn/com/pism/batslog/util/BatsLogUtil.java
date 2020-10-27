@@ -9,6 +9,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.wm.ToolWindow;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class BatsLogUtil {
     public static ToolWindow TOOL_WINDOW;
     public static Boolean TAIL_STATUS = Boolean.FALSE;
     public static ConsoleViewImpl CONSOLE_VIEW;
+    public static JScrollBar PANE_BAR;
 
     public static String PREPARING = "Preparing:";
     public static String PARAMETERS = "Parameters:";

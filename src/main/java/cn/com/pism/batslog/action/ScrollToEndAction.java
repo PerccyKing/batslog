@@ -21,8 +21,7 @@ public class ScrollToEndAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        BatsLogUtil.CONSOLE_VIEW.scrollToEnd();
-        BatsLogUtil.CONSOLE_VIEW.scrollTo(10);
+        BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
     }
 
     /**

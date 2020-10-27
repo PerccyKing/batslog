@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.util;
 
+import cn.com.pism.batslog.constants.BatsLogConstant;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -45,13 +46,17 @@ public class SqlFormatUtils {
         }
 
         String formatSql = SQLUtils.format(sql, JdbcConstants.MYSQL, paramList);
-        BatsLogUtil.CONSOLE_VIEW.print("*******************************************\n", ConsoleViewContentType.ERROR_OUTPUT);
-        BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding(formatSql + "\n"), ConsoleViewContentType.USER_INPUT);
-        BatsLogUtil.CONSOLE_VIEW.scrollToEnd();
+        printSql(formatSql, "");
 
         String substring = subStr.substring(paramEnd);
         if (StringUtils.indexOf(substring, PREPARING) > 0) {
             format(subStr);
         }
+    }
+
+    private static void printSql(String sql, String methodName) {
+        BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding(sql + "\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
     }
 }

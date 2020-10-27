@@ -12,6 +12,8 @@ import lombok.Data;
 
 import javax.swing.*;
 
+import static cn.com.pism.batslog.constants.BatsLogConstant.BATS_LOG;
+
 /**
  * @author PerccyKing
  * @version 0.0.1
@@ -22,6 +24,7 @@ import javax.swing.*;
 public class FormatConsole {
     private JPanel root;
     private JPanel sqlPanel;
+    private JScrollPane sqlPane;
 
     public FormatConsole(Project project) {
         SimpleToolWindowPanel simpleToolWindowPanel = new SimpleToolWindowPanel(false, true);
@@ -30,7 +33,10 @@ public class FormatConsole {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(simpleToolWindowPanel, "", false);
         sqlPanel.add(content.getComponent());
-        consoleView.print(StringUtil.encoding("BatsLog已准备成功\n"), ConsoleViewContentType.ERROR_OUTPUT);
+        JScrollBar paneBar = sqlPane.getVerticalScrollBar();
+        BatsLogUtil.PANE_BAR = paneBar;
+        paneBar.setUnitIncrement(16);
+        consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
         BatsLogUtil.CONSOLE_VIEW = consoleView;
     }
 }
