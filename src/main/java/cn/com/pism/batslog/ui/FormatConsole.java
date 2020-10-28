@@ -1,4 +1,4 @@
-package cn.com.pism.batslog.window;
+package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;

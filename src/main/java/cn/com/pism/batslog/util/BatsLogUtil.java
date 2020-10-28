@@ -7,6 +7,7 @@ import cn.com.pism.batslog.action.SuspendTailAction;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 
 import javax.swing.*;
