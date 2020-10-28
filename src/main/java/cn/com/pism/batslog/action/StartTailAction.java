@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Objects;
 
 /**
  * @author wangyihuai
@@ -20,7 +21,7 @@ public class StartTailAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         BatsLogUtil.TAIL_STATUS = Boolean.TRUE;
-        BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding("SQL监听已启动\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()).getName()).print(StringUtil.encoding("SQL监听已启动\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
         BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.SUSPEND_ACTION);
     }
 

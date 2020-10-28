@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Objects;
 
 /**
  * @author PerccyKing
@@ -28,7 +29,7 @@ public class SuspendTailAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         BatsLogUtil.TAIL_STATUS = Boolean.FALSE;
-        BatsLogUtil.CONSOLE_VIEW.print(StringUtil.encoding("SQL监听已停止\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()).getName()).print(StringUtil.encoding("SQL监听已停止\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
         BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.START_ACTION);
     }
 

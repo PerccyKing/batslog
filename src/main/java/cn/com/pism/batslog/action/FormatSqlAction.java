@@ -22,6 +22,6 @@ public class FormatSqlAction extends AnAction {
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         SelectionModel selectionModel = editor.getSelectionModel();
         String selectedText = selectionModel.getSelectedText();
-        SqlFormatUtils.format(selectedText);
+        SqlFormatUtils.format(selectedText,e.getProject());
     }
 }

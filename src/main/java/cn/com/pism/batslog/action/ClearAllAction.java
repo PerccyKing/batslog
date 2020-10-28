@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Objects;
 
 /**
  * @author PerccyKing
@@ -23,7 +24,7 @@ public class ClearAllAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        BatsLogUtil.CONSOLE_VIEW.clear();
+        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()).getName()).clear();
     }
 
     /**

@@ -7,13 +7,13 @@ import cn.com.pism.batslog.action.SuspendTailAction;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.intellij.icons.AllIcons.RunConfigurations.Scroll_down;
 
@@ -26,9 +26,8 @@ public class BatsLogUtil {
     public static List<AnAction> SUSPEND_ACTION;
     public static ToolWindow TOOL_WINDOW;
     public static Boolean TAIL_STATUS = Boolean.FALSE;
-    public static ConsoleViewImpl CONSOLE_VIEW;
+    public static Map<String, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
     public static JScrollBar PANE_BAR;
-    public static Project PROJECT;
 
     public static String PREPARING = "Preparing:";
     public static String PARAMETERS = "Parameters:";

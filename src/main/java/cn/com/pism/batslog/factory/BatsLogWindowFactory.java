@@ -22,7 +22,6 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         BatsLogUtil.TOOL_WINDOW = toolWindow;
-        BatsLogUtil.PROJECT = project;
         FormatConsole formatConsole = new FormatConsole(project);
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();

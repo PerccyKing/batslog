@@ -33,7 +33,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
             if (line.contains(PARAMETERS) && SOURCE_SQL_LIST.size() != 0) {
                 SOURCE_SQL_LIST.add(line);
                 if (SOURCE_SQL_LIST.size() == 2) {
-                    SqlFormatUtils.format(String.join("\n", SOURCE_SQL_LIST));
+                    SqlFormatUtils.format(String.join("\n", SOURCE_SQL_LIST), project);
                     SOURCE_SQL_LIST.clear();
                 }
             }

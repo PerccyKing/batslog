@@ -37,6 +37,6 @@ public class FormatConsole {
         BatsLogUtil.PANE_BAR = paneBar;
         paneBar.setUnitIncrement(16);
         consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
-        BatsLogUtil.CONSOLE_VIEW = consoleView;
+        BatsLogUtil.CONSOLE_VIEW_MAP.put(project.getName(), consoleView);
     }
 }
