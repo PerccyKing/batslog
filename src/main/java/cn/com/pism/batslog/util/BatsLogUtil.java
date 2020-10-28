@@ -7,6 +7,7 @@ import cn.com.pism.batslog.action.SuspendTailAction;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 
@@ -27,6 +28,7 @@ public class BatsLogUtil {
     public static Boolean TAIL_STATUS = Boolean.FALSE;
     public static ConsoleViewImpl CONSOLE_VIEW;
     public static JScrollBar PANE_BAR;
+    public static Project PROJECT;
 
     public static String PREPARING = "Preparing:";
     public static String PARAMETERS = "Parameters:";

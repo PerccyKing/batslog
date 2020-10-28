@@ -38,6 +38,10 @@
                       <text value="数据库类型"/>
                     </properties>
                   </component>
+                  <component id="184f6" class="javax.swing.JComboBox" binding="dbTypeBox">
+                    <constraints/>
+                    <properties/>
+                  </component>
                 </children>
               </grid>
             </children>

@@ -1,9 +1,9 @@
 package cn.com.pism.batslog.factory;
 
-import cn.com.pism.batslog.util.BatsLogUtil;
-import cn.com.pism.batslog.util.StringUtil;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
+import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -22,6 +22,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         BatsLogUtil.TOOL_WINDOW = toolWindow;
+        BatsLogUtil.PROJECT = project;
         FormatConsole formatConsole = new FormatConsole(project);
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();

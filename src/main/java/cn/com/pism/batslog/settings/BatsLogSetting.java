@@ -3,6 +3,7 @@ package cn.com.pism.batslog.settings;
 import cn.com.pism.batslog.enums.DbType;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,7 +17,11 @@ public class BatsLogSetting {
 
     public static DbType getDbType(@NotNull Project project) {
         String dbName = PropertiesComponent.getInstance(project).getValue(project.getName() + SELECTED_TYPE);
-        return DbType.getByName(dbName);
+        if (StringUtils.isNotBlank(dbName)) {
+            return DbType.getByName(dbName);
+        } else {
+            return DbType.NONE;
+        }
     }
 
     public static void setDbType(@NotNull Project project, DbType value) {

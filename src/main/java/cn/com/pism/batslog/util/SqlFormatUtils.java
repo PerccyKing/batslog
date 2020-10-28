@@ -1,6 +1,8 @@
 package cn.com.pism.batslog.util;
 
 import cn.com.pism.batslog.constants.BatsLogConstant;
+import cn.com.pism.batslog.enums.DbType;
+import cn.com.pism.batslog.settings.BatsLogSetting;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -45,7 +47,13 @@ public class SqlFormatUtils {
             }
         }
 
-        String formatSql = SQLUtils.format(sql, JdbcConstants.MYSQL, paramList);
+        String dbTypeStr = JdbcConstants.MYSQL;
+        DbType dbType = BatsLogSetting.getDbType(BatsLogUtil.PROJECT);
+        if (!DbType.NONE.equals(dbType)) {
+            dbTypeStr = dbType.getType();
+        }
+
+        String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
         printSql(formatSql, "");
 
         String substring = subStr.substring(paramEnd);
