@@ -2,6 +2,7 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import lombok.Data;
 
@@ -22,9 +23,11 @@ public class SettingForm {
     public SettingForm(Project project) {
         List<DbType> radioButtons = DbType.getRadioButtons();
         radioButtons.forEach(rb -> {
-            JLabel jLabel = new JLabel(rb.getName());
-            jLabel.setIcon(rb.getIcon());
-            dbTypeBox.addItem(rb);
+            if (!DbType.NONE.equals(rb)) {
+                JLabel jLabel = new JLabel(rb.getName());
+                jLabel.setIcon(rb.getIcon());
+                dbTypeBox.addItem(rb);
+            }
         });
         DbType dbType = BatsLogSetting.getDbType(project);
         if (dbType.equals(DbType.NONE)) {
@@ -47,6 +50,9 @@ public class SettingForm {
         public Component getListCellRendererComponent(JList<? extends T> list, T value, int index, boolean isSelected, boolean cellHasFocus) {
             if (!value.equals(DbType.NONE)) {
                 this.setIcon(value.getIcon());
+                if (value.getIcon() == null) {
+                    this.setIcon(AllIcons.Javaee.Home);
+                }
                 this.setText(value.getName());
             }
             return this;
