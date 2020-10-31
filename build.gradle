@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.10.28.1150-SNAPSHOT'
+version '20.10.31.1131-Release'
 
 repositories {
     mavenCentral()
@@ -27,8 +27,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      <h1>$version</h1>
+
+<ul><li>选取选取SQL日志格式化输出</li><li>自动监听SQL日志格式化输出</li></ul>
+      """
 }
 
 tasks.withType(JavaCompile) {

@@ -4,7 +4,13 @@
     <vendor email="batslog@pism.com.cn" url="http://www.pism.com.cn">PISM</vendor>
 
     <description><![CDATA[
-    mybatis 日志监控插件，格式化输出mybatis的SQL语句。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+<h1>batslog</h1>
+
+<blockquote><p>mybatis sql 格式化插件 mybatis log 格式化插件</p></blockquote>
+
+<h2>功能</h2>
+
+<ol><li>选取SQL格式化SQL</li><li>自动读取打印的SQL日志，并格式化输出</li><li>支持多种数据库（MySQL、Oracle、SqlServer……）</li></ol>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
