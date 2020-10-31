@@ -15,7 +15,8 @@
         <!-- Add your extensions here -->
         <console.folding implementation="cn.com.pism.batslog.points.BatsLogConsoleFolding"/>
 
-        <toolWindow id="BatsLog" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"/>
+        <toolWindow id="BatsLog" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"
+        icon="BatsLogIcons.BATS_LOG"/>
     </extensions>
 
     <actions>
@@ -33,7 +34,9 @@
             <add-to-group group-id="Diff.EditorPopupMenu" anchor="first"/>
         </group>-->
         <action id="$FormatSql" class="cn.com.pism.batslog.action.FormatSqlAction" text="格式化sql"
-                description="将mybatis打印的SQL进行格式化">
+                description="将mybatis打印的SQL进行格式化"
+                icon="BatsLogIcons.BATS_LOG"
+        >
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
         </action>
     </actions>

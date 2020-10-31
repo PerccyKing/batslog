@@ -2,8 +2,8 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
+import icons.BatsLogIcons;
 import lombok.Data;
 
 import javax.swing.*;
@@ -51,7 +51,7 @@ public class SettingForm {
             if (!value.equals(DbType.NONE)) {
                 this.setIcon(value.getIcon());
                 if (value.getIcon() == null) {
-                    this.setIcon(AllIcons.Javaee.Home);
+                    this.setIcon(BatsLogIcons.BATS_LOG);
                 }
                 this.setText(value.getName());
             }
