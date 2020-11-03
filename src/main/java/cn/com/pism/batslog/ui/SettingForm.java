@@ -3,11 +3,16 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.ColorChooser;
+import com.intellij.ui.JBColor;
+import com.intellij.util.ui.JBUI;
 import icons.BatsLogIcons;
 import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
@@ -19,6 +24,9 @@ public class SettingForm {
     private JPanel root;
     private JPanel radioButtonPanel;
     private JComboBox<DbType> dbTypeBox;
+    private ColorButton keyWord;
+
+    public static Color myColor;
 
     public SettingForm(Project project) {
         List<DbType> radioButtons = DbType.getRadioButtons();
@@ -42,6 +50,61 @@ public class SettingForm {
         dbTypeBox.setRenderer(dbTypeRender);
     }
 
+
+    private static class ColorButton extends JButton {
+        @Override
+        protected void init(String text, Icon icon) {
+            super.init(text, icon);
+        }
+
+        ColorButton() {
+            setMargin(JBUI.emptyInsets());
+            setFocusable(false);
+            setDefaultCapable(false);
+            setFocusable(false);
+            MouseAdapter adapter = new MouseAdapter() {
+                /**
+                 * {@inheritDoc}
+                 *
+                 * @param e
+                 */
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Color color = ColorChooser.chooseColor(new JPanel(), "选择颜色", myColor);
+                    if (color != null) {
+                        myColor = color;
+                    }
+                    super.mouseClicked(e);
+                }
+            };
+            addMouseListener(adapter);
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            final Color color = g.getColor();
+            g.setColor(myColor);
+            g.fillRect(0, 0, 12, 12);
+            g.setColor(color);
+        }
+
+        @Override
+        public Dimension getMinimumSize() {
+            return getPreferredSize();
+        }
+
+        @Override
+        public Dimension getMaximumSize() {
+            return getPreferredSize();
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(12, 12);
+        }
+
+
+    }
 
     protected static class DbTypeRender<T extends DbType> extends JLabel implements ListCellRenderer<T> {
 
