@@ -4,7 +4,6 @@ import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
-import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import icons.BatsLogIcons;
 import lombok.Data;
@@ -25,8 +24,6 @@ public class SettingForm {
     private JPanel radioButtonPanel;
     private JComboBox<DbType> dbTypeBox;
     private ColorButton keyWord;
-
-    public static Color myColor;
 
     public SettingForm(Project project) {
         List<DbType> radioButtons = DbType.getRadioButtons();
@@ -52,6 +49,9 @@ public class SettingForm {
 
 
     private static class ColorButton extends JButton {
+
+        private Color myColor;
+
         @Override
         protected void init(String text, Icon icon) {
             super.init(text, icon);
