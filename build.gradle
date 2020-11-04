@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.11.3.0900-Release'
+version '20.11.4.0853-Release'
 
 repositories {
     mavenCentral()
@@ -30,17 +30,24 @@ patchPluginXml {
 <h1>$version</h1>
 
 <ul>
-<li>添加英文描述信息</li>
+<li>Exchange Chinese and English description position</li>
+<li>切换中文英文描述信息位置</li>
+</ul>
+
+<h1>20.11.3.0900-Release</h1>
+
+<ul>
 <li>Add English description information</li>
+<li>添加英文描述信息</li>
 </ul>
 
 <h1>20.10.31.1131-Release</h1>
 
 <ul>
-<li>选取SQL日志格式化输出</li>
-<li>自动监听SQL日志格式化输出</li>
 <li>Select SQL log format output</li>
 <li>Automatic monitoring SQL log formatted output</li>
+<li>选取SQL日志格式化输出</li>
+<li>自动监听SQL日志格式化输出</li>
 </ul>
       """
 }
