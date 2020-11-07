@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.11.4.0853-Release'
+version '20.11.4.1935-Release'
 
 repositories {
     mavenCentral()
@@ -28,6 +28,12 @@ intellij {
 patchPluginXml {
     changeNotes """
 <h1>$version</h1>
+
+<ul>
+<li>change url to github</li>
+</ul>
+
+<h1>20.11.4.0853-Release</h1>
 
 <ul>
 <li>Exchange Chinese and English description position</li>

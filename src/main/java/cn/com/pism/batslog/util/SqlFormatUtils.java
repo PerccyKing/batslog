@@ -7,6 +7,7 @@ import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ import static cn.com.pism.batslog.util.BatsLogUtil.PREPARING;
  */
 public class SqlFormatUtils {
     public static void format(String str, Project project) {
+        format(str, project, Boolean.TRUE);
+    }
+
+    public static void format(String str, Project project, Boolean printToConsole) {
         str = str + "\nend";
         //从第一个====>  Preparing:开始
         int start = StringUtils.indexOf(str, PREPARING);
@@ -55,17 +60,27 @@ public class SqlFormatUtils {
         }
 
         String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
-        printSql(formatSql, "", project);
+        if (printToConsole) {
+            printSql(formatSql, "", project);
+        } else {
+            //放入缓存
+            List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
+            if (!CollectionUtils.isNotEmpty(sqlCache)) {
+                sqlCache = new ArrayList<>();
+            }
+            sqlCache.add(formatSql);
+            BatsLogUtil.SQL_CACHE.put(project, sqlCache);
+        }
 
         String substring = subStr.substring(paramEnd);
         if (StringUtils.indexOf(substring, PREPARING) > 0) {
-            format(subStr, project);
+            format(subStr, project, printToConsole);
         }
     }
 
     private static void printSql(String sql, String methodName, Project project) {
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(project.getName()).print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(project.getName()).print(StringUtil.encoding(sql + "\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW_MAP.get(project).print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW_MAP.get(project).print(StringUtil.encoding(sql + "\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
         BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
     }
 }

@@ -7,6 +7,7 @@ import cn.com.pism.batslog.action.SuspendTailAction;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 
 import javax.swing.*;
@@ -26,13 +27,15 @@ public class BatsLogUtil {
     public static List<AnAction> SUSPEND_ACTION;
     public static ToolWindow TOOL_WINDOW;
     public static Boolean TAIL_STATUS = Boolean.FALSE;
-    public static Map<String, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
+    public static Map<Project, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
     public static JScrollBar PANE_BAR;
 
     public static String PREPARING = "Preparing:";
     public static String PARAMETERS = "Parameters:";
 
     public static List<String> SOURCE_SQL_LIST = new ArrayList<>();
+
+    public static Map<Project, List<String>> SQL_CACHE = new HashMap<>();
 
     static {
         ClearAllAction clearAllAction = new ClearAllAction(StringUtil.encoding("清空面板"), StringUtil.encoding("清空面板"), AllIcons.Actions.GC);
