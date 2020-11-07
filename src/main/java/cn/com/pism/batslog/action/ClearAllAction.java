@@ -24,7 +24,7 @@ public class ClearAllAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()).getName()).clear();
+        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject())).clear();
     }
 
     /**

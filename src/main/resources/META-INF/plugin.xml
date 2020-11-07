@@ -1,16 +1,25 @@
 <idea-plugin>
     <id>cn.com.pism.batslog</id>
-    <name>batslog</name>
-    <vendor email="batslog@pism.com.cn" url="http://www.pism.com.cn">PISM</vendor>
+    <name>Batslog</name>
+    <vendor email="batslog@pism.com.cn" url="https://github.com/PerccyKing">PerccyKing</vendor>
 
     <description><![CDATA[
 <h1>batslog</h1>
+
+<blockquote><p>Mybatis SQL format plug-in mybatis log format plug-in</p></blockquote>
+
+<h2>the function</h2>
+
+<ol><li>Select SQL to format SQL</li><li>Automatically read the printed SQL log and format the output</li><li>Support multiple databases (mysql, Oracle, sqlserver...)</li></ol>
+
+
+<hr/>
 
 <blockquote><p>mybatis sql 格式化插件 mybatis log 格式化插件</p></blockquote>
 
 <h2>功能</h2>
 
-<ol><li>选取SQL格式化SQL</li><li>自动读取打印的SQL日志，并格式化输出</li><li>支持多种数据库（MySQL、Oracle、SqlServer……）</li></ol>
+<ol><li>选取SQL格式化SQL</li><li>自动读取打印的SQL日志，并格式化输出</li><li>支持多种数据库（MySQL、Oracle、SqlServer……）</li><li></li></ol>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -44,6 +53,9 @@
                 icon="BatsLogIcons.BATS_LOG"
         >
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="$CopySql" class="cn.com.pism.batslog.action.CopySqlAction" text="复制SQL" description="直接选中SQL和参数进行复制操作">
+            <add-to-group group-id="ConsoleEditorPopupMenu" anchor="before" relative-to-action="$FormatSql"/>
         </action>
     </actions>
 </idea-plugin>
