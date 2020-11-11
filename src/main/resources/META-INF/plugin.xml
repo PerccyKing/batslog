@@ -48,13 +48,15 @@
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
             <add-to-group group-id="Diff.EditorPopupMenu" anchor="first"/>
         </group>-->
-        <action id="$FormatSql" class="cn.com.pism.batslog.action.FormatSqlAction" text="格式化sql"
+        <action id="$FormatSql" class="cn.com.pism.batslog.action.FormatSqlAction" text="格式化SQL"
                 description="将mybatis打印的SQL进行格式化"
                 icon="BatsLogIcons.BATS_LOG"
         >
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
         </action>
-        <action id="$CopySql" class="cn.com.pism.batslog.action.CopySqlAction" text="复制SQL" description="直接选中SQL和参数进行复制操作">
+        <action id="$CopySql" class="cn.com.pism.batslog.action.CopySqlAction" text="复制SQL"
+                icon="BatsLogIcons.BATS_LOG"
+                description="直接选中SQL和参数进行复制操作">
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="before" relative-to-action="$FormatSql"/>
         </action>
     </actions>
