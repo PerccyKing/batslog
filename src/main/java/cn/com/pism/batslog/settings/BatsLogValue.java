@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.settings;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -9,7 +10,8 @@ import lombok.Data;
  * @since 0.0.1
  */
 @Data
+@AllArgsConstructor
 public class BatsLogValue<T> {
-    private String type;
+    private String key;
     private T value;
 }

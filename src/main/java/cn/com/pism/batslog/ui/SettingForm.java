@@ -2,8 +2,12 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
+import cn.com.pism.batslog.settings.BatsLogValue;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
+import com.intellij.ui.JBColor;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
 import icons.BatsLogIcons;
 import lombok.Data;
@@ -20,12 +24,18 @@ import java.util.List;
  */
 @Data
 public class SettingForm {
+
+    private Project project;
+
     private JPanel root;
     private JPanel radioButtonPanel;
     private JComboBox<DbType> dbTypeBox;
     private ColorButton keyWord;
+    private JPanel keyWordsPanel;
 
     public SettingForm(Project project) {
+        this.project = project;
+
         List<DbType> radioButtons = DbType.getRadioButtons();
         radioButtons.forEach(rb -> {
             if (!DbType.NONE.equals(rb)) {
@@ -45,6 +55,13 @@ public class SettingForm {
         });
         DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
         dbTypeBox.setRenderer(dbTypeRender);
+        ColorButton colorButton = new ColorButton(project, BatsLogSetting.getValue(project, BatsLogSetting.KEYWORDS, Color.class).getValue());
+        GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
+        GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
+        layout.removeLayoutComponent(keyWord);
+        layout.addLayoutComponent(colorButton, constraintsForComponent);
+        keyWordsPanel.add(colorButton, constraintsForComponent);
+        keyWordsPanel.revalidate();
     }
 
 
@@ -57,11 +74,27 @@ public class SettingForm {
             super.init(text, icon);
         }
 
+        ColorButton(Project project, Color color) {
+            if (color != null) {
+                this.myColor = color;
+            } else {
+                this.myColor = new JBColor(new Color(204, 120, 50), new Color(204, 120, 50));
+            }
+            buttonInit(project, color);
+        }
+
         ColorButton() {
+            buttonInit(null, null);
+        }
+
+        private void buttonInit(Project project, Color color) {
             setMargin(JBUI.emptyInsets());
             setFocusable(false);
             setDefaultCapable(false);
             setFocusable(false);
+            if (color != null) {
+                myColor = color;
+            }
             MouseAdapter adapter = new MouseAdapter() {
                 /**
                  * {@inheritDoc}
@@ -73,12 +106,14 @@ public class SettingForm {
                     Color color = ColorChooser.chooseColor(new JPanel(), "选择颜色", myColor);
                     if (color != null) {
                         myColor = color;
+                        BatsLogSetting.setValue(project, new BatsLogValue<>(BatsLogSetting.KEYWORDS, color));
                     }
                     super.mouseClicked(e);
                 }
             };
             addMouseListener(adapter);
         }
+
 
         @Override
         public void paint(Graphics g) {
