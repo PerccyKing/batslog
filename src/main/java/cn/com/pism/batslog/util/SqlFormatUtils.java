@@ -1,18 +1,30 @@
 package cn.com.pism.batslog.util;
 
 import cn.com.pism.batslog.constants.BatsLogConstant;
+import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
+import cn.com.pism.batslog.settings.BatsLogValue;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
+import com.alibaba.druid.util.OracleUtils;
+import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.impl.ConsoleViewUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.ide.highlighter.custom.CustomFileHighlighter;
+import com.intellij.ide.highlighter.custom.SyntaxTable;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
+import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
+import static cn.com.pism.batslog.constants.BatsLogConstant.PRE;
 import static cn.com.pism.batslog.util.BatsLogUtil.PARAMETERS;
 import static cn.com.pism.batslog.util.BatsLogUtil.PREPARING;
 
@@ -60,7 +72,36 @@ public class SqlFormatUtils {
         }
 
         String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
+ /*       BatsLogValue<Color> keyWord = BatsLogSetting.getValue(project, BatsLogSetting.KEYWORDS, Color.class);
+        Color keyWordColor;
+        if (keyWord.getValue() != null) {
+            keyWordColor = keyWord.getValue();
+        } else {
+            keyWordColor = KEY_WORD_DEF_COL;
+        }*/
         if (printToConsole) {
+            //对关键字进行作色处理
+            /*String[] word = formatSql.split(" ");
+            for (int i = 0, wordLength = word.length; i < wordLength; i++) {
+                String s = word[i];
+                if (JdbcConstants.MYSQL.equals(dbType.getName())) {
+                    boolean keyword = isKeyword(s);
+                    if (keyword) {
+                        s = String.format(PRE + "%d;2;%d;%d;%dm%s", 38,
+                                keyWordColor.getRed(), keyWordColor.getGreen(), keyWordColor.getBlue(), s);
+                        word[i] = s;
+                    }
+                } else if (JdbcConstants.ORACLE.equals(dbType.getName())) {
+                    boolean keyword = OracleUtils.isKeyword(s);
+                    if (keyword) {
+                        s = String.format(PRE + "%d;2;%d;%d;%dm%s", 38,
+                                keyWordColor.getRed(), keyWordColor.getGreen(), keyWordColor.getBlue(), s);
+                        word[i] = s;
+                    }
+                }
+            }
+            formatSql = String.join(" ", Arrays.asList(word));*/
+
             printSql(formatSql, "", project);
         } else {
             //放入缓存
@@ -79,8 +120,29 @@ public class SqlFormatUtils {
     }
 
     private static void printSql(String sql, String methodName, Project project) {
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(project).print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(project).print(StringUtil.encoding(sql + "\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        ConsoleViewImpl consoleView = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+        consoleView.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
+        consoleView.print(StringUtil.encoding(sql + "\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
         BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
+    }
+
+
+    private static Set<String> keywords;
+
+    public static boolean isKeyword(String name) {
+        if (name == null) {
+            return false;
+        }
+
+        String nameLower = name.toLowerCase();
+
+        Set<String> words = keywords;
+
+        if (words == null || words.size() == 0) {
+            words = KeyWordsConstant.MYSQL;
+            keywords = words;
+        }
+
+        return words.contains(nameLower);
     }
 }

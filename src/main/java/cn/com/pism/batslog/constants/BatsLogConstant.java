@@ -1,11 +1,15 @@
 package cn.com.pism.batslog.constants;
 
+import com.intellij.ui.JBColor;
+
+import java.awt.*;
+
 /**
  * @author wangyihuai
  * @date 2020/10/27 下午 03:38
  */
 public class BatsLogConstant {
-    public static final String BATS_LOG= "\n" +
+    public static final String BATS_LOG = "\n" +
             "  ____        _       _                 \n" +
             " |  _ \\      | |     | |                \n" +
             " | |_) | __ _| |_ ___| |     ___   __ _ \n" +
@@ -16,4 +20,8 @@ public class BatsLogConstant {
             "                                  |___/ \n";
 
     public static final String SEPARATOR = "*********************************\n";
+
+    public static final String PRE = "\u001B[";
+
+    public static final Color KEY_WORD_DEF_COL = new JBColor(new Color(204, 120, 50), new Color(204, 120, 50));
 }

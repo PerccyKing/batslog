@@ -18,6 +18,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
+
 /**
  * @author wangyihuai
  * @date 2020/10/28 上午 09:47
@@ -78,7 +80,7 @@ public class SettingForm {
             if (color != null) {
                 this.myColor = color;
             } else {
-                this.myColor = new JBColor(new Color(204, 120, 50), new Color(204, 120, 50));
+                this.myColor = KEY_WORD_DEF_COL;
             }
             buttonInit(project, color);
         }
