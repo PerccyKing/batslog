@@ -115,7 +115,7 @@ public class SqlFormatUtils {
         consoleView.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
         String[] chars = sql.split("");
         //关键字校验
-        String[] words = sql.split(" |\t\n|\n");
+        String[] words = sql.split(" |\t\n|\n|\t");
         int charLength = 0;
         for (String word : words) {
             boolean keyword = isKeyword(word);

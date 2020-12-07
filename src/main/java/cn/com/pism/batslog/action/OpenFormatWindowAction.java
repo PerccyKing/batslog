@@ -1,6 +1,5 @@
 package cn.com.pism.batslog.action;
 
-import cn.com.pism.batslog.ui.FormatWindow;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.util.NlsActions;
@@ -23,10 +22,6 @@ public class OpenFormatWindowAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        FormatWindow window = new FormatWindow();
-        window.setSize(500,500);
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
     }
 
     /**
