@@ -1,7 +1,14 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.util.Editors;
+import com.intellij.lang.Language;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.ui.LanguageTextField;
+
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Objects;
 
 /**
  * @author PerccyKing
@@ -10,6 +17,16 @@ public class FormatWindow extends JDialog {
     private JPanel contentPane;
     private JButton buttonOk;
     private JButton buttonCancel;
+    private LanguageTextField logConsole;
+
+    private void createUIComponents(){
+        Language velocityLanguage = Objects.requireNonNull(Language.findLanguageByID("SQL"));
+        Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+        logConsole = new LanguageTextField(velocityLanguage,
+                defaultProject, "",
+                (value, language, project) -> Editors.createSourceEditor(project, velocityLanguage, value, true)
+                        .getDocument(), false);
+    }
 
     public FormatWindow() {
         setContentPane(contentPane);
@@ -47,6 +64,7 @@ public class FormatWindow extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
+
 
     private void onOk() {
         // add your code here
