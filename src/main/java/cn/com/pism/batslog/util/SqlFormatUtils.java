@@ -4,27 +4,18 @@ import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
-import cn.com.pism.batslog.settings.BatsLogValue;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.druid.util.OracleUtils;
 import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.execution.impl.ConsoleViewUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.ide.highlighter.custom.CustomFileHighlighter;
-import com.intellij.ide.highlighter.custom.SyntaxTable;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
-import static cn.com.pism.batslog.constants.BatsLogConstant.PRE;
 import static cn.com.pism.batslog.util.BatsLogUtil.PARAMETERS;
 import static cn.com.pism.batslog.util.BatsLogUtil.PREPARING;
 
@@ -122,7 +113,27 @@ public class SqlFormatUtils {
     private static void printSql(String sql, String methodName, Project project) {
         ConsoleViewImpl consoleView = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
         consoleView.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
-        consoleView.print(StringUtil.encoding(sql + "\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        String[] chars = sql.split("");
+        //关键字校验
+        String[] words = sql.split(" |\t\n|\n");
+        int charLength = 0;
+        for (String word : words) {
+            boolean keyword = isKeyword(word);
+            charLength = charLength + word.length();
+            String supplement = "";
+
+            if (keyword) {
+                printKeyWord(consoleView, project, word);
+            } else {
+                consoleView.print(StringUtil.encoding(word), ConsoleViewContentType.NORMAL_OUTPUT);
+            }
+            if (charLength < chars.length) {
+                supplement = chars[charLength];
+                charLength = charLength + supplement.length();
+                consoleView.print(supplement, ConsoleViewContentType.NORMAL_OUTPUT);
+            }
+        }
+        consoleView.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
         BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
     }
 
@@ -145,4 +156,9 @@ public class SqlFormatUtils {
 
         return words.contains(nameLower);
     }
+
+    public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord) {
+        consoleView.print(StringUtil.encoding(keyWord), ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project));
+    }
+
 }
