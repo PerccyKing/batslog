@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="cn.com.pism.batslog.ui.FormatConsole">
-  <grid id="27dc6" binding="root" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="27dc6" binding="root" layout-manager="BorderLayout" hgap="-1" vgap="-1">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
@@ -20,7 +20,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="61817" binding="sqlPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+              <grid id="61817" binding="sqlPanel" layout-manager="BorderLayout" hgap="-1" vgap="-1">
                 <constraints/>
                 <properties/>
                 <border type="none"/>
@@ -44,6 +44,12 @@
         <border type="none"/>
         <children/>
       </grid>
+      <hspacer id="69c9f">
+        <constraints border-constraint="West"/>
+      </hspacer>
+      <hspacer id="94ee2">
+        <constraints border-constraint="East"/>
+      </hspacer>
     </children>
   </grid>
 </form>
