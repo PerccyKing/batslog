@@ -68,7 +68,7 @@ public class SqlFormatUtils {
 
         String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
         if (printToConsole) {
-            if (console==null){
+            if (console == null) {
                 console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
             }
 
@@ -85,7 +85,7 @@ public class SqlFormatUtils {
 
         String substring = subStr.substring(paramEnd);
         if (StringUtils.indexOf(substring, PREPARING) > 0) {
-            format(subStr, project, printToConsole);
+            format(subStr, project, printToConsole, console);
         }
     }
 
