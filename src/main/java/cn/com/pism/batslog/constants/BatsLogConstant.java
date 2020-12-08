@@ -19,7 +19,7 @@ public class BatsLogConstant {
             "                                   __/ |\n" +
             "                                  |___/ \n";
 
-    public static final String SEPARATOR = "*********************************\n";
+    public static final String SEPARATOR = "-- --------------------------------------\n";
 
     public static final String PRE = "\u001B[";
 
