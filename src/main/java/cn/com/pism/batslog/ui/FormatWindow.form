@@ -31,18 +31,47 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <horizontalScrollBarPolicy value="32"/>
+                  <verticalScrollBarPolicy value="22"/>
+                </properties>
                 <border type="none"/>
                 <children>
-                  <component id="442af" class="com.intellij.ui.components.JBTextArea" binding="textArea1" default-binding="true">
+                  <grid id="78bb2" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints/>
                     <properties>
                       <minimumSize width="350" height="-1"/>
                       <preferredSize width="350" height="-1"/>
-                      <tabSize value="8"/>
-                      <text value=""/>
                     </properties>
-                  </component>
+                    <border type="none"/>
+                    <children>
+                      <component id="442af" class="javax.swing.JTextArea" binding="logArea">
+                        <constraints border-constraint="Center"/>
+                        <properties>
+                          <autoscrolls value="false"/>
+                          <minimumSize width="350" height="-1"/>
+                          <preferredSize width="350" height="-1"/>
+                          <tabSize value="8"/>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                      <toolbar id="7bcca">
+                        <constraints border-constraint="North"/>
+                        <properties>
+                          <floatable value="false"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="240d7" class="javax.swing.JButton" binding="button2" default-binding="true">
+                            <constraints/>
+                            <properties>
+                              <text value="Button"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </toolbar>
+                    </children>
+                  </grid>
                 </children>
               </scrollpane>
             </children>
@@ -62,13 +91,29 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="9f8e1" class="com.intellij.execution.impl.ConsoleViewImpl" binding="textArea2" default-binding="true">
+                  <grid id="fc22a" binding="sqlConsole" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints/>
                     <properties>
                       <minimumSize width="350" height="-1"/>
                       <preferredSize width="350" height="-1"/>
                     </properties>
-                  </component>
+                    <border type="none"/>
+                    <children>
+                      <toolbar id="c6310">
+                        <constraints border-constraint="North"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="92c8a" class="javax.swing.JButton" binding="button1" default-binding="true">
+                            <constraints/>
+                            <properties>
+                              <text value="Button"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </toolbar>
+                    </children>
+                  </grid>
                 </children>
               </scrollpane>
             </children>

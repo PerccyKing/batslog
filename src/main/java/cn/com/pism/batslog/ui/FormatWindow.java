@@ -1,16 +1,22 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.util.SqlFormatUtils;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.mock.MockApplication;
+import com.intellij.mock.MockProject;
+import com.intellij.mock.MockProjectEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.components.JBTextArea;
-import com.intellij.ui.components.OnOffButton;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.vfs.VirtualFile;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
+import org.picocontainer.MutablePicoContainer;
 
 import javax.swing.*;
+import java.util.UUID;
 
 /**
  * @author PerccyKing
@@ -22,8 +28,14 @@ import javax.swing.*;
 @Setter
 public class FormatWindow extends DialogWrapper {
     private JPanel root;
-    private JBTextArea textArea1;
-    private ConsoleViewImpl textArea2;
+    private JTextArea logArea;
+    private JPanel sqlConsole;
+    private JButton button1;
+    private JButton button2;
+
+    private ConsoleViewImpl consoleView;
+
+    private Project project;
 
     /**
      * Creates modal {@code DialogWrapper} that can be parent for other windows.
@@ -38,6 +50,11 @@ public class FormatWindow extends DialogWrapper {
     protected FormatWindow(@Nullable Project project) {
         super(project);
         init();
+        this.project = project;
+        ConsoleViewImpl consoleView = new ConsoleViewImpl(project, true);
+        this.consoleView = consoleView;
+
+        sqlConsole.add(consoleView.getComponent());
         setSize(800, 500);
         setTitle(StringUtil.encoding("BatsLog"));
         show();
@@ -55,6 +72,18 @@ public class FormatWindow extends DialogWrapper {
 
     public static void show(Project project) {
         new FormatWindow(project);
+    }
+
+    /**
+     * This method is invoked by default implementation of "OK" action. It just closes dialog
+     * with {@code OK_EXIT_CODE}. This is convenient place to override functionality of "OK" action.
+     * Note that the method does nothing if "OK" action isn't enabled.
+     */
+    @Override
+    protected void doOKAction() {
+        consoleView.getEditor().getSettings().setDndEnabled(true);
+        String text = this.logArea.getText();
+        SqlFormatUtils.format(text, project, Boolean.TRUE, this.consoleView);
     }
 
 }

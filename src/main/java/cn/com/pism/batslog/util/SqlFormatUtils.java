@@ -31,6 +31,10 @@ public class SqlFormatUtils {
     }
 
     public static void format(String str, Project project, Boolean printToConsole) {
+        format(str, project, printToConsole, null);
+    }
+
+    public static void format(String str, Project project, Boolean printToConsole, ConsoleViewImpl console) {
         str = str + "\nend";
         //从第一个====>  Preparing:开始
         int start = StringUtils.indexOf(str, PREPARING);
@@ -63,37 +67,12 @@ public class SqlFormatUtils {
         }
 
         String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
- /*       BatsLogValue<Color> keyWord = BatsLogSetting.getValue(project, BatsLogSetting.KEYWORDS, Color.class);
-        Color keyWordColor;
-        if (keyWord.getValue() != null) {
-            keyWordColor = keyWord.getValue();
-        } else {
-            keyWordColor = KEY_WORD_DEF_COL;
-        }*/
         if (printToConsole) {
-            //对关键字进行作色处理
-            /*String[] word = formatSql.split(" ");
-            for (int i = 0, wordLength = word.length; i < wordLength; i++) {
-                String s = word[i];
-                if (JdbcConstants.MYSQL.equals(dbType.getName())) {
-                    boolean keyword = isKeyword(s);
-                    if (keyword) {
-                        s = String.format(PRE + "%d;2;%d;%d;%dm%s", 38,
-                                keyWordColor.getRed(), keyWordColor.getGreen(), keyWordColor.getBlue(), s);
-                        word[i] = s;
-                    }
-                } else if (JdbcConstants.ORACLE.equals(dbType.getName())) {
-                    boolean keyword = OracleUtils.isKeyword(s);
-                    if (keyword) {
-                        s = String.format(PRE + "%d;2;%d;%d;%dm%s", 38,
-                                keyWordColor.getRed(), keyWordColor.getGreen(), keyWordColor.getBlue(), s);
-                        word[i] = s;
-                    }
-                }
+            if (console==null){
+                console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
             }
-            formatSql = String.join(" ", Arrays.asList(word));*/
 
-            printSql(formatSql, "", project);
+            printSql(formatSql, "", project, console);
         } else {
             //放入缓存
             List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
@@ -110,8 +89,8 @@ public class SqlFormatUtils {
         }
     }
 
-    private static void printSql(String sql, String methodName, Project project) {
-        ConsoleViewImpl consoleView = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+    private static void printSql(String sql, String methodName, Project project, ConsoleViewImpl consoleView) {
+
         consoleView.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
         String[] chars = sql.split("");
         //关键字校验
