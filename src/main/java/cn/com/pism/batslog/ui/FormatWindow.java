@@ -3,20 +3,15 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.util.SqlFormatUtils;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.mock.MockApplication;
-import com.intellij.mock.MockProject;
-import com.intellij.mock.MockProjectEx;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
-import org.picocontainer.MutablePicoContainer;
 
 import javax.swing.*;
-import java.util.UUID;
 
 /**
  * @author PerccyKing
@@ -30,8 +25,7 @@ public class FormatWindow extends DialogWrapper {
     private JPanel root;
     private JTextArea logArea;
     private JPanel sqlConsole;
-    private JButton button1;
-    private JButton button2;
+    private JPanel consoleBar;
 
     private ConsoleViewImpl consoleView;
 
@@ -51,10 +45,20 @@ public class FormatWindow extends DialogWrapper {
         super(project);
         init();
         this.project = project;
-        ConsoleViewImpl consoleView = new ConsoleViewImpl(project, true);
+        Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+        ConsoleViewImpl consoleView = new ConsoleViewImpl(defaultProject, true);
         this.consoleView = consoleView;
 
+        //添加操作栏
+        DefaultActionGroup actions = new DefaultActionGroup();
+        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, actions, true);
+        consoleBar.add(actionToolbar.getComponent());
         sqlConsole.add(consoleView.getComponent());
+        AnAction[] consoleActions = consoleView.createConsoleActions();
+        for (AnAction action : consoleActions) {
+            actions.add(action);
+        }
+
         setSize(800, 500);
         setTitle(StringUtil.encoding("BatsLog"));
         show();
@@ -81,7 +85,6 @@ public class FormatWindow extends DialogWrapper {
      */
     @Override
     protected void doOKAction() {
-        consoleView.getEditor().getSettings().setDndEnabled(true);
         String text = this.logArea.getText();
         SqlFormatUtils.format(text, project, Boolean.TRUE, this.consoleView);
     }
