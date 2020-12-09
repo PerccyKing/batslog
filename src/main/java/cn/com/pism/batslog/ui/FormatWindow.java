@@ -1,12 +1,15 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.util.Editors;
 import cn.com.pism.batslog.util.SqlFormatUtils;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.LanguageTextField;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +26,7 @@ import javax.swing.*;
 @Setter
 public class FormatWindow extends DialogWrapper {
     private JPanel root;
-    private JTextArea logArea;
+    private LanguageTextField logArea;
     private JPanel sqlConsole;
     private JPanel consoleBar;
 
@@ -89,4 +92,12 @@ public class FormatWindow extends DialogWrapper {
         SqlFormatUtils.format(text, project, Boolean.TRUE, this.consoleView);
     }
 
+    private void createUIComponents() {
+        Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+        Language text = Language.findLanguageByID("TEXT");
+        logArea = new LanguageTextField(text, defaultProject, "",
+                (value, language, project) -> Editors
+                        .createSourceEditor(project, text, value, false)
+                        .getDocument(), false);
+    }
 }

@@ -45,13 +45,12 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="442af" class="javax.swing.JTextArea" binding="logArea">
+                      <component id="442af" class="com.intellij.ui.LanguageTextField" binding="logArea" custom-create="true">
                         <constraints border-constraint="Center"/>
                         <properties>
                           <autoscrolls value="false"/>
                           <minimumSize width="350" height="-1"/>
                           <preferredSize width="350" height="-1"/>
-                          <tabSize value="8"/>
                           <text value=""/>
                         </properties>
                       </component>
