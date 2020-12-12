@@ -71,6 +71,12 @@ public class FormatWindow extends DialogWrapper {
         initForm(project);
         setOKButtonTooltip(StringUtil.encoding("打印SQL到控制台"));
 
+        initFormAction(project);
+
+        show();
+    }
+
+    private void initFormAction(@Nullable Project project) {
         format.addActionListener(e -> format(project, myEditor.getDocument().getText(), true, consoleView));
 
         clearAndFormat.addActionListener(e -> {
@@ -91,8 +97,6 @@ public class FormatWindow extends DialogWrapper {
             clearLogEditor(myEditor);
             consoleView.clear();
         });
-
-        show();
     }
 
     private void format(@Nullable Project project, String text, boolean b, ConsoleViewImpl consoleView) {
