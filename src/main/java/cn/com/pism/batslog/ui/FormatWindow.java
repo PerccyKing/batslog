@@ -17,11 +17,15 @@ import com.intellij.openapi.ui.DialogWrapper;
 import icons.BatsLogIcons;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,6 +45,7 @@ public class FormatWindow extends DialogWrapper {
      * 日志工具栏
      */
     private JPanel logToolBar;
+    private JButton format;
 
     private ConsoleViewImpl consoleView;
 
@@ -62,6 +67,25 @@ public class FormatWindow extends DialogWrapper {
         super(project);
         init();
         this.project = project;
+        initForm(project);
+        setOKButtonTooltip(StringUtil.encoding("打印SQL到控制台"));
+
+        format.addActionListener(new ActionListener() {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SqlFormatUtils.format(myEditor.getDocument().getText(), project, true, consoleView);
+            }
+        });
+
+        show();
+    }
+
+    private void initForm(@Nullable Project project) {
         //创建一个编辑器
         Project defaultProject = ProjectManager.getInstance().getDefaultProject();
         Editor logEditor = Editors.createSourceEditor(project, Language.findLanguageByID("TEXT"), "", false);
@@ -82,15 +106,27 @@ public class FormatWindow extends DialogWrapper {
 
         //添加操作栏,调用一次getComponent ，editor才会创建
         JComponent component = consoleView.getComponent();
+        List<AnAction> consoleActionList = new ArrayList<>();
+        consoleActionList.add(new AnAction(StringUtil.encoding("复制所有SQL"),
+                StringUtil.encoding("复制所有SQL到剪贴板"),
+                BatsLogIcons.BATS_LOG_COPY) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                String sqls = consoleView.getText();
+                if (StringUtils.isNotBlank(sqls)) {
+                    BatsLogUtil.copyToClipboard(sqls);
+                }
+            }
+        });
         AnAction[] consoleActions = consoleView.createConsoleActions();
-        ActionToolbar sqlConsoleToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, consoleActions);
+        consoleActionList.addAll(Arrays.asList(consoleActions));
+        ActionToolbar sqlConsoleToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, consoleActionList.toArray(new AnAction[0]));
         consoleBar.add(sqlConsoleToolBar.getComponent());
         sqlConsole.add(component);
 
         setSize(1000, 800);
         setTitle(StringUtil.encoding("BatsLog"));
         setAutoAdjustable(true);
-        show();
     }
 
     /**
@@ -115,10 +151,25 @@ public class FormatWindow extends DialogWrapper {
     @Override
     protected void doOKAction() {
         String text = this.myEditor.getDocument().getText();
-        SqlFormatUtils.format(text, project, Boolean.TRUE, this.consoleView);
+        if (StringUtils.isNotBlank(text)) {
+            SqlFormatUtils.format(text, project, Boolean.TRUE, BatsLogUtil.CONSOLE_VIEW_MAP.get(this.project));
+        }
+        super.doOKAction();
     }
 
 
+    /**
+     * <p>
+     * 生成一个ActionToolBar
+     * </p>
+     *
+     * @param places     : 位置 {@link ActionPlaces}
+     * @param horizontal : 是否水平
+     * @param anActions  :
+     * @return {@link ActionToolbar} ActionToolBar
+     * @author PerccyKing
+     * @date 2020/12/12 下午 08:36
+     */
     public ActionToolbar getActionToolBar(String places, boolean horizontal, AnAction[] anActions) {
         DefaultActionGroup actions = new DefaultActionGroup();
         ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
@@ -129,9 +180,19 @@ public class FormatWindow extends DialogWrapper {
         return actionToolbar;
     }
 
+    /**
+     * <p>
+     * 生成日志输入框的操作事件
+     * </p>
+     *
+     * @param editor : 编辑器
+     * @return {@link List<AnAction>} 事件列表
+     * @author PerccyKing
+     * @date 2020/12/12 下午 08:38
+     */
     public List<AnAction> getLogActions(Editor editor) {
         List<AnAction> logActions = new ArrayList<>();
-        AnAction clear = new AnAction("清空", "", AllIcons.Actions.GC) {
+        AnAction clear = new AnAction(StringUtil.encoding("清空"), StringUtil.encoding("清空日志输入编辑器"), AllIcons.Actions.GC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 Document document = editor.getDocument();
@@ -141,7 +202,8 @@ public class FormatWindow extends DialogWrapper {
                 );
             }
         };
-        AnAction copySqlToClipboard = new AnAction("复制SQL到剪贴板", "", BatsLogIcons.BATS_LOG_COPY) {
+        AnAction copySqlToClipboard = new AnAction(StringUtil.encoding("复制SQL到剪贴板"),
+                StringUtil.encoding("复制SQL到剪贴板"), BatsLogIcons.BATS_LOG_COPY) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 BatsLogUtil.copySqlToClipboard(e, editor.getDocument().getText());

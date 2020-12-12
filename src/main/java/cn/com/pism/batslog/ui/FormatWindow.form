@@ -105,7 +105,21 @@
               <autoscrolls value="false"/>
             </properties>
             <border type="none"/>
-            <children/>
+            <children>
+              <component id="ddbb0" class="javax.swing.JButton" binding="format">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="55" height="-1"/>
+                    <preferred-size width="55" height="-1"/>
+                    <maximum-size width="55" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <horizontalTextPosition value="0"/>
+                  <text value="格式化"/>
+                </properties>
+              </component>
+            </children>
           </grid>
         </children>
       </grid>

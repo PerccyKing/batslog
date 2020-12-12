@@ -67,9 +67,13 @@ public class BatsLogUtil {
         List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(e.getProject());
         String cache = String.join(";\n\n", sqlCache);
         //复制到剪贴板
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new StringSelection(cache), null);
+        copyToClipboard(cache);
         //清空缓存
         BatsLogUtil.SQL_CACHE.put(e.getProject(), new ArrayList<>());
+    }
+
+    public static void copyToClipboard(String cache) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(new StringSelection(cache), null);
     }
 }
