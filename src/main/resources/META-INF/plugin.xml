@@ -55,7 +55,7 @@
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
         </action>
         <action id="$CopySql" class="cn.com.pism.batslog.action.CopySqlAction" text="复制SQL"
-                icon="BatsLogIcons.BATS_LOG"
+                icon="BatsLogIcons.BATS_LOG_COPY"
                 description="直接选中SQL和参数进行复制操作">
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="before" relative-to-action="$FormatSql"/>
         </action>

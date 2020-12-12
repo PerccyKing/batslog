@@ -4,10 +4,14 @@ import cn.com.pism.batslog.action.*;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +42,7 @@ public class BatsLogUtil {
     static {
         ClearAllAction clearAllAction = new ClearAllAction(StringUtil.encoding("清空面板"), StringUtil.encoding("清空面板"), AllIcons.Actions.GC);
         ScrollToEndAction scrollToEndAction = new ScrollToEndAction(StringUtil.encoding("最新"), StringUtil.encoding("滑动到最新行"), Scroll_down);
-        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(StringUtil.encoding("最新"), StringUtil.encoding("滑动到最新行"), Applet);
+        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(StringUtil.encoding("格式化窗口"), StringUtil.encoding("FormatWindow"), Applet);
 
         List<AnAction> anActions = new ArrayList<>();
         anActions.add(new StartTailAction(StringUtil.encoding("启动"), StringUtil.encoding("开启SQL监听"), AllIcons.Actions.Execute));
@@ -54,5 +58,18 @@ public class BatsLogUtil {
         suspend.add(openFormatWindowAction);
         SUSPEND_ACTION = suspend;
 
+    }
+
+
+    public static void copySqlToClipboard(AnActionEvent e, String text) {
+
+        SqlFormatUtils.format(text, e.getProject(), Boolean.FALSE);
+        List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(e.getProject());
+        String cache = String.join(";\n\n", sqlCache);
+        //复制到剪贴板
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(new StringSelection(cache), null);
+        //清空缓存
+        BatsLogUtil.SQL_CACHE.put(e.getProject(), new ArrayList<>());
     }
 }

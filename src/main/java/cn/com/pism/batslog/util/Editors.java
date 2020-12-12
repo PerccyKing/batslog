@@ -3,6 +3,7 @@ package cn.com.pism.batslog.util;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.EditorSettings;
 import com.intellij.openapi.project.Project;
 import java.util.Objects;
 
@@ -12,7 +13,10 @@ public class Editors {
         final EditorFactory factory = EditorFactory.getInstance();
         final Editor editor = factory.createEditor(factory.createDocument(content), project,
             Objects.requireNonNull(language.getAssociatedFileType()), readOnly);
-        editor.getSettings().setRefrainFromScrolling(false);
+        EditorSettings settings = editor.getSettings();
+        settings.setLineNumbersShown(false);
+        settings.setRefrainFromScrolling(false);
+        settings.setLineMarkerAreaShown(false);
         return editor;
     }
 

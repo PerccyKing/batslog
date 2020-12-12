@@ -12,5 +12,14 @@ import javax.swing.*;
  * @since 0.0.1
  */
 public interface BatsLogIcons {
+    /**
+     * 主图标
+     */
     Icon BATS_LOG = IconLoader.getIcon("/icons/batsLog.svg", BatsLogIcons.class);
+
+    /**
+     * 复制
+     */
+    Icon BATS_LOG_COPY = IconLoader.getIcon("/icons/batsLogCopy.svg", BatsLogIcons.class);
+
 }

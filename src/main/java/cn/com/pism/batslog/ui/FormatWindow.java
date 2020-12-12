@@ -1,20 +1,28 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.Editors;
 import cn.com.pism.batslog.util.SqlFormatUtils;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.LanguageTextField;
+import icons.BatsLogIcons;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author PerccyKing
@@ -26,11 +34,17 @@ import javax.swing.*;
 @Setter
 public class FormatWindow extends DialogWrapper {
     private JPanel root;
-    private LanguageTextField logArea;
+    private JPanel logPanel;
     private JPanel sqlConsole;
     private JPanel consoleBar;
+    /**
+     * 日志工具栏
+     */
+    private JPanel logToolBar;
 
     private ConsoleViewImpl consoleView;
+
+    private Editor myEditor;
 
     private Project project;
 
@@ -48,22 +62,34 @@ public class FormatWindow extends DialogWrapper {
         super(project);
         init();
         this.project = project;
+        //创建一个编辑器
         Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+        Editor logEditor = Editors.createSourceEditor(project, Language.findLanguageByID("TEXT"), "", false);
+        this.myEditor = logEditor;
+
+        //添加一个工具栏
+        List<AnAction> logActions = new ArrayList<>(getLogActions(logEditor));
+        ActionToolbar logToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, logActions.toArray(new AnAction[0]));
+        this.logToolBar.add(logToolBar.getComponent());
+
+        //将编辑器加入panel
+        logPanel.add(logEditor.getComponent());
+
+
+        //右边console
         ConsoleViewImpl consoleView = new ConsoleViewImpl(defaultProject, true);
         this.consoleView = consoleView;
 
-        //添加操作栏
-        DefaultActionGroup actions = new DefaultActionGroup();
-        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, actions, true);
-        consoleBar.add(actionToolbar.getComponent());
-        sqlConsole.add(consoleView.getComponent());
+        //添加操作栏,调用一次getComponent ，editor才会创建
+        JComponent component = consoleView.getComponent();
         AnAction[] consoleActions = consoleView.createConsoleActions();
-        for (AnAction action : consoleActions) {
-            actions.add(action);
-        }
+        ActionToolbar sqlConsoleToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, consoleActions);
+        consoleBar.add(sqlConsoleToolBar.getComponent());
+        sqlConsole.add(component);
 
-        setSize(800, 500);
+        setSize(1000, 800);
         setTitle(StringUtil.encoding("BatsLog"));
+        setAutoAdjustable(true);
         show();
     }
 
@@ -88,16 +114,43 @@ public class FormatWindow extends DialogWrapper {
      */
     @Override
     protected void doOKAction() {
-        String text = this.logArea.getText();
+        String text = this.myEditor.getDocument().getText();
         SqlFormatUtils.format(text, project, Boolean.TRUE, this.consoleView);
     }
 
-    private void createUIComponents() {
-        Project defaultProject = ProjectManager.getInstance().getDefaultProject();
-        Language text = Language.findLanguageByID("TEXT");
-        logArea = new LanguageTextField(text, defaultProject, "",
-                (value, language, project) -> Editors
-                        .createSourceEditor(project, text, value, false)
-                        .getDocument(), false);
+
+    public ActionToolbar getActionToolBar(String places, boolean horizontal, AnAction[] anActions) {
+        DefaultActionGroup actions = new DefaultActionGroup();
+        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
+        for (AnAction action : anActions) {
+            actions.add(action);
+        }
+
+        return actionToolbar;
+    }
+
+    public List<AnAction> getLogActions(Editor editor) {
+        List<AnAction> logActions = new ArrayList<>();
+        AnAction clear = new AnAction("清空", "", AllIcons.Actions.GC) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                Document document = editor.getDocument();
+                int length = document.getText().length();
+                WriteCommandAction.runWriteCommandAction(project, () ->
+                        document.replaceString(0, length, "")
+                );
+            }
+        };
+        AnAction copySqlToClipboard = new AnAction("复制SQL到剪贴板", "", BatsLogIcons.BATS_LOG_COPY) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BatsLogUtil.copySqlToClipboard(e, editor.getDocument().getText());
+            }
+        };
+
+        logActions.add(copySqlToClipboard);
+        logActions.add(clear);
+
+        return logActions;
     }
 }

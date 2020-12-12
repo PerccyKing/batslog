@@ -37,7 +37,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <grid id="78bb2" layout-manager="BorderLayout" hgap="0" vgap="0">
+                  <grid id="78bb2" binding="logPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints/>
                     <properties>
                       <minimumSize width="350" height="-1"/>
@@ -45,15 +45,12 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="442af" class="com.intellij.ui.LanguageTextField" binding="logArea" custom-create="true">
-                        <constraints border-constraint="Center"/>
-                        <properties>
-                          <autoscrolls value="false"/>
-                          <minimumSize width="350" height="-1"/>
-                          <preferredSize width="350" height="-1"/>
-                          <text value=""/>
-                        </properties>
-                      </component>
+                      <grid id="1f2fb" binding="logToolBar" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints border-constraint="North"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
                     </children>
                   </grid>
                 </children>
