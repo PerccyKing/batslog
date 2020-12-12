@@ -22,8 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +44,7 @@ public class FormatWindow extends DialogWrapper {
      */
     private JPanel logToolBar;
     private JButton format;
+    private JButton clearAndFormat;
 
     private ConsoleViewImpl consoleView;
 
@@ -70,19 +69,20 @@ public class FormatWindow extends DialogWrapper {
         initForm(project);
         setOKButtonTooltip(StringUtil.encoding("打印SQL到控制台"));
 
-        format.addActionListener(new ActionListener() {
-            /**
-             * Invoked when an action occurs.
-             *
-             * @param e
-             */
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SqlFormatUtils.format(myEditor.getDocument().getText(), project, true, consoleView);
-            }
+        format.addActionListener(e -> format(project, myEditor.getDocument().getText(), true, consoleView));
+
+        clearAndFormat.addActionListener(e -> {
+            //清空
+            consoleView.clear();
+            //格式化
+            format(project, myEditor.getDocument().getText(), true, consoleView);
         });
 
         show();
+    }
+
+    private void format(@Nullable Project project, String text, boolean b, ConsoleViewImpl consoleView) {
+        SqlFormatUtils.format(text, project, b, consoleView);
     }
 
     private void initForm(@Nullable Project project) {
@@ -152,7 +152,7 @@ public class FormatWindow extends DialogWrapper {
     protected void doOKAction() {
         String text = this.myEditor.getDocument().getText();
         if (StringUtils.isNotBlank(text)) {
-            SqlFormatUtils.format(text, project, Boolean.TRUE, BatsLogUtil.CONSOLE_VIEW_MAP.get(this.project));
+            format(project, text, Boolean.TRUE, BatsLogUtil.CONSOLE_VIEW_MAP.get(this.project));
         }
         super.doOKAction();
     }
