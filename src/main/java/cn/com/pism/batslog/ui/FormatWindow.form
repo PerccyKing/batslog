@@ -135,6 +135,26 @@
                   <verticalTextPosition value="0"/>
                 </properties>
               </component>
+              <component id="35ea2" class="javax.swing.JButton" binding="formatAndClear">
+                <constraints/>
+                <properties>
+                  <maximumSize width="58" height="60"/>
+                  <minimumSize width="58" height="60"/>
+                  <preferredSize width="58" height="60"/>
+                  <text value="&lt;html&gt;格式化&lt;br&gt;清空并&lt;/html&gt;"/>
+                  <toolTipText value="格式化输出并清空左侧面板"/>
+                </properties>
+              </component>
+              <component id="544fc" class="javax.swing.JButton" binding="clearAll">
+                <constraints/>
+                <properties>
+                  <maximumSize width="58" height="38"/>
+                  <minimumSize width="58" height="38"/>
+                  <preferredSize width="58" height="38"/>
+                  <text value="清空"/>
+                  <toolTipText value="清空全部"/>
+                </properties>
+              </component>
             </children>
           </grid>
         </children>

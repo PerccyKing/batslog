@@ -45,6 +45,8 @@ public class FormatWindow extends DialogWrapper {
     private JPanel logToolBar;
     private JButton format;
     private JButton clearAndFormat;
+    private JButton formatAndClear;
+    private JButton clearAll;
 
     private ConsoleViewImpl consoleView;
 
@@ -78,11 +80,25 @@ public class FormatWindow extends DialogWrapper {
             format(project, myEditor.getDocument().getText(), true, consoleView);
         });
 
+        formatAndClear.addActionListener(e -> {
+            //格式化
+            format(project, myEditor.getDocument().getText(), true, consoleView);
+            //清空
+            clearLogEditor(myEditor);
+        });
+
+        clearAll.addActionListener(e -> {
+            clearLogEditor(myEditor);
+            consoleView.clear();
+        });
+
         show();
     }
 
     private void format(@Nullable Project project, String text, boolean b, ConsoleViewImpl consoleView) {
-        SqlFormatUtils.format(text, project, b, consoleView);
+        if (StringUtils.isNotBlank(text)) {
+            SqlFormatUtils.format(text, project, b, consoleView);
+        }
     }
 
     private void initForm(@Nullable Project project) {
@@ -195,11 +211,7 @@ public class FormatWindow extends DialogWrapper {
         AnAction clear = new AnAction(StringUtil.encoding("清空"), StringUtil.encoding("清空日志输入编辑器"), AllIcons.Actions.GC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                Document document = editor.getDocument();
-                int length = document.getText().length();
-                WriteCommandAction.runWriteCommandAction(project, () ->
-                        document.replaceString(0, length, "")
-                );
+                clearLogEditor(editor);
             }
         };
         AnAction copySqlToClipboard = new AnAction(StringUtil.encoding("复制SQL到剪贴板"),
@@ -214,5 +226,13 @@ public class FormatWindow extends DialogWrapper {
         logActions.add(clear);
 
         return logActions;
+    }
+
+    private void clearLogEditor(Editor editor) {
+        Document document = editor.getDocument();
+        int length = document.getText().length();
+        WriteCommandAction.runWriteCommandAction(project, () ->
+                document.replaceString(0, length, "")
+        );
     }
 }
