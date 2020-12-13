@@ -10,7 +10,12 @@
 
 <h2>the function</h2>
 
-<ol><li>Select SQL to format SQL</li><li>Automatically read the printed SQL log and format the output</li><li>Copy the formatted SQL directly to the clipboard</li><li>Support multiple databases (mysql, Oracle, sqlserver...)</li></ol>
+<ol><li>Select SQL to format SQL</li>
+<li>Automatically read the printed SQL log and format the output</li>
+<li>Copy the formatted SQL directly to the clipboard</li>
+<li>Support multiple databases (mysql, Oracle, sqlserver...)</li>
+<li>Support external log format</li>
+</ol>
 
 
 <hr/>
@@ -19,7 +24,12 @@
 
 <h2>功能</h2>
 
-<ol><li>选取SQL格式化SQL</li><li>自动读取打印的SQL日志，并格式化输出</li><li>直接复制格式化后的SQL到剪贴板</li><li>支持多种数据库（MySQL、Oracle、SqlServer……）</li><li></li></ol>
+<ol><li>选取SQL格式化SQL</li>
+<li>自动读取打印的SQL日志，并格式化输出</li>
+<li>直接复制格式化后的SQL到剪贴板</li>
+<li>支持多种数据库（MySQL、Oracle、SqlServer……）</li>
+<li>支持外部日志格式化</li>
+</ol>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html

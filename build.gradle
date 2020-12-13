@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.11.15.1902-Release'
+version '20.12.13.1659-Release'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,21 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+
 <h1>$version</h1>
+
+<ul>
+<li>New SQL keyword coloring function (beta version)</li>
+<li>New external log format support</li>
+<li>Fix some bugs</li>
+<li>Optimization of formatting algorithm</li>
+<li>新增SQL关键字作色功能（beta 版）</li>
+<li>新增外部日志格式化支持</li>
+<li>修复部分bug</li>
+<li>格式化算法优化</li>
+</ul>
+
+<h1>20.11.15.1902-Release</h1>
 
 <ul>
 <li>Add the function of copying SQL directly to the clipboard</li>
