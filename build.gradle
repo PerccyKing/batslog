@@ -36,7 +36,7 @@ patchPluginXml {
 <li>New external log format support</li>
 <li>Fix some bugs</li>
 <li>Optimization of formatting algorithm</li>
-<li>新增SQL关键字作色功能（beta 版）</li>
+<li>新增SQL关键字着色功能（beta 版）</li>
 <li>新增外部日志格式化支持</li>
 <li>修复部分bug</li>
 <li>格式化算法优化</li>
