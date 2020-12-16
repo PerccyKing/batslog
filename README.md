@@ -6,18 +6,22 @@
 2. 自动监听读取打印的SQL日志，并格式化输出
 3. 直接复制格式化后的SQL到剪贴板（可以自己设置快捷键）
 4. 支持多种数据库（MySQL、Oracle、SqlServer……）
-5. 期待你点击[这里](https://github.com/PerccyKing/batslog/issues)提出需求
+5. 支持外部日志格式化
+6. 期待你点击[这里](https://github.com/PerccyKing/batslog/issues)提出需求
+
 
 ## 功能展示
+### 主界面
+![主界面](./screenshot/主界面.png)
 ### 中文支持
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020113016074874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5NjAyNTc3,size_16,color_FFFFFF,t_70)
+![中文支持](./screenshot/中文支持.png)
 ### 复制SQL功能
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20201130171818996.gif)
+![复制SQL](./screenshot/复制SQL.gif)
 
 ### 自动监听功能
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20201130172540631.gif)
+![listen1](./screenshot/listen1.gif)
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20201130171904631.gif)
+![listen2](./screenshot/listen2.gif)
 ## 其他
 请将你遇到的问题写在[这里](https://github.com/PerccyKing/batslog/issues)，我将尽力为你解决
 
