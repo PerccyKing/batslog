@@ -1,3 +1,6 @@
+
+<div align=center><img width="30%" src="./screenshot/pluginIcon.svg"/></div>
+
 # mybatis 日志插件 BatsLog
 @[toc]
 >分享一个免费的mybatis日志插件[idea插件](https://plugins.jetbrains.com/plugin/15301-batslog)
