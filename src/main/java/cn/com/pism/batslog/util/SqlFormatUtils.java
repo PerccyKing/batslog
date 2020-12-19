@@ -35,57 +35,60 @@ public class SqlFormatUtils {
     }
 
     public static void format(String str, Project project, Boolean printToConsole, ConsoleViewImpl console) {
-        str = str + "\nend";
-        //从第一个====>  Preparing:开始
-        int start = StringUtils.indexOf(str, PREPARING);
-        String subStr = str.substring(start + PREPARING.getBytes().length);
-        int sqlEnd = StringUtils.indexOf(subStr, "\n");
-        String sql = subStr.substring(0, sqlEnd);
-        //参数
-        subStr = subStr.substring(sqlEnd);
-        int paramStart = StringUtils.indexOf(subStr, PARAMETERS);
-        subStr = subStr.substring(paramStart + PARAMETERS.getBytes().length);
-        int paramEnd = StringUtils.indexOf(subStr, "\n");
-        String params = subStr.substring(0, paramEnd);
 
-        //提取参数
-        String[] paramArr = params.split(",");
-        List<Object> paramList = new ArrayList<>();
-        for (String s : paramArr) {
-            if (StringUtils.isNotBlank(s)) {
-                String par = s.substring(0, s.trim().indexOf("(") + 1);
-                paramList.add(par.trim());
+        if (StringUtils.isNotBlank(str)) {
+            str = str + "\nend";
+            //从第一个====>  Preparing:开始
+            int start = StringUtils.indexOf(str, PREPARING);
+            String subStr = str.substring(start + PREPARING.getBytes().length);
+            int sqlEnd = StringUtils.indexOf(subStr, "\n");
+            String sql = subStr.substring(0, sqlEnd);
+            //参数
+            subStr = subStr.substring(sqlEnd);
+            int paramStart = StringUtils.indexOf(subStr, PARAMETERS);
+            subStr = subStr.substring(paramStart + PARAMETERS.getBytes().length);
+            int paramEnd = StringUtils.indexOf(subStr, "\n");
+            String params = subStr.substring(0, paramEnd);
+
+            //提取参数
+            String[] paramArr = params.split(",");
+            List<Object> paramList = new ArrayList<>();
+            for (String s : paramArr) {
+                if (StringUtils.isNotBlank(s)) {
+                    String par = s.substring(0, s.trim().indexOf("(") + 1);
+                    paramList.add(par.trim());
+                } else {
+                    paramList.add("");
+                }
+            }
+
+            String dbTypeStr = JdbcConstants.MYSQL;
+            DbType dbType = BatsLogSetting.getDbType(project);
+            if (!DbType.NONE.equals(dbType)) {
+                dbTypeStr = dbType.getType();
+            }
+
+            String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
+            if (printToConsole) {
+                if (console == null) {
+                    console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+                }
+
+                printSql(formatSql, "", project, console);
             } else {
-                paramList.add("");
-            }
-        }
-
-        String dbTypeStr = JdbcConstants.MYSQL;
-        DbType dbType = BatsLogSetting.getDbType(project);
-        if (!DbType.NONE.equals(dbType)) {
-            dbTypeStr = dbType.getType();
-        }
-
-        String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
-        if (printToConsole) {
-            if (console == null) {
-                console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+                //放入缓存
+                List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
+                if (!CollectionUtils.isNotEmpty(sqlCache)) {
+                    sqlCache = new ArrayList<>();
+                }
+                sqlCache.add(formatSql);
+                BatsLogUtil.SQL_CACHE.put(project, sqlCache);
             }
 
-            printSql(formatSql, "", project, console);
-        } else {
-            //放入缓存
-            List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
-            if (!CollectionUtils.isNotEmpty(sqlCache)) {
-                sqlCache = new ArrayList<>();
+            String substring = subStr.substring(paramEnd);
+            if (StringUtils.indexOf(substring, PREPARING) > 0) {
+                format(subStr, project, printToConsole, console);
             }
-            sqlCache.add(formatSql);
-            BatsLogUtil.SQL_CACHE.put(project, sqlCache);
-        }
-
-        String substring = subStr.substring(paramEnd);
-        if (StringUtils.indexOf(substring, PREPARING) > 0) {
-            format(subStr, project, printToConsole, console);
         }
     }
 
