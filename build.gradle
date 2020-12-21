@@ -1,10 +1,22 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.5.0'
+    id 'org.jetbrains.intellij' version '0.6.5'
 }
 
 group 'cn.com.pism'
 version '20.12.13.1659-Release'
+
+
+allprojects {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
 
 repositories {
     mavenCentral()
@@ -23,7 +35,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2020.2.3'
+    version '2020.3'
 //    type 'IU'
 }
 patchPluginXml {
