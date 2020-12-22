@@ -3,7 +3,6 @@ package cn.com.pism.batslog.action;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.util.NlsActions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +32,7 @@ public class ScrollToEndAction extends AnAction {
      *                    the status bar when presentation has focus
      * @param icon        Action's icon
      */
-    public ScrollToEndAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description, @Nullable Icon icon) {
+    public ScrollToEndAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
         super(text, description, icon);
     }
 }

@@ -70,4 +70,6 @@
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="before" relative-to-action="$FormatSql"/>
         </action>
     </actions>
+
+    <idea-version since-build="192"/>
 </idea-plugin>
