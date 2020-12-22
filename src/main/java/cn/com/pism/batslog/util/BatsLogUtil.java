@@ -47,14 +47,14 @@ public class BatsLogUtil {
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
 
         List<AnAction> anActions = new ArrayList<>();
-        anActions.add(new StartTailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSQLMonitoring"), AllIcons.Actions.Execute));
+        anActions.add(new StartTailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqllistener"), AllIcons.Actions.Execute));
         anActions.add(clearAllAction);
         anActions.add(scrollToEndAction);
         anActions.add(openFormatWindowAction);
 
         START_ACTION = anActions.toArray(new AnAction[0]);
         List<AnAction> suspend = new ArrayList<>();
-        suspend.add(new SuspendTailAction(BatsLogBundle.message("stop"), BatsLogBundle.message("stopSQLMonitoring"), AllIcons.Actions.Suspend));
+        suspend.add(new SuspendTailAction(BatsLogBundle.message("stop"), BatsLogBundle.message("stopSqllistener"), AllIcons.Actions.Suspend));
         suspend.add(clearAllAction);
         suspend.add(scrollToEndAction);
         suspend.add(openFormatWindowAction);
