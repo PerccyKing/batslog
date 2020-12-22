@@ -44,7 +44,7 @@ public class BatsLogUtil {
     static {
         ClearAllAction clearAllAction = new ClearAllAction(BatsLogBundle.message("clearConsole"), BatsLogBundle.message("clearConsole"), AllIcons.Actions.GC);
         ScrollToEndAction scrollToEndAction = new ScrollToEndAction(BatsLogBundle.message("ScrollToEnd"), BatsLogBundle.message("ScrollToEnd"), Scroll_down);
-        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("FormatWindow"), BatsLogBundle.message("FormatWindow"), Applet);
+        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
 
         List<AnAction> anActions = new ArrayList<>();
         anActions.add(new StartTailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSQLMonitoring"), AllIcons.Actions.Execute));
