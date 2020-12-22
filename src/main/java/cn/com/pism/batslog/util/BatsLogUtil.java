@@ -8,6 +8,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,9 +67,11 @@ public class BatsLogUtil {
 
         SqlFormatUtils.format(text, e.getProject(), Boolean.FALSE);
         List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(e.getProject());
-        String cache = String.join(";\n\n", sqlCache);
-        //复制到剪贴板
-        copyToClipboard(cache);
+        if (CollectionUtils.isNotEmpty(sqlCache)) {
+            String cache = String.join(";\n\n", sqlCache);
+            //复制到剪贴板
+            copyToClipboard(cache);
+        }
         //清空缓存
         BatsLogUtil.SQL_CACHE.put(e.getProject(), new ArrayList<>());
     }
