@@ -4,7 +4,25 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.12.13.1659-Release'
+version '20.12.21.1613-Release'
+
+
+java {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+
+
+allprojects {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
 
 repositories {
     mavenCentral()
@@ -15,6 +33,8 @@ dependencies {
 
     implementation 'com.alibaba:fastjson:1.2.67'
     implementation 'com.alibaba:druid:1.1.9'
+    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'commons-collections:commons-collections:3.2.2'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -23,13 +43,25 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2020.2.3'
-//    type 'IU'
+    version '2019.2'
+    type 'IU'
+    updateSinceUntilBuild false
 }
 patchPluginXml {
     changeNotes """
 
+<div color='red'>
 <h1>$version</h1>
+
+<ul>
+<li>Fix some bugs</li>
+<li>Fix compatibility issues</li>
+<li>修复一些bug</li>
+<li>修复兼容性问题</li>
+</ul>
+</div>
+
+<h1>20.12.13.1659-Release</h1>
 
 <ul>
 <li>New SQL keyword coloring function (beta version)</li>

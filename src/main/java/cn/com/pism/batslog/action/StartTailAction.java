@@ -5,7 +5,6 @@ import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.util.NlsActions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +34,7 @@ public class StartTailAction extends AnAction {
      *                    the status bar when presentation has focus
      * @param icon        Action's icon
      */
-    public StartTailAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description,
+    public StartTailAction(@Nullable String text, @Nullable String description,
                            @Nullable Icon icon) {
         super(text, description, icon);
     }

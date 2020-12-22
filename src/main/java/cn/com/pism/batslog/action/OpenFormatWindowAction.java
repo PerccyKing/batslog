@@ -3,7 +3,6 @@ package cn.com.pism.batslog.action;
 import cn.com.pism.batslog.ui.FormatWindow;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.util.NlsActions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +34,7 @@ public class OpenFormatWindowAction extends AnAction {
      *                    the status bar when presentation has focus
      * @param icon        Action's icon
      */
-    public OpenFormatWindowAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description, @Nullable Icon icon) {
+    public OpenFormatWindowAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
         super(text, description, icon);
     }
 }
