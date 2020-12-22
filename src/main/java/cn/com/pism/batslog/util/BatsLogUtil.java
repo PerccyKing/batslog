@@ -1,12 +1,12 @@
 package cn.com.pism.batslog.util;
 
+import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.*;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -47,14 +47,14 @@ public class BatsLogUtil {
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(StringUtil.encoding("格式化窗口"), StringUtil.encoding("FormatWindow"), Applet);
 
         List<AnAction> anActions = new ArrayList<>();
-        anActions.add(new StartTailAction(StringUtil.encoding("启动"), StringUtil.encoding("开启SQL监听"), AllIcons.Actions.Execute));
+        anActions.add(new StartTailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSQLMonitoring"), AllIcons.Actions.Execute));
         anActions.add(clearAllAction);
         anActions.add(scrollToEndAction);
         anActions.add(openFormatWindowAction);
 
         START_ACTION = anActions.toArray(new AnAction[0]);
         List<AnAction> suspend = new ArrayList<>();
-        suspend.add(new SuspendTailAction(StringUtil.encoding("停止"), StringUtil.encoding("停止SQL监听"), AllIcons.Actions.Suspend));
+        suspend.add(new SuspendTailAction(BatsLogBundle.message("stop"), BatsLogBundle.message("stopSQLMonitoring"), AllIcons.Actions.Suspend));
         suspend.add(clearAllAction);
         suspend.add(scrollToEndAction);
         suspend.add(openFormatWindowAction);
