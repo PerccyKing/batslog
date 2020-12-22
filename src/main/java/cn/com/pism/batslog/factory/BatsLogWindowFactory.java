@@ -1,9 +1,9 @@
 package cn.com.pism.batslog.factory;
 
+import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
-import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -26,8 +26,8 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         FormatConsole formatConsole = new FormatConsole(project);
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), StringUtil.encoding("控制台"), false);
-        Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), StringUtil.encoding("设置"), false);
+        Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("console"), false);
+        Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("consoleSetting"), false);
         toolWindow.getContentManager().addContent(formatConsoleContent);
         toolWindow.getContentManager().addContent(settingFormContent);
         BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.START_ACTION);

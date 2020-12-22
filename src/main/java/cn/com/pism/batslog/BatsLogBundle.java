@@ -1,6 +1,8 @@
 package cn.com.pism.batslog;
 
 import com.intellij.AbstractBundle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.PropertyKey;
 
 /**
  * @author wangyihuai
@@ -10,11 +12,13 @@ public class BatsLogBundle extends AbstractBundle {
 
     private static final String BUNDLE = "text.BatsLogBundle";
 
-    public BatsLogBundle() {
-        super(BUNDLE);
+    public static String message(@NotNull @PropertyKey(resourceBundle = BUNDLE) String key, @NotNull Object... params) {
+        return INSTANCE.getMessage(key, params);
     }
 
-    public String text() {
-        return getMessage("");
+    private static final BatsLogBundle INSTANCE = new BatsLogBundle();
+
+    private BatsLogBundle() {
+        super(BUNDLE);
     }
 }
