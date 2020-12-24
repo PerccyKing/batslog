@@ -1,9 +1,7 @@
 package cn.com.pism.batslog.ui;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.impl.ContextMenuPopupHandler;
@@ -20,6 +18,7 @@ import java.util.List;
  */
 public class MyConsoleViewImpl extends ConsoleViewImpl {
 
+    ActionToolbar actionToolbar;
 
     public MyConsoleViewImpl(@NotNull Project project, boolean viewer) {
         super(project, viewer);
@@ -47,5 +46,38 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
     public void installPopupHandler(ContextMenuPopupHandler handler) {
         EditorEx editor = (EditorEx) getEditor();
         editor.installPopupHandler(handler);
+    }
+
+    /**
+     * <p>
+     * 生成一个ActionToolBar
+     * </p>
+     *
+     * @param places     : 位置 {@link ActionPlaces}
+     * @param horizontal : 是否水平
+     * @param anActions  :
+     * @return {@link ActionToolbar} ActionToolBar
+     * @author PerccyKing
+     * @date 2020/12/12 下午 08:36
+     */
+    public ActionToolbar createActionToolBar(String places, boolean horizontal, AnAction[] anActions){
+        AnAction[] consoleActions = createConsoleActions();
+        //todo 只保留console本省的事件
+        DefaultActionGroup actions = new DefaultActionGroup();
+        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
+        for (AnAction action : anActions) {
+            actions.add(action);
+        }
+        setActionToolbar(actionToolbar);
+        return actionToolbar;
+    }
+
+
+    public ActionToolbar getActionToolbar() {
+        return actionToolbar;
+    }
+
+    public void setActionToolbar(ActionToolbar actionToolbar) {
+        this.actionToolbar = actionToolbar;
     }
 }
