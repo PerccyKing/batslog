@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -28,7 +29,9 @@ public class SuspendTailAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         BatsLogUtil.TAIL_STATUS = Boolean.FALSE;
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject())).print(StringUtil.encoding("SQL监听已停止\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()));
+        consoleView.print(StringUtil.encoding("SQL监听已停止\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        consoleView.installPopupHandler(BatsLogUtil.START_ACTION);
         BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.START_ACTION);
     }
 

@@ -1,8 +1,8 @@
 package cn.com.pism.batslog.action;
 
 import cn.com.pism.batslog.BatsLogBundle;
+import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.util.BatsLogUtil;
-import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -21,7 +21,9 @@ public class StartTailAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         BatsLogUtil.TAIL_STATUS = Boolean.TRUE;
-        BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject())).print(BatsLogBundle.message("SqlListenerHasStarted"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()));
+        consoleView.print(BatsLogBundle.message("SqlListenerHasStarted"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        consoleView.installPopupHandler(BatsLogUtil.SUSPEND_ACTION);
         BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.SUSPEND_ACTION);
     }
 

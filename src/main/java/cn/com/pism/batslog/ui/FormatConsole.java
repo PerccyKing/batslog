@@ -2,7 +2,6 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;
-import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
@@ -28,7 +27,7 @@ public class FormatConsole {
 
     public FormatConsole(Project project) {
         SimpleToolWindowPanel simpleToolWindowPanel = new SimpleToolWindowPanel(false, true);
-        ConsoleViewImpl consoleView = new ConsoleViewImpl(project, true);
+        MyConsoleViewImpl consoleView = new MyConsoleViewImpl(project, true);
         simpleToolWindowPanel.setContent(consoleView.getComponent());
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(simpleToolWindowPanel, "", false);
@@ -37,6 +36,7 @@ public class FormatConsole {
         BatsLogUtil.PANE_BAR = paneBar;
         paneBar.setUnitIncrement(16);
         consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
+        consoleView.installPopupHandler(BatsLogUtil.START_ACTION);
         BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
     }
 }
