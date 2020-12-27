@@ -3,6 +3,8 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.ui.content.Content;
@@ -10,6 +12,8 @@ import com.intellij.ui.content.ContentFactory;
 import lombok.Data;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.BATS_LOG;
 
@@ -24,6 +28,7 @@ public class FormatConsole {
     private JPanel root;
     private JPanel sqlPanel;
     private JScrollPane sqlPane;
+    private JPanel toolBar;
 
     public FormatConsole(Project project) {
         SimpleToolWindowPanel simpleToolWindowPanel = new SimpleToolWindowPanel(false, true);
@@ -37,6 +42,8 @@ public class FormatConsole {
         paneBar.setUnitIncrement(16);
         consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
         consoleView.installPopupHandler(BatsLogUtil.START_ACTION);
+        ActionToolbar actionToolBar = consoleView.createActionToolBar(ActionPlaces.UNKNOWN, true, BatsLogUtil.START_ACTION);
+        toolBar.add(actionToolBar.getComponent());
         BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
     }
 }

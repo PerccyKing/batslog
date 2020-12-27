@@ -48,6 +48,15 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
         editor.installPopupHandler(handler);
     }
 
+    public ActionToolbar createActionToolBar(String places, boolean horizontal, List<AnAction> anActions) {
+        AnAction[] consoleActions = createConsoleActions();
+        for (AnAction action : consoleActions) {
+            boolean transparentUpdate = action.isTransparentUpdate();
+            anActions.add(action);
+        }
+        return createActionToolBar(places, horizontal, anActions.toArray(new AnAction[0]));
+    }
+
     /**
      * <p>
      * 生成一个ActionToolBar
@@ -60,9 +69,8 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
      * @author PerccyKing
      * @date 2020/12/12 下午 08:36
      */
-    public ActionToolbar createActionToolBar(String places, boolean horizontal, AnAction[] anActions){
-        AnAction[] consoleActions = createConsoleActions();
-        //todo 只保留console本省的事件
+    public ActionToolbar createActionToolBar(String places, boolean horizontal, AnAction[] anActions) {
+        //只保留console自身的事件
         DefaultActionGroup actions = new DefaultActionGroup();
         ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
         for (AnAction action : anActions) {

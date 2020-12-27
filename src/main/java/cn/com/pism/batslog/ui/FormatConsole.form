@@ -37,10 +37,11 @@
         <border type="none"/>
         <children/>
       </grid>
-      <grid id="13635" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
+      <grid id="13635" binding="toolBar" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="North"/>
-        <properties/>
+        <properties>
+          <preferredSize width="50" height="50"/>
+        </properties>
         <border type="none"/>
         <children/>
       </grid>
