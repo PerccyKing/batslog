@@ -1,7 +1,8 @@
 package cn.com.pism.batslog.util;
 
 import cn.com.pism.batslog.BatsLogBundle;
-import cn.com.pism.batslog.action.*;
+import cn.com.pism.batslog.action.OpenFormatWindowAction;
+import cn.com.pism.batslog.action.TailAction;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -20,15 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 import static com.intellij.icons.AllIcons.RunConfigurations.Applet;
-import static com.intellij.icons.AllIcons.RunConfigurations.Scroll_down;
 
 /**
  * @author PerccyKing
  * @date 2020/10/26 下午 01:17
  */
 public class BatsLogUtil {
-    public static AnAction[] START_ACTION;
-    public static AnAction[] SUSPEND_ACTION;
+    public static AnAction[] TAIL_ACTION;
     public static ToolWindowEx TOOL_WINDOW;
     public static Boolean TAIL_STATUS = Boolean.FALSE;
     public static Map<Project, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
@@ -45,14 +44,10 @@ public class BatsLogUtil {
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
 
         List<AnAction> anActions = new ArrayList<>();
-        anActions.add(new StartTailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute));
+        anActions.add(new TailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute));
         anActions.add(openFormatWindowAction);
 
-        START_ACTION = anActions.toArray(new AnAction[0]);
-        List<AnAction> suspend = new ArrayList<>();
-        suspend.add(new SuspendTailAction(BatsLogBundle.message("stop"), BatsLogBundle.message("stopSqlListener"), AllIcons.Actions.Suspend));
-        suspend.add(openFormatWindowAction);
-        SUSPEND_ACTION = suspend.toArray(new AnAction[0]);
+        TAIL_ACTION = anActions.toArray(new AnAction[0]);
 
     }
 

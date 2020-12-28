@@ -6,9 +6,6 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
 import lombok.Data;
 
 import javax.swing.*;
@@ -28,8 +25,8 @@ public class FormatConsole {
     public FormatConsole(Project project) {
         MyConsoleViewImpl consoleView = new MyConsoleViewImpl(project, true);
         JComponent component = consoleView.getComponent();
-        consoleView.installPopupHandler(BatsLogUtil.START_ACTION);
-        ActionToolbar actionToolBar = consoleView.createActionToolBar(ActionPlaces.UNKNOWN, true, BatsLogUtil.START_ACTION);
+        consoleView.installPopupHandler(BatsLogUtil.TAIL_ACTION);
+        ActionToolbar actionToolBar = consoleView.createActionToolBar(ActionPlaces.UNKNOWN, true, BatsLogUtil.TAIL_ACTION);
         toolBar.add(actionToolBar.getComponent());
         sqlPanel.add(component);
         sqlPanel.setBorder(null);
