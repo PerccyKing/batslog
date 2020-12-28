@@ -1,10 +1,16 @@
 package cn.com.pism.batslog.ui;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.ide.CommonActionsManager;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.actions.ScrollToTheEndToolbarAction;
+import com.intellij.openapi.editor.actions.ToggleUseSoftWrapsToolbarAction;
 import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.impl.ContextMenuPopupHandler;
+import com.intellij.openapi.editor.impl.softwrap.SoftWrapAppliancePlaces;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,14 +75,12 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
     }
 
     public ActionToolbar createActionToolBar(String places, boolean horizontal, List<AnAction> anActions) {
-        AnAction[] consoleActions = createConsoleActions();
+        AnAction[] consoleActions = createConsoleActionArr();
+        ActionManager actionManager = ActionManager.getInstance();
         //只保留console自身的事件
-        for (AnAction action : consoleActions) {
-            boolean transparentUpdate = action.isTransparentUpdate();
-            anActions.add(action);
-        }
+        anActions.addAll(Arrays.asList(consoleActions));
         DefaultActionGroup actions = new DefaultActionGroup();
-        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
+        ActionToolbar actionToolbar = actionManager.createActionToolbar(places, actions, horizontal);
         for (AnAction action : anActions) {
             actions.add(action);
         }
@@ -107,5 +111,52 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
 
     public void setActionToolbar(ActionToolbar actionToolbar) {
         this.actionToolbar = actionToolbar;
+    }
+
+    public AnAction[] createConsoleActionArr() {
+        //Initializing prev and next occurrences actions
+        final CommonActionsManager actionsManager = CommonActionsManager.getInstance();
+        final AnAction prevAction = actionsManager.createPrevOccurenceAction(this);
+        prevAction.getTemplatePresentation().setText(getPreviousOccurenceActionName());
+        final AnAction nextAction = actionsManager.createNextOccurenceAction(this);
+        nextAction.getTemplatePresentation().setText(getNextOccurenceActionName());
+
+        Editor editor = getEditor();
+        final AnAction switchSoftWrapsAction = new ToggleUseSoftWrapsToolbarAction(SoftWrapAppliancePlaces.CONSOLE) {
+            @Override
+            protected Editor getEditor(@NotNull AnActionEvent e) {
+                return editor;
+            }
+        };
+        final AnAction autoScrollToTheEndAction = new ScrollToTheEndToolbarAction(editor);
+
+        List<AnAction> consoleActions = new ArrayList<>();
+        consoleActions.add(prevAction);
+        consoleActions.add(nextAction);
+        consoleActions.add(switchSoftWrapsAction);
+        consoleActions.add(autoScrollToTheEndAction);
+        consoleActions.add(ActionManager.getInstance().getAction("Print"));
+        consoleActions.add(new ClearThisConsoleViewAction(this));
+        return consoleActions.toArray(AnAction.EMPTY_ARRAY);
+    }
+
+
+    private static class ClearThisConsoleViewAction extends ClearAllAction {
+        private final ConsoleView myConsoleView;
+
+        ClearThisConsoleViewAction(@NotNull ConsoleView consoleView) {
+            myConsoleView = consoleView;
+        }
+
+        @Override
+        public void update(@NotNull AnActionEvent e) {
+            boolean enabled = myConsoleView.getContentSize() > 0;
+            e.getPresentation().setEnabled(enabled);
+        }
+
+        @Override
+        public void actionPerformed(@NotNull final AnActionEvent e) {
+            myConsoleView.clear();
+        }
     }
 }
