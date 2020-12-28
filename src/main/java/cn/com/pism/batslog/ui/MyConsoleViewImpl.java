@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,12 +23,31 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
 
     public MyConsoleViewImpl(@NotNull Project project, boolean viewer) {
         super(project, viewer);
+        setBorder(null);
     }
 
+    /**
+     * <p>
+     * 更新邮件菜单
+     * </p>
+     *
+     * @param anActions : 新的事件列表
+     * @author wangyihuai
+     * @date 2020/12/28 10:44
+     */
     public void installPopupHandler(AnAction[] anActions) {
         installPopupHandler(Arrays.asList(anActions));
     }
 
+    /**
+     * <p>
+     * 更新邮件菜单
+     * </p>
+     *
+     * @param anActions : 新的事件列表
+     * @author wangyihuai
+     * @date 2020/12/28 10:44
+     */
     public void installPopupHandler(List<AnAction> anActions) {
         installPopupHandler(new ContextMenuPopupHandler() {
             @Override
@@ -50,11 +70,18 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
 
     public ActionToolbar createActionToolBar(String places, boolean horizontal, List<AnAction> anActions) {
         AnAction[] consoleActions = createConsoleActions();
+        //只保留console自身的事件
         for (AnAction action : consoleActions) {
             boolean transparentUpdate = action.isTransparentUpdate();
             anActions.add(action);
         }
-        return createActionToolBar(places, horizontal, anActions.toArray(new AnAction[0]));
+        DefaultActionGroup actions = new DefaultActionGroup();
+        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
+        for (AnAction action : anActions) {
+            actions.add(action);
+        }
+        setActionToolbar(actionToolbar);
+        return actionToolbar;
     }
 
     /**
@@ -70,14 +97,7 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
      * @date 2020/12/12 下午 08:36
      */
     public ActionToolbar createActionToolBar(String places, boolean horizontal, AnAction[] anActions) {
-        //只保留console自身的事件
-        DefaultActionGroup actions = new DefaultActionGroup();
-        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(places, actions, horizontal);
-        for (AnAction action : anActions) {
-            actions.add(action);
-        }
-        setActionToolbar(actionToolbar);
-        return actionToolbar;
+        return createActionToolBar(places, horizontal, new ArrayList<>(Arrays.asList(anActions)));
     }
 
 

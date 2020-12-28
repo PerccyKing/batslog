@@ -42,21 +42,15 @@ public class BatsLogUtil {
     public static Map<Project, List<String>> SQL_CACHE = new HashMap<>();
 
     static {
-        ClearAllAction clearAllAction = new ClearAllAction(BatsLogBundle.message("clearConsole"), BatsLogBundle.message("clearConsole"), AllIcons.Actions.GC);
-        ScrollToEndAction scrollToEndAction = new ScrollToEndAction(BatsLogBundle.message("ScrollToEnd"), BatsLogBundle.message("ScrollToEnd"), Scroll_down);
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
 
         List<AnAction> anActions = new ArrayList<>();
         anActions.add(new StartTailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute));
-        anActions.add(clearAllAction);
-        anActions.add(scrollToEndAction);
         anActions.add(openFormatWindowAction);
 
         START_ACTION = anActions.toArray(new AnAction[0]);
         List<AnAction> suspend = new ArrayList<>();
         suspend.add(new SuspendTailAction(BatsLogBundle.message("stop"), BatsLogBundle.message("stopSqlListener"), AllIcons.Actions.Suspend));
-        suspend.add(clearAllAction);
-        suspend.add(scrollToEndAction);
         suspend.add(openFormatWindowAction);
         SUSPEND_ACTION = suspend.toArray(new AnAction[0]);
 

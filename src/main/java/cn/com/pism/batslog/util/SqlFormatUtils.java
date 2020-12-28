@@ -116,7 +116,7 @@ public class SqlFormatUtils {
             }
         }
         consoleView.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
-        BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
+//        BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
     }
 
 

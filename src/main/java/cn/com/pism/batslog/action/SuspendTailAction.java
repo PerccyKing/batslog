@@ -32,7 +32,6 @@ public class SuspendTailAction extends AnAction {
         MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()));
         consoleView.print(StringUtil.encoding("SQL监听已停止\n"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
         consoleView.installPopupHandler(BatsLogUtil.START_ACTION);
-        BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.START_ACTION);
     }
 
     /**

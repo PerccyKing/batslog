@@ -12,34 +12,28 @@ import com.intellij.ui.content.ContentFactory;
 import lombok.Data;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.BATS_LOG;
 
 /**
- * @author PerccyKing
- * @version 0.0.1
- * @date 2020/10/25 上午 11:48
- * @since 0.0.1
+ * @author wangyihuai
+ * @date 2020/12/28 13:07
  */
 @Data
-public class FormatConsole {
+public class FormatConsoleNew {
     private JPanel root;
     private JPanel sqlPanel;
     private JPanel toolBar;
 
-    public FormatConsole(Project project) {
-        SimpleToolWindowPanel simpleToolWindowPanel = new SimpleToolWindowPanel(false, true);
+    public FormatConsoleNew(Project project) {
         MyConsoleViewImpl consoleView = new MyConsoleViewImpl(project, true);
-        simpleToolWindowPanel.setContent(consoleView.getComponent());
-        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(simpleToolWindowPanel, "", false);
-        sqlPanel.add(content.getComponent());
-        consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
+        JComponent component = consoleView.getComponent();
         consoleView.installPopupHandler(BatsLogUtil.START_ACTION);
         ActionToolbar actionToolBar = consoleView.createActionToolBar(ActionPlaces.UNKNOWN, true, BatsLogUtil.START_ACTION);
-        simpleToolWindowPanel.setToolbar(actionToolBar.getComponent());
+        toolBar.add(actionToolBar.getComponent());
+        sqlPanel.add(component);
+        sqlPanel.setBorder(null);
+        consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
         BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
     }
 }

@@ -24,7 +24,6 @@ public class StartTailAction extends AnAction {
         MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()));
         consoleView.print(BatsLogBundle.message("SqlListenerHasStarted"), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
         consoleView.installPopupHandler(BatsLogUtil.SUSPEND_ACTION);
-        BatsLogUtil.TOOL_WINDOW.setTitleActions(BatsLogUtil.SUSPEND_ACTION);
     }
 
 
