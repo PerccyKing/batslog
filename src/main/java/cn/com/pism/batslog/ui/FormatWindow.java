@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,7 +47,7 @@ public class FormatWindow extends DialogWrapper {
     private JButton formatAndClear;
     private JButton clearAll;
 
-    private ConsoleViewImpl consoleView;
+    private MyConsoleViewImpl consoleView;
 
     private Editor myEditor;
 
@@ -121,7 +120,7 @@ public class FormatWindow extends DialogWrapper {
 
 
         //右边console
-        ConsoleViewImpl consoleView = new ConsoleViewImpl(defaultProject, true);
+        MyConsoleViewImpl consoleView = new MyConsoleViewImpl(defaultProject, true);
         this.consoleView = consoleView;
 
         //添加操作栏,调用一次getComponent ，editor才会创建
@@ -138,9 +137,8 @@ public class FormatWindow extends DialogWrapper {
                 }
             }
         });
-        AnAction[] consoleActions = consoleView.createConsoleActions();
-        consoleActionList.addAll(Arrays.asList(consoleActions));
-        ActionToolbar sqlConsoleToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, consoleActionList.toArray(new AnAction[0]));
+        ActionToolbar sqlConsoleToolBar = consoleView.createActionToolBar(ActionPlaces.UNKNOWN, true, consoleActionList);
+        consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());
         consoleBar.add(sqlConsoleToolBar.getComponent());
         sqlConsole.add(component);
 
