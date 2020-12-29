@@ -30,7 +30,7 @@ public class BatsLogUtil {
     public static String PREPARING = "Preparing:";
     public static String PARAMETERS = "Parameters:";
 
-    public static Map<Project,List<String>> SOURCE_SQL_LIST_MAP = new HashMap<>();
+    public static Map<Project, List<String>> SOURCE_SQL_LIST_MAP = new HashMap<>();
 
     public static Map<Project, List<String>> SQL_CACHE = new HashMap<>();
 
@@ -51,5 +51,11 @@ public class BatsLogUtil {
     public static void copyToClipboard(String cache) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(cache), null);
+    }
+
+    public static Boolean getTailStatus(Project project) {
+        Boolean tailStatus = TAIL_STATUS.get(project);
+        tailStatus = tailStatus == null ? Boolean.FALSE : tailStatus;
+        return tailStatus;
     }
 }

@@ -25,8 +25,7 @@ public class TailAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         if (project != null) {
-            Boolean tailStatus = BatsLogUtil.TAIL_STATUS.get(project);
-            tailStatus = tailStatus == null ? Boolean.FALSE : tailStatus;
+            Boolean tailStatus = BatsLogUtil.getTailStatus(project);
             BatsLogUtil.TAIL_STATUS.put(project, !tailStatus);
             MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(project));
             String tipMsg = tailStatus ? BatsLogBundle.message("SqlListenerHasStop") : BatsLogBundle.message("SqlListenerHasStarted");
@@ -41,8 +40,7 @@ public class TailAction extends AnAction {
         super.update(e);
         Project project = e.getProject();
         if (project != null) {
-            Boolean tailStatus = BatsLogUtil.TAIL_STATUS.get(project);
-            tailStatus = tailStatus == null ? Boolean.FALSE : tailStatus;
+            Boolean tailStatus = BatsLogUtil.getTailStatus(project);
             Icon icon = tailStatus ? AllIcons.Actions.Suspend : AllIcons.Actions.Execute;
             String text = tailStatus ? BatsLogBundle.message("stop") : BatsLogBundle.message("start");
             String description = tailStatus ? BatsLogBundle.message("stopSqlListener") : BatsLogBundle.message("startSqlListener");

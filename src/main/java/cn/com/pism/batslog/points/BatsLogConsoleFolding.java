@@ -35,7 +35,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
             sourceSqlList = new ArrayList<>();
         }
         //sql和参数占用两行
-        if (BatsLogUtil.TAIL_STATUS.get(project)) {
+        if (BatsLogUtil.getTailStatus(project)) {
             if (line.contains(PREPARING) && sourceSqlList.size() == 0) {
                 sourceSqlList.add(line);
                 SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
