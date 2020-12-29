@@ -4,7 +4,11 @@ import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.SqlFormatUtils;
 import com.intellij.execution.ConsoleFolding;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static cn.com.pism.batslog.util.BatsLogUtil.*;
 
@@ -15,6 +19,9 @@ import static cn.com.pism.batslog.util.BatsLogUtil.*;
  * @since 0.0.1
  */
 public class BatsLogConsoleFolding extends ConsoleFolding {
+
+    public static final Integer LIST_SIZE = 2;
+
     /**
      * @param project current project
      * @param line    line to check whether it should be folded or not
@@ -23,18 +30,25 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
     @Override
     public boolean shouldFoldLine(@NotNull Project project, @NotNull String line) {
         line = line.replace("\n", "");
-        if (BatsLogUtil.TAIL_STATUS) {
-            if (line.contains(PREPARING) && SOURCE_SQL_LIST.size() == 0) {
-                SOURCE_SQL_LIST.add(line);
-            } else if (SOURCE_SQL_LIST.size() >= 2) {
-                SOURCE_SQL_LIST.clear();
+        List<String> sourceSqlList = SOURCE_SQL_LIST_MAP.get(project);
+        if ((CollectionUtils.isEmpty(sourceSqlList)) || (sourceSqlList.size() > LIST_SIZE)) {
+            sourceSqlList = new ArrayList<>();
+        }
+        //sql和参数占用两行
+        if (BatsLogUtil.TAIL_STATUS.get(project)) {
+            if (line.contains(PREPARING) && sourceSqlList.size() == 0) {
+                sourceSqlList.add(line);
+                SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+            } else if (sourceSqlList.size() >= LIST_SIZE) {
+                SOURCE_SQL_LIST_MAP.remove(project);
             }
 
-            if (line.contains(PARAMETERS) && SOURCE_SQL_LIST.size() != 0) {
-                SOURCE_SQL_LIST.add(line);
-                if (SOURCE_SQL_LIST.size() == 2) {
-                    SqlFormatUtils.format(String.join("\n", SOURCE_SQL_LIST), project);
-                    SOURCE_SQL_LIST.clear();
+            if (line.contains(PARAMETERS) && sourceSqlList.size() != 0) {
+                sourceSqlList.add(line);
+                SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+                if (sourceSqlList.size() == LIST_SIZE) {
+                    SqlFormatUtils.format(String.join("\n", sourceSqlList), project);
+                    SOURCE_SQL_LIST_MAP.remove(project);
                 }
             }
         }

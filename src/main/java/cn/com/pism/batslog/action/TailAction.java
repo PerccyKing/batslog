@@ -8,6 +8,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,26 +23,35 @@ public class TailAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        BatsLogUtil.TAIL_STATUS = !BatsLogUtil.TAIL_STATUS;
-        MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(e.getProject()));
-        String tipMsg = BatsLogUtil.TAIL_STATUS ? BatsLogBundle.message("SqlListenerHasStarted") : BatsLogBundle.message("SqlListenerHasStop");
-        consoleView.print(tipMsg, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
-        consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());
+        Project project = e.getProject();
+        if (project != null) {
+            Boolean tailStatus = BatsLogUtil.TAIL_STATUS.get(project);
+            tailStatus = tailStatus == null ? Boolean.FALSE : tailStatus;
+            BatsLogUtil.TAIL_STATUS.put(project, !tailStatus);
+            MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(project));
+            String tipMsg = tailStatus ? BatsLogBundle.message("SqlListenerHasStop") : BatsLogBundle.message("SqlListenerHasStarted");
+            consoleView.print(tipMsg, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+            consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());
+        }
     }
 
 
     @Override
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
-        Boolean tailStatus = BatsLogUtil.TAIL_STATUS;
-        Icon icon = tailStatus ? AllIcons.Actions.Suspend : AllIcons.Actions.Execute;
-        String text = tailStatus ? BatsLogBundle.message("stop") : BatsLogBundle.message("start");
-        String description = tailStatus ? BatsLogBundle.message("stopSqlListener") : BatsLogBundle.message("startSqlListener");
+        Project project = e.getProject();
+        if (project != null) {
+            Boolean tailStatus = BatsLogUtil.TAIL_STATUS.get(project);
+            tailStatus = tailStatus == null ? Boolean.FALSE : tailStatus;
+            Icon icon = tailStatus ? AllIcons.Actions.Suspend : AllIcons.Actions.Execute;
+            String text = tailStatus ? BatsLogBundle.message("stop") : BatsLogBundle.message("start");
+            String description = tailStatus ? BatsLogBundle.message("stopSqlListener") : BatsLogBundle.message("startSqlListener");
 
-        Presentation presentation = e.getPresentation();
-        presentation.setIcon(icon);
-        presentation.setDescription(description);
-        presentation.setText(text);
+            Presentation presentation = e.getPresentation();
+            presentation.setIcon(icon);
+            presentation.setDescription(description);
+            presentation.setText(text);
+        }
     }
 
     /**

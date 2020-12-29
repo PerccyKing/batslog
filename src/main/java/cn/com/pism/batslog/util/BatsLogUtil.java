@@ -1,10 +1,6 @@
 package cn.com.pism.batslog.util;
 
-import cn.com.pism.batslog.BatsLogBundle;
-import cn.com.pism.batslog.action.OpenFormatWindowAction;
-import cn.com.pism.batslog.action.TailAction;
 import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -20,36 +16,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.intellij.icons.AllIcons.RunConfigurations.Applet;
-
 /**
  * @author PerccyKing
  * @date 2020/10/26 下午 01:17
  */
 public class BatsLogUtil {
-    public static AnAction[] TAIL_ACTION;
+    public static Map<Project, AnAction[]> TAIL_ACTION = new HashMap<>();
     public static ToolWindowEx TOOL_WINDOW;
-    public static Boolean TAIL_STATUS = Boolean.FALSE;
+    public static Map<Project, Boolean> TAIL_STATUS = new HashMap<>();
     public static Map<Project, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
     public static JScrollBar PANE_BAR;
 
     public static String PREPARING = "Preparing:";
     public static String PARAMETERS = "Parameters:";
 
-    public static List<String> SOURCE_SQL_LIST = new ArrayList<>();
+    public static Map<Project,List<String>> SOURCE_SQL_LIST_MAP = new HashMap<>();
 
     public static Map<Project, List<String>> SQL_CACHE = new HashMap<>();
-
-    static {
-        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
-
-        List<AnAction> anActions = new ArrayList<>();
-        anActions.add(new TailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute));
-        anActions.add(openFormatWindowAction);
-
-        TAIL_ACTION = anActions.toArray(new AnAction[0]);
-
-    }
 
 
     public static void copySqlToClipboard(AnActionEvent e, String text) {

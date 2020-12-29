@@ -23,6 +23,10 @@ import org.jetbrains.annotations.NotNull;
 public class BatsLogWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+
+        //项目默认监听状态
+        BatsLogUtil.TAIL_STATUS.put(project, Boolean.FALSE);
+
         BatsLogUtil.TOOL_WINDOW = (ToolWindowEx) toolWindow;
         FormatConsole formatConsole = new FormatConsole(project);
         SettingForm settingForm = new SettingForm(project);
