@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.Editors;
 import cn.com.pism.batslog.util.SqlFormatUtils;
@@ -68,7 +69,7 @@ public class FormatWindow extends DialogWrapper {
         init();
         this.project = project;
         initForm(project);
-        setOKButtonTooltip(StringUtil.encoding("打印SQL到控制台"));
+        setOKButtonTooltip(BatsLogBundle.message("printSqlToConsole"));
 
         initFormAction(project);
 
@@ -126,8 +127,8 @@ public class FormatWindow extends DialogWrapper {
         //添加操作栏,调用一次getComponent ，editor才会创建
         JComponent component = consoleView.getComponent();
         List<AnAction> consoleActionList = new ArrayList<>();
-        consoleActionList.add(new AnAction(StringUtil.encoding("复制所有SQL"),
-                StringUtil.encoding("复制所有SQL到剪贴板"),
+        consoleActionList.add(new AnAction(BatsLogBundle.message("copyAllSQL"),
+                BatsLogBundle.message("copyAllSQL"),
                 BatsLogIcons.BATS_LOG_COPY) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
@@ -210,14 +211,14 @@ public class FormatWindow extends DialogWrapper {
      */
     public List<AnAction> getLogActions(Editor editor) {
         List<AnAction> logActions = new ArrayList<>();
-        AnAction clear = new AnAction(StringUtil.encoding("清空"), StringUtil.encoding("清空日志输入编辑器"), AllIcons.Actions.GC) {
+        AnAction clear = new AnAction(BatsLogBundle.message("clear"), BatsLogBundle.message("clearEditor"), AllIcons.Actions.GC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 clearLogEditor(editor);
             }
         };
-        AnAction copySqlToClipboard = new AnAction(StringUtil.encoding("复制SQL到剪贴板"),
-                StringUtil.encoding("复制SQL到剪贴板"), BatsLogIcons.BATS_LOG_COPY) {
+        AnAction copySqlToClipboard = new AnAction(BatsLogBundle.message("copySQLToClipboard"),
+                BatsLogBundle.message("copySQLToClipboard"), BatsLogIcons.BATS_LOG_COPY) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 BatsLogUtil.copySqlToClipboard(e, editor.getDocument().getText());

@@ -43,7 +43,7 @@ public class KeyWordsConstant {
                 "backup", "current_timestamp", "extent_size", "interval", "minvalue", "prepare", "rotate", "string", "varcharacter",
                 "before", "current_user", "false", "into", "mod", "preserve", "routine", "subclass_origin", "variables",
                 "begin", "cursor", "fast", "io", "modifies", "prev", "row", "subpartition", "varying",
-                "between", "database", "faults", "io_after_gtids", "modify", "primary", "rows", "subpartitions", "view",
+                "between", "databaseType", "faults", "io_after_gtids", "modify", "primary", "rows", "subpartitions", "view",
                 "bigint", "databases", "fetch", "io_before_gtids", "month", "privileges", "row_count", "super", "virtual",
                 "binary", "date", "fields", "io_thread", "multilinestring", "procedure", "row_format", "suspend", "wait",
                 "binlog", "datetime", "filter", "ipc", "multipoint", "processlist", "rtree", "swaps", "warnings",

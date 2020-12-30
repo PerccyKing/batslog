@@ -1,9 +1,14 @@
 package cn.com.pism.batslog.factory;
 
 import cn.com.pism.batslog.BatsLogBundle;
+import cn.com.pism.batslog.action.CopySqlAction;
+import cn.com.pism.batslog.action.FormatSqlAction;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import com.intellij.execution.console.ConsoleExecutionEditor;
+import com.intellij.largeFilesEditor.PlatformActionsReplacer;
+import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -11,7 +16,9 @@ import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
+import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.builtInWebServer.ConsoleManager;
 
 
 /**
@@ -36,5 +43,8 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         ContentManager contentManager = toolWindow.getContentManager();
         contentManager.addContent(formatConsoleContent);
         contentManager.addContent(settingFormContent);
+        ActionManager instance = ActionManager.getInstance();
+        instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("formatSql"), "", BatsLogIcons.BATS_LOG));
+        instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("copySql"), "", BatsLogIcons.BATS_LOG_COPY));
     }
 }

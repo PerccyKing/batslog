@@ -112,7 +112,7 @@
                   <maximumSize width="58" height="38"/>
                   <minimumSize width="58" height="38"/>
                   <preferredSize width="58" height="38"/>
-                  <text value="格式化"/>
+                  <text resource-bundle="text/BatsLogBundle" key="FormatButton"/>
                 </properties>
               </component>
               <component id="fdceb" class="javax.swing.JButton" binding="clearAndFormat">
@@ -122,15 +122,15 @@
                   <hideActionText value="false"/>
                   <horizontalTextPosition value="0"/>
                   <inheritsPopupMenu value="false"/>
-                  <label value="&lt;html&gt;清空并&lt;br&gt;格式化&lt;/html&gt;"/>
+                  <label resource-bundle="text/BatsLogBundle" key="clearAndFormat"/>
                   <maximumSize width="58" height="60"/>
                   <minimumSize width="58" height="60"/>
                   <opaque value="false"/>
                   <preferredSize width="58" height="60"/>
                   <requestFocusEnabled value="true"/>
                   <rolloverEnabled value="true"/>
-                  <text value="&lt;html&gt;清空并&lt;br&gt;格式化&lt;/html&gt;"/>
-                  <toolTipText value="清空右侧面板并格式化输出"/>
+                  <text resource-bundle="text/BatsLogBundle" key="clearAndFormat"/>
+                  <toolTipText resource-bundle="text/BatsLogBundle" key="clearAndFormatTips"/>
                   <verifyInputWhenFocusTarget value="true"/>
                   <verticalTextPosition value="0"/>
                 </properties>
@@ -141,8 +141,8 @@
                   <maximumSize width="58" height="60"/>
                   <minimumSize width="58" height="60"/>
                   <preferredSize width="58" height="60"/>
-                  <text value="&lt;html&gt;格式化&lt;br&gt;清空并&lt;/html&gt;"/>
-                  <toolTipText value="格式化输出并清空左侧面板"/>
+                  <text resource-bundle="text/BatsLogBundle" key="formatAndClear"/>
+                  <toolTipText resource-bundle="text/BatsLogBundle" key="formatAndClearTips"/>
                 </properties>
               </component>
               <component id="544fc" class="javax.swing.JButton" binding="clearAll">
@@ -151,8 +151,8 @@
                   <maximumSize width="58" height="38"/>
                   <minimumSize width="58" height="38"/>
                   <preferredSize width="58" height="38"/>
-                  <text value="清空"/>
-                  <toolTipText value="清空全部"/>
+                  <text resource-bundle="text/BatsLogBundle" key="clear"/>
+                  <toolTipText resource-bundle="text/BatsLogBundle" key="clearTips"/>
                 </properties>
               </component>
             </children>
