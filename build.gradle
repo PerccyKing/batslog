@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.12.22.1520-Release'
+version '20.12.31.0000-Release.HAPY.NEW.YEAR'
 
 
 java {
@@ -55,11 +55,22 @@ patchPluginXml {
 
 <ul>
 <li>Fix some bugs</li>
+<li>Optimize console right click operation</li>
+<li>Provide I18N support</li>
+<li>修复一些bug</li>
+<li>优化控制台右键操作</li>
+<li>提供I18N支持</li>
+</ul>
+</div>
+
+<h1>20.12.22.1520-Release</h1>
+
+<ul>
+<li>Fix some bugs</li>
 <li>Fix compatibility issues</li>
 <li>修复一些bug</li>
 <li>修复兼容性问题</li>
 </ul>
-</div>
 
 <h1>20.12.13.1659-Release</h1>
 
