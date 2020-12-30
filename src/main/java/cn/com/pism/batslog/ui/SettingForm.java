@@ -5,7 +5,6 @@ import cn.com.pism.batslog.settings.BatsLogSetting;
 import cn.com.pism.batslog.settings.BatsLogValue;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
-import com.intellij.ui.JBColor;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
@@ -81,6 +80,7 @@ public class SettingForm {
                 this.myColor = color;
             } else {
                 this.myColor = KEY_WORD_DEF_COL;
+                BatsLogSetting.setValue(project, new BatsLogValue<>(BatsLogSetting.KEYWORDS, KEY_WORD_DEF_COL));
             }
             buttonInit(project, color);
         }

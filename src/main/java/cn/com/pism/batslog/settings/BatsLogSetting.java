@@ -38,13 +38,16 @@ public class BatsLogSetting {
 
     public static <T> BatsLogValue<T> getValue(@NotNull Project project, String key, Class<T> clazz) {
         String value = PropertiesComponent.getInstance(project).getValue(key);
-        if (StringUtils.isNotBlank(value)) {
-            JSONObject jsonObject = JSON.parseObject(value);
-            return new BatsLogValue<>(key, JSON.parseObject(jsonObject.getString("value"), clazz));
-        } else {
+        try {
+            if (StringUtils.isNotBlank(value)) {
+                JSONObject jsonObject = JSON.parseObject(value);
+                return new BatsLogValue<>(key, JSON.parseObject(jsonObject.getString("value"), clazz));
+            } else {
+                return new BatsLogValue<>(key, null);
+            }
+        } catch (Exception e) {
             return new BatsLogValue<>(key, null);
         }
-
     }
 
 }
