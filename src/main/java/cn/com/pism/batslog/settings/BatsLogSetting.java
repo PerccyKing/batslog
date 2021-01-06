@@ -18,6 +18,9 @@ public class BatsLogSetting {
     private static final String SELECTED_TYPE = PREFIX + "SelectedType";
     public static final String KEYWORDS = PREFIX + "Keywords";
 
+    public static final String SQL_PREFIX = PREFIX + "SqlPrefix";
+    public static final String PARAMS_PREFIX = PREFIX + "ParamsPrefix";
+
 
     public static DbType getDbType(@NotNull Project project) {
         String dbName = PropertiesComponent.getInstance(project).getValue(project.getName() + SELECTED_TYPE);

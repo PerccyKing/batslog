@@ -24,4 +24,8 @@ public class BatsLogConstant {
     public static final String PRE = "\u001B[";
 
     public static final Color KEY_WORD_DEF_COL = new JBColor(new Color(204, 120, 50), new Color(204, 120, 50));
+
+
+    public static String SQL_PREFIX = "Preparing:";
+    public static String PARAMS_PREFIX = "Parameters:";
 }

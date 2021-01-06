@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.com.pism.batslog.util.BatsLogUtil.*;
+import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
+import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
+import static cn.com.pism.batslog.util.BatsLogUtil.SOURCE_SQL_LIST_MAP;
 
 /**
  * @author PerccyKing
@@ -36,14 +38,14 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
         }
         //sql和参数占用两行
         if (BatsLogUtil.getTailStatus(project)) {
-            if (line.contains(PREPARING) && sourceSqlList.size() == 0) {
+            if (line.contains(SQL_PREFIX) && sourceSqlList.size() == 0) {
                 sourceSqlList.add(line);
                 SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
             } else if (sourceSqlList.size() >= LIST_SIZE) {
                 SOURCE_SQL_LIST_MAP.remove(project);
             }
 
-            if (line.contains(PARAMETERS) && sourceSqlList.size() != 0) {
+            if (line.contains(PARAMS_PREFIX) && sourceSqlList.size() != 0) {
                 sourceSqlList.add(line);
                 SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
                 if (sourceSqlList.size() == LIST_SIZE) {

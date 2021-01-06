@@ -27,9 +27,6 @@ public class BatsLogUtil {
     public static Map<Project, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
     public static JScrollBar PANE_BAR;
 
-    public static String PREPARING = "Preparing:";
-    public static String PARAMETERS = "Parameters:";
-
     public static Map<Project, List<String>> SOURCE_SQL_LIST_MAP = new HashMap<>();
 
     public static Map<Project, List<String>> SQL_CACHE = new HashMap<>();

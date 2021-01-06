@@ -6,8 +6,6 @@ import cn.com.pism.batslog.action.FormatSqlAction;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
-import com.intellij.execution.console.ConsoleExecutionEditor;
-import com.intellij.largeFilesEditor.PlatformActionsReplacer;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -18,7 +16,6 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.builtInWebServer.ConsoleManager;
 
 
 /**

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static cn.com.pism.batslog.util.BatsLogUtil.PARAMETERS;
-import static cn.com.pism.batslog.util.BatsLogUtil.PREPARING;
+import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
+import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
 
 /**
  * @author PerccyKing
@@ -39,14 +39,14 @@ public class SqlFormatUtils {
         if (StringUtils.isNotBlank(str)) {
             str = str + "\nend";
             //从第一个====>  Preparing:开始
-            int start = StringUtils.indexOf(str, PREPARING);
-            String subStr = str.substring(start + PREPARING.getBytes().length);
+            int start = StringUtils.indexOf(str, SQL_PREFIX);
+            String subStr = str.substring(start + SQL_PREFIX.getBytes().length);
             int sqlEnd = StringUtils.indexOf(subStr, "\n");
             String sql = subStr.substring(0, sqlEnd);
             //参数
             subStr = subStr.substring(sqlEnd);
-            int paramStart = StringUtils.indexOf(subStr, PARAMETERS);
-            subStr = subStr.substring(paramStart + PARAMETERS.getBytes().length);
+            int paramStart = StringUtils.indexOf(subStr, PARAMS_PREFIX);
+            subStr = subStr.substring(paramStart + PARAMS_PREFIX.getBytes().length);
             int paramEnd = StringUtils.indexOf(subStr, "\n");
             String params = subStr.substring(0, paramEnd);
 
@@ -86,7 +86,7 @@ public class SqlFormatUtils {
             }
 
             String substring = subStr.substring(paramEnd);
-            if (StringUtils.indexOf(substring, PREPARING) > 0) {
+            if (StringUtils.indexOf(substring, SQL_PREFIX) > 0) {
                 format(subStr, project, printToConsole, console);
             }
         }
