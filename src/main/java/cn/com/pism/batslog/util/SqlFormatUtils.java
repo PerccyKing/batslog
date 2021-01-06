@@ -3,11 +3,12 @@ package cn.com.pism.batslog.util;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
-import cn.com.pism.batslog.settings.BatsLogSetting;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,10 +36,11 @@ public class SqlFormatUtils {
     }
 
     public static void format(String str, Project project, Boolean printToConsole, ConsoleViewImpl console) {
+        BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
 
-        String sqlPrefix = BatsLogSetting.getVal(project, BatsLogSetting.SQL_PREFIX);
+        String sqlPrefix = service.getSqlPrefix();
         sqlPrefix = StringUtils.isBlank(sqlPrefix) ? SQL_PREFIX : sqlPrefix;
-        String paramsPrefix = BatsLogSetting.getVal(project, BatsLogSetting.PARAMS_PREFIX);
+        String paramsPrefix = service.getParamsPrefix();
         paramsPrefix = StringUtils.isBlank(paramsPrefix) ? PARAMS_PREFIX : paramsPrefix;
 
         if (StringUtils.isNotBlank(str)) {
@@ -71,7 +73,7 @@ public class SqlFormatUtils {
             }
 
             String dbTypeStr = JdbcConstants.MYSQL;
-            DbType dbType = BatsLogSetting.getDbType(project);
+            DbType dbType = service.getDbType();
             if (!DbType.NONE.equals(dbType)) {
                 dbTypeStr = dbType.getType();
             }

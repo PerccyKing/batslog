@@ -1,9 +1,9 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
-import cn.com.pism.batslog.settings.BatsLogSetting;
-import cn.com.pism.batslog.settings.BatsLogValue;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -12,6 +12,7 @@ import com.intellij.util.ui.JBUI;
 import icons.BatsLogIcons;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -24,7 +25,6 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
-import static cn.com.pism.batslog.settings.BatsLogSetting.*;
 
 /**
  * @author wangyihuai
@@ -42,8 +42,12 @@ public class SettingForm {
     private JTextField sqlPrefix;
     private JTextField paramsPrefix;
 
+    private BatsLogSettingState service;
+
+
     public SettingForm(Project project) {
         this.project = project;
+        this.service = ServiceManager.getService(project, BatsLogSettingState.class);
 
         List<DbType> radioButtons = DbType.getRadioButtons();
         radioButtons.forEach(rb -> {
@@ -53,18 +57,18 @@ public class SettingForm {
                 dbTypeBox.addItem(rb);
             }
         });
-        DbType dbType = BatsLogSetting.getDbType(project);
+        DbType dbType = service.getDbType();
         if (dbType.equals(DbType.NONE)) {
             dbType = DbType.MYSQL;
         }
         dbTypeBox.setSelectedItem(dbType);
         dbTypeBox.addItemListener(e -> {
             DbType item = (DbType) e.getItem();
-            BatsLogSetting.setDbType(project, item);
+            service.setDbType(item);
         });
         DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
         dbTypeBox.setRenderer(dbTypeRender);
-        ColorButton colorButton = new ColorButton(project, BatsLogSetting.getVal(project, KEYWORDS, Color.class));
+        ColorButton colorButton = new ColorButton(project, service.getKeyWordDefCol());
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
         layout.removeLayoutComponent(keyWord);
@@ -72,13 +76,13 @@ public class SettingForm {
         keyWordsPanel.add(colorButton, constraintsForComponent);
         keyWordsPanel.revalidate();
 
-        String sqlPrefixStr = BatsLogSetting.getVal(project, SQL_PREFIX);
+        String sqlPrefixStr = service.getSqlPrefix();
         if (StringUtils.isBlank(sqlPrefixStr)) {
             sqlPrefixStr = BatsLogConstant.SQL_PREFIX;
         }
         sqlPrefix.setText(sqlPrefixStr);
 
-        String paramsPrefixStr = BatsLogSetting.getVal(project, PARAMS_PREFIX);
+        String paramsPrefixStr = service.getParamsPrefix();
         if (StringUtils.isBlank(paramsPrefixStr)) {
             paramsPrefixStr = BatsLogConstant.PARAMS_PREFIX;
         }
@@ -123,15 +127,18 @@ public class SettingForm {
     }
 
     private void updateParamsPrefix(DocumentEvent e, Project project) {
-        updatePrefix(e, project, PARAMS_PREFIX);
+        String text = getSettingPrefix(e);
+        service.setParamsPrefix(text);
     }
 
 
     private void updateSqlPrefix(DocumentEvent e, Project project) {
-        updatePrefix(e, project, SQL_PREFIX);
+        String text = getSettingPrefix(e);
+        service.setSqlPrefix(text);
     }
 
-    private void updatePrefix(DocumentEvent e, Project project, String prefix) {
+    @Nullable
+    private String getSettingPrefix(DocumentEvent e) {
         String text = null;
         try {
             Document document = e.getDocument();
@@ -140,7 +147,7 @@ public class SettingForm {
         } catch (BadLocationException badLocationException) {
             badLocationException.printStackTrace();
         }
-        BatsLogSetting.setValue(project, new BatsLogValue<>(prefix, text));
+        return text;
     }
 
 
@@ -148,17 +155,20 @@ public class SettingForm {
 
         private Color myColor;
 
+        private BatsLogSettingState service;
+
         @Override
         protected void init(String text, Icon icon) {
             super.init(text, icon);
         }
 
         ColorButton(Project project, Color color) {
+            this.service = ServiceManager.getService(project, BatsLogSettingState.class);
             if (color != null) {
                 this.myColor = color;
             } else {
                 this.myColor = KEY_WORD_DEF_COL;
-                BatsLogSetting.setValue(project, new BatsLogValue<>(KEYWORDS, KEY_WORD_DEF_COL));
+                service.setKeyWordDefCol(KEY_WORD_DEF_COL);
             }
             buttonInit(project, color);
         }
@@ -186,7 +196,7 @@ public class SettingForm {
                     Color color = ColorChooser.chooseColor(new JPanel(), "选择颜色", myColor);
                     if (color != null) {
                         myColor = color;
-                        BatsLogSetting.setValue(project, new BatsLogValue<>(KEYWORDS, color));
+                        service.setKeyWordDefCol(color);
                     }
                     super.mouseClicked(e);
                 }
