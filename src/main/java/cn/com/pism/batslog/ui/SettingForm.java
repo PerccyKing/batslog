@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSetting;
 import cn.com.pism.batslog.settings.BatsLogValue;
@@ -10,6 +11,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
 import icons.BatsLogIcons;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +20,11 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
+import static cn.com.pism.batslog.settings.BatsLogSetting.*;
 
 /**
  * @author wangyihuai
- * @date 2020/10/28 上午 09:47
+ * @date 2021/1/6 11:30
  */
 @Data
 public class SettingForm {
@@ -29,10 +32,11 @@ public class SettingForm {
     private Project project;
 
     private JPanel root;
-    private JPanel radioButtonPanel;
     private JComboBox<DbType> dbTypeBox;
     private ColorButton keyWord;
     private JPanel keyWordsPanel;
+    private JTextField sqlPrefix;
+    private JTextField paramsPrefix;
 
     public SettingForm(Project project) {
         this.project = project;
@@ -56,17 +60,31 @@ public class SettingForm {
         });
         DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
         dbTypeBox.setRenderer(dbTypeRender);
-        ColorButton colorButton = new ColorButton(project, BatsLogSetting.getValue(project, BatsLogSetting.KEYWORDS, Color.class).getValue());
+        ColorButton colorButton = new ColorButton(project, BatsLogSetting.getValue(project, KEYWORDS, Color.class).getValue());
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
         layout.removeLayoutComponent(keyWord);
         layout.addLayoutComponent(colorButton, constraintsForComponent);
         keyWordsPanel.add(colorButton, constraintsForComponent);
         keyWordsPanel.revalidate();
+
+        String sqlPrefixStr = BatsLogSetting.getValue(project, SQL_PREFIX, String.class).getValue();
+        if (StringUtils.isBlank(sqlPrefixStr)) {
+            sqlPrefixStr = BatsLogConstant.SQL_PREFIX;
+        }
+        sqlPrefix.setText(sqlPrefixStr);
+        BatsLogSetting.setValue(project, new BatsLogValue<>(SQL_PREFIX, sqlPrefixStr));
+
+        String paramsPrefixStr = BatsLogSetting.getValue(project, PARAMS_PREFIX, String.class).getValue();
+        if (StringUtils.isBlank(paramsPrefixStr)) {
+            paramsPrefixStr = BatsLogConstant.PARAMS_PREFIX;
+        }
+        paramsPrefix.setText(paramsPrefixStr);
+        BatsLogSetting.setValue(project, new BatsLogValue<>(PARAMS_PREFIX, paramsPrefixStr));
     }
 
 
-    private static class ColorButton extends JButton {
+    public static class ColorButton extends JButton {
 
         private Color myColor;
 
@@ -80,7 +98,7 @@ public class SettingForm {
                 this.myColor = color;
             } else {
                 this.myColor = KEY_WORD_DEF_COL;
-                BatsLogSetting.setValue(project, new BatsLogValue<>(BatsLogSetting.KEYWORDS, KEY_WORD_DEF_COL));
+                BatsLogSetting.setValue(project, new BatsLogValue<>(KEYWORDS, KEY_WORD_DEF_COL));
             }
             buttonInit(project, color);
         }
@@ -108,7 +126,7 @@ public class SettingForm {
                     Color color = ColorChooser.chooseColor(new JPanel(), "选择颜色", myColor);
                     if (color != null) {
                         myColor = color;
-                        BatsLogSetting.setValue(project, new BatsLogValue<>(BatsLogSetting.KEYWORDS, color));
+                        BatsLogSetting.setValue(project, new BatsLogValue<>(KEYWORDS, color));
                     }
                     super.mouseClicked(e);
                 }
@@ -158,5 +176,4 @@ public class SettingForm {
             return this;
         }
     }
-
 }
