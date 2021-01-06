@@ -14,6 +14,10 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -60,7 +64,7 @@ public class SettingForm {
         });
         DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
         dbTypeBox.setRenderer(dbTypeRender);
-        ColorButton colorButton = new ColorButton(project, BatsLogSetting.getValue(project, KEYWORDS, Color.class).getValue());
+        ColorButton colorButton = new ColorButton(project, BatsLogSetting.getVal(project, KEYWORDS, Color.class));
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
         layout.removeLayoutComponent(keyWord);
@@ -68,19 +72,75 @@ public class SettingForm {
         keyWordsPanel.add(colorButton, constraintsForComponent);
         keyWordsPanel.revalidate();
 
-        String sqlPrefixStr = BatsLogSetting.getValue(project, SQL_PREFIX, String.class).getValue();
+        String sqlPrefixStr = BatsLogSetting.getVal(project, SQL_PREFIX);
         if (StringUtils.isBlank(sqlPrefixStr)) {
             sqlPrefixStr = BatsLogConstant.SQL_PREFIX;
         }
         sqlPrefix.setText(sqlPrefixStr);
-        BatsLogSetting.setValue(project, new BatsLogValue<>(SQL_PREFIX, sqlPrefixStr));
 
-        String paramsPrefixStr = BatsLogSetting.getValue(project, PARAMS_PREFIX, String.class).getValue();
+        String paramsPrefixStr = BatsLogSetting.getVal(project, PARAMS_PREFIX);
         if (StringUtils.isBlank(paramsPrefixStr)) {
             paramsPrefixStr = BatsLogConstant.PARAMS_PREFIX;
         }
         paramsPrefix.setText(paramsPrefixStr);
-        BatsLogSetting.setValue(project, new BatsLogValue<>(PARAMS_PREFIX, paramsPrefixStr));
+        inputListen(project);
+    }
+
+    private void inputListen(Project project) {
+        sqlPrefix.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateSqlPrefix(e, project);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSqlPrefix(e, project);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSqlPrefix(e, project);
+            }
+        });
+
+        paramsPrefix.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateParamsPrefix(e, project);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateParamsPrefix(e, project);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateParamsPrefix(e, project);
+            }
+        });
+    }
+
+    private void updateParamsPrefix(DocumentEvent e, Project project) {
+        updatePrefix(e, project, PARAMS_PREFIX);
+    }
+
+
+    private void updateSqlPrefix(DocumentEvent e, Project project) {
+        updatePrefix(e, project, SQL_PREFIX);
+    }
+
+    private void updatePrefix(DocumentEvent e, Project project, String prefix) {
+        String text = null;
+        try {
+            Document document = e.getDocument();
+            int length = document.getLength();
+            text = document.getText(0, length);
+        } catch (BadLocationException badLocationException) {
+            badLocationException.printStackTrace();
+        }
+        BatsLogSetting.setValue(project, new BatsLogValue<>(prefix, text));
     }
 
 

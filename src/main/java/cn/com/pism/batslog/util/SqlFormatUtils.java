@@ -36,17 +36,25 @@ public class SqlFormatUtils {
 
     public static void format(String str, Project project, Boolean printToConsole, ConsoleViewImpl console) {
 
+        String sqlPrefix = BatsLogSetting.getVal(project, BatsLogSetting.SQL_PREFIX);
+        sqlPrefix = StringUtils.isBlank(sqlPrefix) ? SQL_PREFIX : sqlPrefix;
+        String paramsPrefix = BatsLogSetting.getVal(project, BatsLogSetting.PARAMS_PREFIX);
+        paramsPrefix = StringUtils.isBlank(paramsPrefix) ? PARAMS_PREFIX : paramsPrefix;
+
         if (StringUtils.isNotBlank(str)) {
             str = str + "\nend";
             //从第一个====>  Preparing:开始
-            int start = StringUtils.indexOf(str, SQL_PREFIX);
-            String subStr = str.substring(start + SQL_PREFIX.getBytes().length);
+            int start = StringUtils.indexOf(str, sqlPrefix);
+            if (start < 0) {
+                return;
+            }
+            String subStr = str.substring(start + sqlPrefix.getBytes().length);
             int sqlEnd = StringUtils.indexOf(subStr, "\n");
             String sql = subStr.substring(0, sqlEnd);
             //参数
             subStr = subStr.substring(sqlEnd);
-            int paramStart = StringUtils.indexOf(subStr, PARAMS_PREFIX);
-            subStr = subStr.substring(paramStart + PARAMS_PREFIX.getBytes().length);
+            int paramStart = StringUtils.indexOf(subStr, paramsPrefix);
+            subStr = subStr.substring(paramStart + paramsPrefix.getBytes().length);
             int paramEnd = StringUtils.indexOf(subStr, "\n");
             String params = subStr.substring(0, paramEnd);
 
@@ -86,7 +94,7 @@ public class SqlFormatUtils {
             }
 
             String substring = subStr.substring(paramEnd);
-            if (StringUtils.indexOf(substring, SQL_PREFIX) > 0) {
+            if (StringUtils.indexOf(substring, sqlPrefix) > 0) {
                 format(subStr, project, printToConsole, console);
             }
         }

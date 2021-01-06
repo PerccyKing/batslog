@@ -3,6 +3,7 @@ package cn.com.pism.batslog.settings;
 import cn.com.pism.batslog.enums.DbType;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.lang3.StringUtils;
@@ -36,19 +37,33 @@ public class BatsLogSetting {
     }
 
     public static void setValue(@NotNull Project project, BatsLogValue<?> batsLogValue) {
-        PropertiesComponent.getInstance(project).setValue(batsLogValue.getKey(), JSON.toJSONString(batsLogValue));
+        PropertiesComponent.getInstance(project).setValue(project.getName() + batsLogValue.getKey(), JSON.toJSONString(batsLogValue));
+    }
+
+    public static String getVal(@NotNull Project project, String key) {
+        return getValue(project, key).getValue();
+    }
+
+    public static <T> T getVal(@NotNull Project project, String key, Class<T> clazz) {
+        BatsLogValue<T> batsLogValue = getValue(project, key, clazz);
+        return batsLogValue.getValue();
+    }
+
+    public static BatsLogValue<String> getValue(@NotNull Project project, String key) {
+        return getValue(project, key, String.class);
     }
 
     public static <T> BatsLogValue<T> getValue(@NotNull Project project, String key, Class<T> clazz) {
-        String value = PropertiesComponent.getInstance(project).getValue(key);
+        String value = PropertiesComponent.getInstance(project).getValue(project.getName() + key);
         try {
             if (StringUtils.isNotBlank(value)) {
-                JSONObject jsonObject = JSON.parseObject(value);
-                return new BatsLogValue<>(key, JSON.parseObject(jsonObject.getString("value"), clazz));
+                return JSONObject.parseObject(value, new TypeReference<BatsLogValue<T>>(clazz) {
+                });
             } else {
                 return new BatsLogValue<>(key, null);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return new BatsLogValue<>(key, null);
         }
     }
