@@ -1,8 +1,14 @@
 package cn.com.pism.batslog.ui;
 
-import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
@@ -24,7 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
+import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
 /**
  * @author wangyihuai
@@ -41,6 +47,8 @@ public class SettingForm {
     private JPanel keyWordsPanel;
     private JTextField sqlPrefix;
     private JTextField paramsPrefix;
+    private JPanel revertSqlPanel;
+    private JPanel revertParamsPanel;
 
     private BatsLogSettingState service;
 
@@ -88,6 +96,10 @@ public class SettingForm {
         }
         paramsPrefix.setText(paramsPrefixStr);
         inputListen(project);
+        RevertAction revertSqlAction = new RevertAction(AllIcons.Actions.Rollback, SQL_PREFIX, sqlPrefix);
+        revertSqlPanel.add(new ActionButton(revertSqlAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
+        RevertAction revertParamsAction = new RevertAction(AllIcons.Actions.Rollback, PARAMS_PREFIX, paramsPrefix);
+        revertParamsPanel.add(new ActionButton(revertParamsAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
     }
 
     private void inputListen(Project project) {
