@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.01.07.1632-Release'
+version '21.01.13.2217-Release'
 
 
 java {
@@ -55,11 +55,22 @@ patchPluginXml {
 
 <ul>
 <li>Fix some bugs</li>
+<li>Fix some data type parsing errors</li>
+<li>Add issuse and document entry</li>
+<li>修复一些bug</li>
+<li>修复部分数据类型解析错误的问题</li>
+<li>添加issuse和文档入口</li>
+</ul>
+</div>
+
+<h1>21.01.07.1632-Release</h1>
+
+<ul>
+<li>Fix some bugs</li>
 <li>Add [preparing:], [parameters:] configuration items</li>
 <li>修复一些bug</li>
 <li>添加[Preparing:],[Parameters:]配置项</li>
 </ul>
-</div>
 
 
 <h1>20.12.31.0000-Release.HAPY.NEW.YEAR</h1>
