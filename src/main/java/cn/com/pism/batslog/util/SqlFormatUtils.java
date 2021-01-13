@@ -65,8 +65,27 @@ public class SqlFormatUtils {
             List<Object> paramList = new ArrayList<>();
             for (String s : paramArr) {
                 if (StringUtils.isNotBlank(s)) {
-                    String par = s.substring(0, s.trim().indexOf("(") + 1);
-                    paramList.add(par.trim());
+                    int i = s.trim().indexOf("(") + 1;
+                    String par = s.substring(0, i);
+                    par = par.trim();
+                    String type = s.substring(i + 1, s.trim().indexOf(")") + 1);
+                    try {
+                        Class<?> aClass = Class.forName("java.lang." + type);
+                        if (aClass == Integer.class) {
+                            paramList.add(Integer.valueOf(par));
+                        } else if (aClass == Long.class) {
+                            paramList.add(Long.valueOf(par));
+                        } else if (aClass == Double.class) {
+                            paramList.add(Double.parseDouble(par));
+                        } else if (aClass == Boolean.class) {
+                            paramList.add(Boolean.valueOf(par));
+                        } else {
+                            paramList.add(par);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    //提取数据类型
                 } else {
                     paramList.add("");
                 }
