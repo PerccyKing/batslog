@@ -6,7 +6,11 @@ import cn.com.pism.batslog.action.FormatSqlAction;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -38,10 +42,22 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("console"), false);
         Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("consoleSetting"), false);
         ContentManager contentManager = toolWindow.getContentManager();
+        ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BrowserUtil.browse("https://github.com/PerccyKing/batslog/issues");
+            }
+        }, new AnAction(AllIcons.Toolwindows.Documentation) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BrowserUtil.browse("https://blog.csdn.net/qq_29602577/article/details/110390650");
+            }
+        });
         contentManager.addContent(formatConsoleContent);
         contentManager.addContent(settingFormContent);
         ActionManager instance = ActionManager.getInstance();
         instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("formatSql"), "", BatsLogIcons.BATS_LOG));
         instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("copySql"), "", BatsLogIcons.BATS_LOG_COPY));
     }
+
 }
