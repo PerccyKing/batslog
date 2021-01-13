@@ -70,18 +70,7 @@ public class SqlFormatUtils {
                     par = par.trim();
                     String type = s.substring(i + 1, s.trim().indexOf(")") + 1);
                     try {
-                        Class<?> aClass = Class.forName("java.lang." + type);
-                        if (aClass == Integer.class) {
-                            paramList.add(Integer.valueOf(par));
-                        } else if (aClass == Long.class) {
-                            paramList.add(Long.valueOf(par));
-                        } else if (aClass == Double.class) {
-                            paramList.add(Double.parseDouble(par));
-                        } else if (aClass == Boolean.class) {
-                            paramList.add(Boolean.valueOf(par));
-                        } else {
-                            paramList.add(par);
-                        }
+                        pack(paramList, par, type);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -118,6 +107,27 @@ public class SqlFormatUtils {
             if (StringUtils.indexOf(substring, sqlPrefix) > 0) {
                 format(subStr, project, printToConsole, console);
             }
+        }
+    }
+
+    private static void pack(List<Object> paramList, String par, String type) throws ClassNotFoundException {
+        Class<?> aClass = Class.forName("java.lang." + type);
+        if (aClass == Integer.class) {
+            paramList.add(Integer.valueOf(par));
+        } else if (aClass == Long.class) {
+            paramList.add(Long.valueOf(par));
+        } else if (aClass == Double.class) {
+            paramList.add(Double.valueOf(par));
+        } else if (aClass == Boolean.class) {
+            paramList.add(Boolean.valueOf(par));
+        } else if (aClass == Byte.class) {
+            paramList.add(Byte.valueOf(par));
+        } else if (aClass == Short.class) {
+            paramList.add(Short.valueOf(par));
+        } else if (aClass == Float.class) {
+            paramList.add(Float.valueOf(par));
+        } else {
+            paramList.add(par);
         }
     }
 
