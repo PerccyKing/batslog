@@ -49,6 +49,8 @@ public class SettingForm {
     private JTextField paramsPrefix;
     private JPanel revertSqlPanel;
     private JPanel revertParamsPanel;
+    private JTextField sqlTerminator;
+    private JTextField paramsTerminator;
 
     private BatsLogSettingState service;
 
@@ -95,6 +97,9 @@ public class SettingForm {
             paramsPrefixStr = BatsLogConstant.PARAMS_PREFIX;
         }
         paramsPrefix.setText(paramsPrefixStr);
+
+        sqlTerminator.setText(service.getSqlTerminator());
+        paramsTerminator.setText(service.getParamsTerminator());
         inputListen(project);
         RevertAction revertSqlAction = new RevertAction(AllIcons.Actions.Rollback, SQL_PREFIX, sqlPrefix);
         revertSqlPanel.add(new ActionButton(revertSqlAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));

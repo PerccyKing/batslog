@@ -41,6 +41,9 @@ public class BatsLogSettingState implements PersistentStateComponent<BatsLogSett
      */
     private String paramsPrefix = BatsLogConstant.PARAMS_PREFIX;
 
+    private String sqlTerminator = "|\n";
+    private String paramsTerminator = "|\n";
+
     /**
      * 数据库类型
      */

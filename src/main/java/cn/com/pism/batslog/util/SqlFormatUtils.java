@@ -51,13 +51,13 @@ public class SqlFormatUtils {
                 return;
             }
             String subStr = str.substring(start + sqlPrefix.getBytes().length);
-            int sqlEnd = StringUtils.indexOf(subStr, "\n");
+            int sqlEnd = StringUtils.indexOf(subStr, service.getSqlTerminator());
             String sql = subStr.substring(0, sqlEnd);
             //参数
             subStr = subStr.substring(sqlEnd);
             int paramStart = StringUtils.indexOf(subStr, paramsPrefix);
             subStr = subStr.substring(paramStart + paramsPrefix.getBytes().length);
-            int paramEnd = StringUtils.indexOf(subStr, "\n");
+            int paramEnd = StringUtils.indexOf(subStr, service.getParamsTerminator());
             String params = subStr.substring(0, paramEnd);
 
             //提取参数
