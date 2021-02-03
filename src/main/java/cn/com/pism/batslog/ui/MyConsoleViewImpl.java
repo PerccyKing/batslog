@@ -1,15 +1,22 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.util.Editors;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.ide.CommonActionsManager;
+import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.command.undo.UndoUtil;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.EditorKind;
 import com.intellij.openapi.editor.actions.ScrollToTheEndToolbarAction;
 import com.intellij.openapi.editor.actions.ToggleUseSoftWrapsToolbarAction;
 import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.impl.ContextMenuPopupHandler;
+import com.intellij.openapi.editor.impl.EditorFactoryImpl;
 import com.intellij.openapi.editor.impl.softwrap.SoftWrapAppliancePlaces;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.intellij.execution.impl.ConsoleViewUtil.setupConsoleEditor;
+
 /**
  * @author wangyihuai
  * @date 2020/12/24 10:08
@@ -27,9 +36,12 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
 
     ActionToolbar actionToolbar;
 
+    private Project project;
+
     public MyConsoleViewImpl(@NotNull Project project, boolean viewer) {
         super(project, viewer);
         setBorder(null);
+        this.project = project;
     }
 
     /**
@@ -158,5 +170,30 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
         public void actionPerformed(@NotNull final AnActionEvent e) {
             myConsoleView.clear();
         }
+    }
+
+    @NotNull
+    @Override
+    protected EditorEx doCreateConsoleEditor() {
+        EditorFactory editorFactory = EditorFactory.getInstance();
+        Document document = ((EditorFactoryImpl) editorFactory).createDocument(true);
+        UndoUtil.disableUndoFor(document);
+
+        EditorEx editor = (EditorEx) editorFactory.createEditor(document, project, Language.findLanguageByID("SQL").getAssociatedFileType(), true);
+
+//        EditorEx editor = (EditorEx) Editors.createSourceEditor(project, Language.findLanguageByID("SQL"), "", true);
+        setupConsoleEditor(editor, true, true);
+        return editor;
+    }
+
+
+    @NotNull
+    @Override
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }
