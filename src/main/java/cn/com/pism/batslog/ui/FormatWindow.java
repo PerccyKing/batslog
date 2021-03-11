@@ -12,9 +12,13 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.sql.psi.SqlLanguage;
+import com.intellij.ui.LanguageTextField;
+import com.intellij.ui.ScrollPaneFactory;
 import icons.BatsLogIcons;
 import lombok.Getter;
 import lombok.Setter;
@@ -108,16 +112,18 @@ public class FormatWindow extends DialogWrapper {
     private void initForm(@Nullable Project project) {
         //创建一个编辑器
         Project defaultProject = ProjectManager.getInstance().getDefaultProject();
-        Editor logEditor = Editors.createSourceEditor(project, Language.findLanguageByID("TEXT"), "", false);
+        Editor logEditor = Editors.createSourceEditor(project, PlainTextLanguage.INSTANCE, "", false);
         this.myEditor = logEditor;
 
+        LanguageTextField languageTextField = new LanguageTextField(PlainTextLanguage.INSTANCE, project, "",(value, language, project1)-> Editors.createSourceEditor(project1, PlainTextLanguage.INSTANCE, "", false).getDocument(), false);
         //添加一个工具栏
         List<AnAction> logActions = new ArrayList<>(getLogActions(logEditor));
         ActionToolbar logToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, logActions.toArray(new AnAction[0]));
         this.logToolBar.add(logToolBar.getComponent());
 
         //将编辑器加入panel
-        logPanel.add(logEditor.getComponent());
+        JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(languageTextField);
+        logPanel.add(scrollPane);
 
 
         //右边console
