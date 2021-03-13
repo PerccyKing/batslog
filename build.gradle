@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.03.13.1550-Release'
+version '21.03.13.1550-special'
 
 
 java {
