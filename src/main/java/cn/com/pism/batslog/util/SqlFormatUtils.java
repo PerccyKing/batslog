@@ -14,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,9 @@ import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
  * @since 0.0.1
  */
 public class SqlFormatUtils {
+
+    public static final String[] TYPES = new String[]{"Integer", "Long", "Double", "Boolean", "Byte", "Short", "Float"};
+
     public static void format(String str, Project project) {
         format(str, project, Boolean.TRUE);
     }
@@ -111,24 +115,29 @@ public class SqlFormatUtils {
     }
 
     private static void pack(List<Object> paramList, String par, String type) throws ClassNotFoundException {
-        Class<?> aClass = Class.forName("java.lang." + type);
-        if (aClass == Integer.class) {
-            paramList.add(Integer.valueOf(par));
-        } else if (aClass == Long.class) {
-            paramList.add(Long.valueOf(par));
-        } else if (aClass == Double.class) {
-            paramList.add(Double.valueOf(par));
-        } else if (aClass == Boolean.class) {
-            paramList.add(Boolean.valueOf(par));
-        } else if (aClass == Byte.class) {
-            paramList.add(Byte.valueOf(par));
-        } else if (aClass == Short.class) {
-            paramList.add(Short.valueOf(par));
-        } else if (aClass == Float.class) {
-            paramList.add(Float.valueOf(par));
+        if (Arrays.stream(TYPES).allMatch(type::equalsIgnoreCase)) {
+            Class<?> aClass = Class.forName("java.lang." + type);
+            if (aClass == Integer.class) {
+                paramList.add(Integer.valueOf(par));
+            } else if (aClass == Long.class) {
+                paramList.add(Long.valueOf(par));
+            } else if (aClass == Double.class) {
+                paramList.add(Double.valueOf(par));
+            } else if (aClass == Boolean.class) {
+                paramList.add(Boolean.valueOf(par));
+            } else if (aClass == Byte.class) {
+                paramList.add(Byte.valueOf(par));
+            } else if (aClass == Short.class) {
+                paramList.add(Short.valueOf(par));
+            } else if (aClass == Float.class) {
+                paramList.add(Float.valueOf(par));
+            } else {
+                paramList.add(par);
+            }
         } else {
             paramList.add(par);
         }
+
     }
 
     private static void printSql(String sql, String methodName, Project project, ConsoleViewImpl consoleView) {
