@@ -55,6 +55,9 @@ public class SqlFormatUtils {
             if (start < 0) {
                 return;
             }
+            //提取sql所在行的前部分字符
+            String name = "";
+            name = getName(str, sqlPrefix, start, name);
             String subStr = str.substring(start + sqlPrefix.getBytes().length);
             int sqlEnd = StringUtils.indexOf(subStr, "\n");
             String sql = subStr.substring(0, sqlEnd);
@@ -103,7 +106,7 @@ public class SqlFormatUtils {
                     console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
                 }
 
-                printSql(formatSql, "", project, console);
+                printSql(formatSql, name, project, console);
             } else {
                 //放入缓存
                 List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
@@ -119,6 +122,15 @@ public class SqlFormatUtils {
                 format(subStr, project, printToConsole, console);
             }
         }
+    }
+
+    private static String getName(String str, String sqlPrefix, int start, String name) {
+        String[] lines = StringUtils.split(str.substring(0, start + sqlPrefix.getBytes().length), "\n");
+        String line = lines[lines.length - 1];
+        if (StringUtils.isNotBlank(line)) {
+            name = StringUtils.substring(line, 0, StringUtils.indexOf(line, sqlPrefix));
+        }
+        return name;
     }
 
     private static void pack(List<Object> paramList, String par, String type) throws ClassNotFoundException {
@@ -150,6 +162,9 @@ public class SqlFormatUtils {
     private static void printSql(String sql, String methodName, Project project, ConsoleViewImpl consoleView) {
 
         consoleView.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
+        if (StringUtils.isNotBlank(methodName)) {
+            consoleView.print(StringUtil.encoding("### " + methodName + "\n"), ColoringUtil.getNoteColor(project));
+        }
         String[] chars = sql.split("");
         //关键字校验
         String[] words = sql.split(" |\t\n|\n|\t");

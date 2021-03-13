@@ -6,6 +6,8 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.Gray;
+import com.intellij.ui.JBColor;
 
 import java.awt.*;
 
@@ -32,5 +34,11 @@ public class ColoringUtil {
         Color value = service.getKeyWordDefCol();
         TextAttributes textAttributes = new TextAttributes(value, null, null, EffectType.BOXED, Font.PLAIN);
         return new ConsoleViewContentType(project.getName() + "BatsLogKeywords", textAttributes);
+    }
+
+    public static ConsoleViewContentType getNoteColor(Project project) {
+        Color value = new JBColor(Gray._140, Gray._128);
+        TextAttributes textAttributes = new TextAttributes(value, null, null, EffectType.BOXED, Font.PLAIN);
+        return new ConsoleViewContentType(project.getName() + "BatsLogNotes", textAttributes);
     }
 }
