@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.03.13.1550-Release'
+version '21.03.14.0107-Release'
 
 
 java {
@@ -55,7 +55,13 @@ patchPluginXml {
 
 <ul>
 <li>Fix some bugs</li>
+<li>ADD SQL desensitization configuration</li>
+<li>ADD SQL beautification configuration</li>
+<li>ADD SQL case conversion configuration</li>
 <li>修复一些bug</li>
+<li>新增 SQL脱敏配置</li>
+<li>新增 SQL美化配置</li>
+<li>新增 SQL大小写转换配置</li>
 </ul>
 </div>
 
