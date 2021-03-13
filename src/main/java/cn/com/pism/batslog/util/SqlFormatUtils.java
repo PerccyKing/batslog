@@ -29,7 +29,8 @@ import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
  */
 public class SqlFormatUtils {
 
-    public static final String[] TYPES = new String[]{"Integer", "Long", "Double", "Boolean", "Byte", "Short", "Float"};
+    public static final String[] TYPES = new String[]{"Integer", "Long", "Double", "String",
+            "Boolean", "Byte", "Short", "Float"};
 
     public static void format(String str, Project project) {
         format(str, project, Boolean.TRUE);
@@ -90,7 +91,13 @@ public class SqlFormatUtils {
                 dbTypeStr = dbType.getType();
             }
 
-            String formatSql = SQLUtils.format(sql, dbTypeStr, paramList);
+            SQLUtils.FormatOption formatOption = new SQLUtils.FormatOption();
+            formatOption.setDesensitize(service.getDesensitize());
+            formatOption.setPrettyFormat(service.getPrettyFormat());
+            formatOption.setParameterized(service.getParameterized());
+            formatOption.setUppCase(service.getToUpperCase());
+
+            String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
             if (printToConsole) {
                 if (console == null) {
                     console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
@@ -115,7 +122,7 @@ public class SqlFormatUtils {
     }
 
     private static void pack(List<Object> paramList, String par, String type) throws ClassNotFoundException {
-        if (Arrays.stream(TYPES).allMatch(type::equalsIgnoreCase)) {
+        if (Arrays.stream(TYPES).anyMatch(type::equalsIgnoreCase)) {
             Class<?> aClass = Class.forName("java.lang." + type);
             if (aClass == Integer.class) {
                 paramList.add(Integer.valueOf(par));
@@ -132,7 +139,7 @@ public class SqlFormatUtils {
             } else if (aClass == Float.class) {
                 paramList.add(Float.valueOf(par));
             } else {
-                paramList.add(par);
+                paramList.add(String.valueOf(par));
             }
         } else {
             paramList.add(par);

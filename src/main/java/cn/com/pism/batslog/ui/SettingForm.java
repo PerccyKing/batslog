@@ -26,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -51,6 +52,10 @@ public class SettingForm {
     private JPanel revertParamsPanel;
     private JTextField sqlTerminator;
     private JTextField paramsTerminator;
+    private JCheckBox desensitize;
+    private JCheckBox prettyFormat;
+    private JCheckBox parameterized;
+    private JCheckBox toUpperCase;
 
     private BatsLogSettingState service;
 
@@ -100,14 +105,24 @@ public class SettingForm {
 
         sqlTerminator.setText(service.getSqlTerminator());
         paramsTerminator.setText(service.getParamsTerminator());
-        inputListen(project);
+        addListen(project);
         RevertAction revertSqlAction = new RevertAction(AllIcons.Actions.Rollback, SQL_PREFIX, sqlPrefix);
         revertSqlPanel.add(new ActionButton(revertSqlAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
         RevertAction revertParamsAction = new RevertAction(AllIcons.Actions.Rollback, PARAMS_PREFIX, paramsPrefix);
         revertParamsPanel.add(new ActionButton(revertParamsAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
+
+        desensitize.setSelected(service.getDesensitize());
+        parameterized.setSelected(service.getParameterized());
+        prettyFormat.setSelected(service.getPrettyFormat());
+        Boolean toUpperCase = service.getToUpperCase();
+        if (toUpperCase != null) {
+            this.toUpperCase.setSelected(toUpperCase);
+        } else {
+            this.toUpperCase.setSelected(false);
+        }
     }
 
-    private void inputListen(Project project) {
+    private void addListen(Project project) {
         sqlPrefix.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -140,6 +155,18 @@ public class SettingForm {
             public void changedUpdate(DocumentEvent e) {
                 updateParamsPrefix(e, project);
             }
+        });
+        desensitize.addActionListener(ac -> {
+            service.setDesensitize(desensitize.isSelected());
+        });
+        prettyFormat.addActionListener(ac -> {
+            service.setPrettyFormat(prettyFormat.isSelected());
+        });
+        parameterized.addActionListener(ac -> {
+            service.setParameterized(parameterized.isSelected());
+        });
+        toUpperCase.addActionListener(ac -> {
+            service.setToUpperCase(toUpperCase.isSelected());
         });
     }
 
