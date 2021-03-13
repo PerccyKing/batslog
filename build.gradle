@@ -55,11 +55,7 @@ patchPluginXml {
 
 <ul>
 <li>Fix some bugs</li>
-<li>Fix some data type parsing errors</li>
-<li>Add issuse and document entry</li>
 <li>修复一些bug</li>
-<li>修复部分数据类型解析错误的问题</li>
-<li>添加issuse和文档入口</li>
 </ul>
 </div>
 
