@@ -42,6 +42,26 @@ public class BatsLogSettingState implements PersistentStateComponent<BatsLogSett
     private String paramsPrefix = BatsLogConstant.PARAMS_PREFIX;
 
     /**
+     * 脱敏
+     */
+    private Boolean desensitize = Boolean.FALSE;
+
+    /**
+     * 美化
+     */
+    private Boolean prettyFormat = Boolean.TRUE;
+
+    /**
+     * 参数化
+     */
+    private Boolean parameterized = Boolean.FALSE;
+
+    /**
+     * 关键字转大写
+     */
+    private Boolean toUpperCase = Boolean.FALSE;
+
+    /**
      * 数据库类型
      */
     @OptionTag(converter = DbTypeConverter.class)
