@@ -43,7 +43,7 @@
         <projectService serviceImplementation="cn.com.pism.batslog.settings.BatsLogSettingState"/>
 
 
-        <toolWindow id="BatsLog" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"
+        <toolWindow id="BSL" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"
                     icon="BatsLogIcons.BATS_LOG"/>
     </extensions>
 
