@@ -22,4 +22,9 @@ public interface BatsLogIcons {
      */
     Icon BATS_LOG_COPY = IconLoader.getIcon("/icons/batsLogCopy.svg", BatsLogIcons.class);
 
+    /**
+     * 美化
+     */
+    Icon BEAUTY = IconLoader.getIcon("/icons/beauty.svg", BatsLogIcons.class);
+
 }

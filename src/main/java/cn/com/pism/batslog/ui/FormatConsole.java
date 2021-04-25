@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
+import cn.com.pism.batslog.action.BeautyAction;
 import cn.com.pism.batslog.action.OpenFormatWindowAction;
 import cn.com.pism.batslog.action.TailAction;
 import cn.com.pism.batslog.util.BatsLogUtil;
@@ -11,6 +12,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
+import icons.BatsLogIcons;
 import lombok.Data;
 
 import javax.swing.*;
@@ -51,9 +53,12 @@ public class FormatConsole {
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
 
         TailAction tailAction = new TailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute);
+
+        BeautyAction beautyAction = new BeautyAction("Beauty", "Beauty", BatsLogIcons.BEAUTY);
         List<AnAction> anActions = new ArrayList<>();
         anActions.add(tailAction);
         anActions.add(openFormatWindowAction);
+        anActions.add(beautyAction);
 
         BatsLogUtil.TAIL_ACTION.put(project, anActions.toArray(new AnAction[0]));
     }
