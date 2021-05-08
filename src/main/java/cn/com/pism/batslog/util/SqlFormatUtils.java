@@ -106,7 +106,8 @@ public class SqlFormatUtils {
                     console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
                 }
 
-                printSql(formatSql, name, project, console);
+                printSeparatorAndName(project, console, name);
+                printSql(formatSql, project, console);
             } else {
                 //放入缓存
                 List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
@@ -121,6 +122,24 @@ public class SqlFormatUtils {
             if (StringUtils.indexOf(substring, sqlPrefix) > 0) {
                 format(subStr, project, printToConsole, console);
             }
+        }
+    }
+
+    /**
+     * <p>
+     * 打印分隔符和行名称
+     * </p>
+     *
+     * @param project : 项目
+     * @param console : console
+     * @param name    : 行名称
+     * @author PerccyKing
+     * @date 2021/04/26 下午 08:42
+     */
+    private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name) {
+        console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
+        if (StringUtils.isNotBlank(name)) {
+            console.print(StringUtil.encoding("### " + name + "\n"), ColoringUtil.getNoteColor(project));
         }
     }
 
@@ -159,12 +178,19 @@ public class SqlFormatUtils {
 
     }
 
-    private static void printSql(String sql, String methodName, Project project, ConsoleViewImpl consoleView) {
+    /**
+     * <p>
+     * 打印sql
+     * </p>
+     *
+     * @param sql         : SQL ，仅sql
+     * @param project     : 项目
+     * @param consoleView : console
+     * @author PerccyKing
+     * @date 2021/04/26 下午 08:44
+     */
+    public static void printSql(String sql, Project project, ConsoleViewImpl consoleView) {
 
-        consoleView.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
-        if (StringUtils.isNotBlank(methodName)) {
-            consoleView.print(StringUtil.encoding("### " + methodName + "\n"), ColoringUtil.getNoteColor(project));
-        }
         String[] chars = sql.split("");
         //关键字校验
         String[] words = sql.split(" |\t\n|\n|\t");

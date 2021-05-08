@@ -1,12 +1,28 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.constants.BatsLogConstant;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.SqlFormatUtils;
+import cn.com.pism.batslog.util.StringUtil;
+import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.ToggleAction;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
+import com.jetbrains.rd.util.string.StingUtilKt;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author PerccyKing
@@ -14,54 +30,74 @@ import javax.swing.*;
  * @date 2021/04/25 下午 09:47
  * @since 0.0.1
  */
-public class BeautyAction extends AnAction {
+public class BeautyAction extends ToggleAction {
 
-    /**
-     * Creates a new action with its text, description and icon set to {@code null}.
-     */
     public BeautyAction() {
     }
 
-    /**
-     * Creates a new action with {@code icon} provided. Its text, description set to {@code null}.
-     *
-     * @param icon Default icon to appear in toolbars and menus (Note some platform don't have icons in menu).
-     */
-    public BeautyAction(Icon icon) {
-        super(icon);
-    }
-
-    /**
-     * Creates a new action with the specified text. Description and icon are
-     * set to {@code null}.
-     *
-     * @param text Serves as a tooltip when the presentation is a button and the name of the
-     *             menu item when the presentation is a menu item.
-     */
-    public BeautyAction(@Nls(capitalization = Nls.Capitalization.Title) @Nullable String text) {
+    public BeautyAction(@Nullable String text) {
         super(text);
     }
 
-    /**
-     * Constructs a new action with the specified text, description and icon.
-     *
-     * @param text        Serves as a tooltip when the presentation is a button and the name of the
-     *                    menu item when the presentation is a menu item
-     * @param description Describes current action, this description will appear on
-     *                    the status bar when presentation has focus
-     * @param icon        Action's icon
-     */
-    public BeautyAction(@Nls(capitalization = Nls.Capitalization.Title) @Nullable String text, @Nls(capitalization = Nls.Capitalization.Sentence) @Nullable String description, @Nullable Icon icon) {
+    public BeautyAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
         super(text, description, icon);
     }
 
     /**
-     * Implement this method to provide your action handler.
+     * Returns the selected (checked, pressed) state of the action.
      *
-     * @param e Carries information on the invocation place
+     * @param e the action event representing the place and context in which the selected state is queried.
+     * @return true if the action is selected, false otherwise
      */
     @Override
-    public void actionPerformed(@NotNull AnActionEvent e) {
-        System.out.println("beauty");
+    public boolean isSelected(@NotNull AnActionEvent e) {
+        return Boolean.TRUE.equals(getService(e).getPrettyFormat());
+    }
+
+    private BatsLogSettingState getService(@NotNull AnActionEvent e) {
+        return ServiceManager.getService(Objects.requireNonNull(e.getProject()), BatsLogSettingState.class);
+    }
+
+    /**
+     * Sets the selected state of the action to the specified value.
+     *
+     * @param e     the action event which caused the state change.
+     * @param state the new selected state of the action.
+     */
+    @Override
+    public void setSelected(@NotNull AnActionEvent e, boolean state) {
+        reFormat(e);
+    }
+
+    private void reFormat(AnActionEvent e) {
+        Project project = e.getProject();
+        assert project != null;
+        Boolean prettyFormat = getService(e).getPrettyFormat();
+
+        ConsoleViewImpl consoleView = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+        String text = consoleView.getText();
+        //清空console
+//        consoleView.clear();
+
+        //分析出 sql，分隔符，name，other（LOGO）
+//        parseText(text, consoleView);
+
+        //取消UI选中/反选
+        getService(e).setPrettyFormat(!prettyFormat);
+
+        BatsLogUtil.PRETTY_FORMAT.setSelected(!prettyFormat);
+    }
+
+    private void parseText(String text, ConsoleViewImpl consoleView) {
+        //先判断text是否为空 不为空才会进行分析操作
+        if (StringUtils.isNotBlank(text)) {
+            String[] split = text.split("\n");
+            for (String s : split) {
+                if (BatsLogConstant.SEPARATOR.equals(s)) {
+                    consoleView.print(s, ConsoleViewContentType.ERROR_OUTPUT);
+                }
+            }
+        }
+
     }
 }

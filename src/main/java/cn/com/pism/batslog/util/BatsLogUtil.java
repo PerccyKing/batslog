@@ -25,7 +25,7 @@ public class BatsLogUtil {
     public static ToolWindowEx TOOL_WINDOW;
     public static Map<Project, Boolean> TAIL_STATUS = new HashMap<>();
     public static Map<Project, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
-    public static JScrollBar PANE_BAR;
+    public static JCheckBox PRETTY_FORMAT;
 
     public static Map<Project, List<String>> SOURCE_SQL_LIST_MAP = new HashMap<>();
 

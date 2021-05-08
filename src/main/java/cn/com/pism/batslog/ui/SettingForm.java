@@ -4,6 +4,7 @@ import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -109,6 +110,7 @@ public class SettingForm {
         desensitize.setSelected(service.getDesensitize());
         parameterized.setSelected(service.getParameterized());
         prettyFormat.setSelected(service.getPrettyFormat());
+        BatsLogUtil.PRETTY_FORMAT = prettyFormat;
         Boolean toUpperCase = service.getToUpperCase();
         if (toUpperCase != null) {
             this.toUpperCase.setSelected(toUpperCase);
