@@ -12,6 +12,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,23 +71,7 @@ public class SqlFormatUtils {
 
             //提取参数
             String[] paramArr = params.split(",");
-            List<Object> paramList = new ArrayList<>();
-            for (String s : paramArr) {
-                if (StringUtils.isNotBlank(s)) {
-                    int i = s.trim().indexOf("(") + 1;
-                    String par = s.substring(0, i);
-                    par = par.trim();
-                    String type = s.substring(i + 1, s.trim().indexOf(")") + 1);
-                    try {
-                        pack(paramList, par, type);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    //提取数据类型
-                } else {
-                    paramList.add("");
-                }
-            }
+            List<Object> paramList = parseParamToList(paramArr);
 
             String dbTypeStr = JdbcConstants.MYSQL;
             DbType dbType = service.getDbType();
@@ -127,6 +112,45 @@ public class SqlFormatUtils {
 
     /**
      * <p>
+     * 将参数数组转换为list，同时进行类型判断
+     * </p>
+     *
+     * @param paramArr : 待解析的参数数组
+     * @return {@link List<Object>}
+     * @author PerccyKing
+     * @date 2021/05/19 下午 09:23
+     */
+    @NotNull
+    private static List<Object> parseParamToList(String[] paramArr) {
+        List<Object> paramList = new ArrayList<>();
+        //fix https://github.com/PerccyKing/batslog/issues/12 参数为空的时候会造成这种情况
+        for (String s : paramArr) {
+            if (StringUtils.isNotBlank(s)) {
+                String par;
+                String type = null;
+                if (s.trim().contains("(")) {
+                    int i = s.trim().indexOf("(") + 1;
+                    par = s.substring(0, i);
+                    type = s.substring(i + 1, s.trim().indexOf(")") + 1);
+                } else {
+                    par = s;
+                }
+
+                try {
+                    pack(paramList, par.trim(), type);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                //提取数据类型
+            } else {
+                paramList.add("");
+            }
+        }
+        return paramList;
+    }
+
+    /**
+     * <p>
      * 打印分隔符和行名称
      * </p>
      *
@@ -153,7 +177,13 @@ public class SqlFormatUtils {
     }
 
     private static void pack(List<Object> paramList, String par, String type) throws ClassNotFoundException {
-        if (Arrays.stream(TYPES).anyMatch(type::equalsIgnoreCase)) {
+        if (StringUtils.isBlank(type)) {
+            if ("null".equals(par)) {
+                paramList.add(null);
+            } else {
+                paramList.add(par);
+            }
+        } else if (Arrays.stream(TYPES).anyMatch(type::equalsIgnoreCase)) {
             Class<?> aClass = Class.forName("java.lang." + type);
             if (aClass == Integer.class) {
                 paramList.add(Integer.valueOf(par));
