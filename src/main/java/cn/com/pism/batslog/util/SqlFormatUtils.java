@@ -79,11 +79,7 @@ public class SqlFormatUtils {
                 dbTypeStr = dbType.getType();
             }
 
-            SQLUtils.FormatOption formatOption = new SQLUtils.FormatOption();
-            formatOption.setDesensitize(service.getDesensitize());
-            formatOption.setPrettyFormat(service.getPrettyFormat());
-            formatOption.setParameterized(service.getParameterized());
-            formatOption.setUppCase(service.getToUpperCase());
+            SQLUtils.FormatOption formatOption = getFormatOption(service);
 
             String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
             if (printToConsole) {
@@ -108,6 +104,26 @@ public class SqlFormatUtils {
                 format(subStr, project, printToConsole, console);
             }
         }
+    }
+
+    /**
+     * <p>
+     * 获取格式化配置
+     * </p>
+     *
+     * @param service : 配置
+     * @return {@link SQLUtils.FormatOption}
+     * @author PerccyKing
+     * @date 2021/05/19 下午 09:29
+     */
+    @NotNull
+    private static SQLUtils.FormatOption getFormatOption(BatsLogSettingState service) {
+        SQLUtils.FormatOption formatOption = new SQLUtils.FormatOption();
+        formatOption.setDesensitize(service.getDesensitize());
+        formatOption.setPrettyFormat(service.getPrettyFormat());
+        formatOption.setParameterized(service.getParameterized());
+        formatOption.setUppCase(service.getToUpperCase());
+        return formatOption;
     }
 
     /**
