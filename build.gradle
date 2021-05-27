@@ -59,11 +59,13 @@ patchPluginXml {
 <li>ADD Print at the end of SQL [;] semicolon</li>
 <li>ADD Improve log format compatibility</li>
 <li>OPT Some copywriting</li>
+<li>OPT the display name of the toolWindow to reduce space consumption</li>
 <li>FIX 一些bug</li>
 <li>ADD 一键美化配置</li>
 <li>ADD SQL末尾打印[;]分号</li>
 <li>ADD 提高日志格式化兼容性</li>
 <li>OPT 一些文案</li>
+<li>OPT 工具栏显示名称，减少空间占用</li>
 </ul>
 </div>
 
