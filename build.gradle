@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.03.14.0107-Release'
+version '21.05.27.2253-RE'
 
 
 java {
@@ -54,6 +54,22 @@ patchPluginXml {
 <h1>$version</h1>
 
 <ul>
+<li>FIX some bugs</li>
+<li>ADD One click beautification configuration</li>
+<li>ADD Print at the end of SQL [;] semicolon</li>
+<li>ADD Improve log format compatibility</li>
+<li>OPT Some copywriting</li>
+<li>FIX 一些bug</li>
+<li>ADD 一键美化配置</li>
+<li>ADD SQL末尾打印[;]分号</li>
+<li>ADD 提高日志格式化兼容性</li>
+<li>OPT 一些文案</li>
+</ul>
+</div>
+
+<h1>21.03.14.0107-Release</h1>
+
+<ul>
 <li>Fix some bugs</li>
 <li>ADD SQL desensitization configuration</li>
 <li>ADD SQL beautification configuration</li>
@@ -63,8 +79,6 @@ patchPluginXml {
 <li>新增 SQL美化配置</li>
 <li>新增 SQL大小写转换配置</li>
 </ul>
-</div>
-
 
 <h1>21.01.13.2217-Release</h1>
 
