@@ -37,7 +37,7 @@ public class BatsLogUtil {
         SqlFormatUtils.format(text, e.getProject(), Boolean.FALSE);
         List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(e.getProject());
         if (CollectionUtils.isNotEmpty(sqlCache)) {
-            String cache = String.join(";\n\n", sqlCache);
+            String cache = String.join("\n\n", sqlCache);
             //复制到剪贴板
             copyToClipboard(cache);
         }

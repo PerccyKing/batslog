@@ -82,6 +82,9 @@ public class SqlFormatUtils {
             SQLUtils.FormatOption formatOption = getFormatOption(service);
 
             String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
+            if (!formatSql.endsWith(";")) {
+                formatSql = formatSql + ";";
+            }
             if (printToConsole) {
                 if (console == null) {
                     console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
@@ -258,7 +261,6 @@ public class SqlFormatUtils {
             }
         }
         consoleView.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
-//        BatsLogUtil.PANE_BAR.setValue(BatsLogUtil.PANE_BAR.getMaximum());
     }
 
 
