@@ -1,10 +1,15 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
+import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import com.alibaba.fastjson.JSON;
+import com.intellij.codeInspection.ui.ListTable;
+import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -12,25 +17,36 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.CheckboxTreeTable;
 import com.intellij.ui.ColorChooser;
+import com.intellij.ui.Gray;
+import com.intellij.ui.table.JBTable;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.table.JBListTableModel;
 import icons.BatsLogIcons;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
+import java.util.Vector;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
@@ -55,6 +71,7 @@ public class SettingForm {
     private JCheckBox prettyFormat;
     private JCheckBox parameterized;
     private JCheckBox toUpperCase;
+    private JBTable colorSettingTable;
 
     private BatsLogSettingState service;
 
@@ -63,32 +80,10 @@ public class SettingForm {
         this.project = project;
         this.service = ServiceManager.getService(project, BatsLogSettingState.class);
 
-        List<DbType> radioButtons = DbType.getRadioButtons();
-        radioButtons.forEach(rb -> {
-            if (!DbType.NONE.equals(rb)) {
-                JLabel jLabel = new JLabel(rb.getName());
-                jLabel.setIcon(rb.getIcon());
-                dbTypeBox.addItem(rb);
-            }
-        });
-        DbType dbType = service.getDbType();
-        if (dbType.equals(DbType.NONE)) {
-            dbType = DbType.MYSQL;
-        }
-        dbTypeBox.setSelectedItem(dbType);
-        dbTypeBox.addItemListener(e -> {
-            DbType item = (DbType) e.getItem();
-            service.setDbType(item);
-        });
-        DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
-        dbTypeBox.setRenderer(dbTypeRender);
-        ColorButton colorButton = new ColorButton(project, service.getKeyWordDefCol());
-        GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
-        GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
-        layout.removeLayoutComponent(keyWord);
-        layout.addLayoutComponent(colorButton, constraintsForComponent);
-        keyWordsPanel.add(colorButton, constraintsForComponent);
-        keyWordsPanel.revalidate();
+        //初始化数据库选择
+        initDbTypeBox();
+        //初始化关键字颜色选择按钮
+        initKeyWordColorButton(project);
 
         String sqlPrefixStr = service.getSqlPrefix();
         if (StringUtils.isBlank(sqlPrefixStr)) {
@@ -117,6 +112,91 @@ public class SettingForm {
         } else {
             this.toUpperCase.setSelected(false);
         }
+        initColorSettingTable();
+    }
+
+    private void initColorSettingTable() {
+
+        String[] columns = new String[]{
+                "id",
+                BatsLogBundle.message("serialNumber"),
+                BatsLogBundle.message("keyword"),
+                BatsLogBundle.message("backgroundColor"),
+                BatsLogBundle.message("foregroundColor"),
+                BatsLogBundle.message("operation")
+        };
+        int[] columnWidth = {50, 200, 50, 50, 100};
+
+        DefaultTableModel tableModel = new DefaultTableModel(null, columns) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 2 || column == 5;
+            }
+        };
+
+        List<ConsoleColorConfig> mock = mock(30);
+        mock.forEach(m -> tableModel.addRow(m.toArray()));
+
+        colorSettingTable.setModel(tableModel);
+        TableColumnModel columnModel = colorSettingTable.getColumnModel();
+        columnModel.getColumn(0).setMaxWidth(0);
+        columnModel.getColumn(0).setMinWidth(0);
+        columnModel.getColumn(5).setCellEditor(new MyDeleteButtonEditor(colorSettingTable));
+        columnModel.getColumn(5).setCellRenderer(new MyDeleteButtonRender(colorSettingTable));
+        colorSettingTable.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+        colorSettingTable.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+        colorSettingTable.doLayout();
+        colorSettingTable.setShowColumns(true);
+
+    }
+
+    /**
+     * <p>
+     * 初始化关键字颜色选择按钮
+     * </p>
+     *
+     * @param project : 项目
+     * @author PerccyKing
+     * @date 2021/06/26 下午 03:40
+     */
+    private void initKeyWordColorButton(Project project) {
+        ColorButton colorButton = new ColorButton(project, service.getKeyWordDefCol());
+        GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
+        GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
+        layout.removeLayoutComponent(keyWord);
+        layout.addLayoutComponent(colorButton, constraintsForComponent);
+        keyWordsPanel.add(colorButton, constraintsForComponent);
+        keyWordsPanel.revalidate();
+    }
+
+    /**
+     * <p>
+     * 初始化数据库选择
+     * </p>
+     *
+     * @author PerccyKing
+     * @date 2021/06/26 下午 03:39
+     */
+    private void initDbTypeBox() {
+        List<DbType> radioButtons = DbType.getRadioButtons();
+        radioButtons.forEach(rb -> {
+            if (!DbType.NONE.equals(rb)) {
+                JLabel jLabel = new JLabel(rb.getName());
+                jLabel.setIcon(rb.getIcon());
+                dbTypeBox.addItem(rb);
+            }
+        });
+        DbType dbType = service.getDbType();
+        if (dbType.equals(DbType.NONE)) {
+            dbType = DbType.MYSQL;
+        }
+        dbTypeBox.setSelectedItem(dbType);
+        dbTypeBox.addItemListener(e -> {
+            DbType item = (DbType) e.getItem();
+            service.setDbType(item);
+        });
+        DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
+        dbTypeBox.setRenderer(dbTypeRender);
     }
 
     private void addListen(Project project) {
@@ -286,5 +366,13 @@ public class SettingForm {
             }
             return this;
         }
+    }
+
+    private List<ConsoleColorConfig> mock(int size) {
+        List<ConsoleColorConfig> configs = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", Gray._15, Gray._40));
+        }
+        return configs;
     }
 }
