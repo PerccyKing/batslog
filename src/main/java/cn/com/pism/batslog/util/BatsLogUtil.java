@@ -5,9 +5,9 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
+import com.intellij.ui.components.OnOffButton;
 import org.apache.commons.collections.CollectionUtils;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -25,7 +25,7 @@ public class BatsLogUtil {
     public static ToolWindowEx TOOL_WINDOW;
     public static Map<Project, Boolean> TAIL_STATUS = new HashMap<>();
     public static Map<Project, ConsoleViewImpl> CONSOLE_VIEW_MAP = new HashMap<>();
-    public static JCheckBox PRETTY_FORMAT;
+    public static OnOffButton PRETTY_FORMAT;
 
     public static Map<Project, List<String>> SOURCE_SQL_LIST_MAP = new HashMap<>();
 

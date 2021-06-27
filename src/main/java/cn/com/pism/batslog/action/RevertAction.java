@@ -1,7 +1,5 @@
 package cn.com.pism.batslog.action;
 
-import cn.com.pism.batslog.constants.BatsLogConstant;
-import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

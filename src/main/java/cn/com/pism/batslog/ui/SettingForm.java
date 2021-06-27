@@ -4,12 +4,8 @@ import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
-import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
-import com.alibaba.fastjson.JSON;
-import com.intellij.codeInspection.ui.ListTable;
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -17,36 +13,25 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.CheckboxTreeTable;
 import com.intellij.ui.ColorChooser;
-import com.intellij.ui.Gray;
-import com.intellij.ui.table.JBTable;
+import com.intellij.ui.components.OnOffButton;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.table.JBListTableModel;
 import icons.BatsLogIcons;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
-import java.util.Vector;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
@@ -67,11 +52,11 @@ public class SettingForm {
     private JTextField paramsPrefix;
     private JPanel revertSqlPanel;
     private JPanel revertParamsPanel;
-    private JCheckBox desensitize;
-    private JCheckBox prettyFormat;
-    private JCheckBox parameterized;
-    private JCheckBox toUpperCase;
-    private JBTable colorSettingTable;
+    private JButton configButton;
+    private OnOffButton desensitize;
+    private OnOffButton prettyFormat;
+    private OnOffButton parameterized;
+    private OnOffButton toUpperCase;
 
     private BatsLogSettingState service;
 
@@ -102,9 +87,18 @@ public class SettingForm {
         RevertAction revertParamsAction = new RevertAction(AllIcons.Actions.Rollback, PARAMS_PREFIX, paramsPrefix);
         revertParamsPanel.add(new ActionButton(revertParamsAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
 
+        initFormatConfig();
+
+        configButton.addActionListener(e -> ConsoleColorConfigDialog.show(project));
+    }
+
+    private void initFormatConfig() {
         desensitize.setSelected(service.getDesensitize());
+        setOnOffText(desensitize);
         parameterized.setSelected(service.getParameterized());
+        setOnOffText(parameterized);
         prettyFormat.setSelected(service.getPrettyFormat());
+        setOnOffText(prettyFormat);
         BatsLogUtil.PRETTY_FORMAT = prettyFormat;
         Boolean toUpperCase = service.getToUpperCase();
         if (toUpperCase != null) {
@@ -112,42 +106,12 @@ public class SettingForm {
         } else {
             this.toUpperCase.setSelected(false);
         }
-        initColorSettingTable();
+        setOnOffText(this.toUpperCase);
     }
 
-    private void initColorSettingTable() {
-
-        String[] columns = new String[]{
-                "id",
-                BatsLogBundle.message("serialNumber"),
-                BatsLogBundle.message("keyword"),
-                BatsLogBundle.message("backgroundColor"),
-                BatsLogBundle.message("foregroundColor"),
-                BatsLogBundle.message("operation")
-        };
-        int[] columnWidth = {50, 200, 50, 50, 100};
-
-        DefaultTableModel tableModel = new DefaultTableModel(null, columns) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 2 || column == 5;
-            }
-        };
-
-        List<ConsoleColorConfig> mock = mock(30);
-        mock.forEach(m -> tableModel.addRow(m.toArray()));
-
-        colorSettingTable.setModel(tableModel);
-        TableColumnModel columnModel = colorSettingTable.getColumnModel();
-        columnModel.getColumn(0).setMaxWidth(0);
-        columnModel.getColumn(0).setMinWidth(0);
-        columnModel.getColumn(5).setCellEditor(new MyDeleteButtonEditor(colorSettingTable));
-        columnModel.getColumn(5).setCellRenderer(new MyDeleteButtonRender(colorSettingTable));
-        colorSettingTable.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
-        colorSettingTable.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
-        colorSettingTable.doLayout();
-        colorSettingTable.setShowColumns(true);
-
+    private void setOnOffText(OnOffButton offButton) {
+        offButton.setOffText(BatsLogBundle.message("off"));
+        offButton.setOnText(BatsLogBundle.message("on"));
     }
 
     /**
@@ -368,11 +332,4 @@ public class SettingForm {
         }
     }
 
-    private List<ConsoleColorConfig> mock(int size) {
-        List<ConsoleColorConfig> configs = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", Gray._15, Gray._40));
-        }
-        return configs;
-    }
 }
