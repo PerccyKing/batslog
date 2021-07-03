@@ -3,11 +3,11 @@
   <grid id="27dc6" binding="root" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="800"/>
+      <xy x="20" y="20" width="600" height="800"/>
     </constraints>
     <properties>
-      <maximumSize width="500" height="800"/>
-      <minimumSize width="500" height="800"/>
+      <maximumSize width="600" height="800"/>
+      <minimumSize width="600" height="800"/>
     </properties>
     <border type="none"/>
     <children>

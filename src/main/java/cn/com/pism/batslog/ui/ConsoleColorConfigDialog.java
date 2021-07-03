@@ -2,6 +2,9 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
+import com.alibaba.fastjson.JSON;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.Gray;
@@ -12,8 +15,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,22 +31,24 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     private Project project;
 
+
+    private BatsLogSettingState service;
+
     protected ConsoleColorConfigDialog(@Nullable Project project) {
         super(project);
+        this.service = ServiceManager.getService(project, BatsLogSettingState.class);
         this.project = project;
         init();
         initForm();
-        show();
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
+        addButton.addActionListener(e -> {
+            DefaultTableModel tableModel = (DefaultTableModel) colorSettingTable.getModel();
+            tableModel.addRow(mock(1).get(0).toArray());
         });
+        show();
     }
 
     private void initForm() {
         setTitle(BatsLogBundle.message("consoleColorConfig"));
-        setSize(500, 800);
         initColorSettingTable();
         setAutoAdjustable(true);
     }
@@ -59,10 +62,10 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 BatsLogBundle.message("keyword"),
                 BatsLogBundle.message("backgroundColor"),
                 BatsLogBundle.message("foregroundColor"),
-                "是否启用",
+                BatsLogBundle.message("enable"),
                 BatsLogBundle.message("operation")
         };
-        int[] columnWidth = {50, 200, 50, 50, 100};
+        int[] columnWidth = {0, 50, 200, 50, 50, 100, 100};
 
         DefaultTableModel tableModel = new DefaultTableModel(null, columns) {
             @Override
@@ -71,8 +74,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
             }
         };
 
-        List<ConsoleColorConfig> mock = mock(50);
-        mock.forEach(m -> tableModel.addRow(m.toArray()));
+        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        colorConfigs.forEach(config -> tableModel.addRow(config.toArray()));
 
         colorSettingTable.setModel(tableModel);
         TableColumnModel columnModel = colorSettingTable.getColumnModel();
@@ -88,8 +91,15 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         columnModel.getColumn(5).setCellRenderer(new MyOnOffButtonRender());
         columnModel.getColumn(6).setCellEditor(new MyDeleteButtonEditor(colorSettingTable));
         columnModel.getColumn(6).setCellRenderer(new MyDeleteButtonRender(colorSettingTable));
-        colorSettingTable.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
-        colorSettingTable.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+
+        TableColumnModel headerModel = colorSettingTable.getTableHeader().getColumnModel();
+
+        int columnCount = headerModel.getColumnCount();
+        for (int i = 0; i < columnCount; i++) {
+            headerModel.getColumn(i).setMaxWidth(columnWidth[i]);
+            headerModel.getColumn(i).setMinWidth(columnWidth[i]);
+        }
+
         colorSettingTable.doLayout();
         colorSettingTable.setShowColumns(true);
 
@@ -107,6 +117,19 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
+        int columnCount = colorSettingTable.getColumnCount();
+        DefaultTableModel tableModel = (DefaultTableModel) colorSettingTable.getModel();
+        int rowCount = tableModel.getRowCount();
+        List<ConsoleColorConfig> configData = new ArrayList<>();
+        for (int i = 0; i < rowCount; i++) {
+            Object[] row = new Object[columnCount];
+            for (int j = 0; j < columnCount; j++) {
+                row[j] = tableModel.getValueAt(i, j);
+            }
+            configData.add(new ConsoleColorConfig().toConfig(row));
+        }
+        service.setColorConfigs(configData);
+        System.out.println(JSON.toJSONString(configData));
         super.doOKAction();
     }
 

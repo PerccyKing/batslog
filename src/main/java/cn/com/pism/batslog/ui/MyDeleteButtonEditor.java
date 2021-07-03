@@ -1,6 +1,5 @@
 package cn.com.pism.batslog.ui;
 
-import cn.com.pism.batslog.BatsLogBundle;
 import com.alibaba.fastjson.JSON;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.table.JBTable;

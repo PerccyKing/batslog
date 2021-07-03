@@ -26,4 +26,15 @@ public class ConsoleColorConfig {
     public Object[] toArray() {
         return new Object[]{id, sort, keyWord, backgroundColor, foregroundColor, enabled};
     }
+
+    public ConsoleColorConfig toConfig(Object[] objects) {
+        return new ConsoleColorConfig(
+                (String) objects[0],
+                (int) objects[1],
+                (String) objects[2],
+                (Color) objects[3],
+                (Color) objects[4],
+                (Boolean) objects[5]
+        );
+    }
 }
