@@ -2,15 +2,13 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
 import com.alibaba.fastjson.JSON;
+import com.intellij.icons.AllIcons;
 import com.intellij.ui.table.JBTable;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 
 /**
@@ -44,7 +42,8 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
     }
 
     private void initButton() {
-        this.button = new JButton(BatsLogBundle.message("delete"));
+        this.button = new JButton();
+        this.button.setIcon(AllIcons.Actions.GC);
         TableColumnModel columnModel = jbTable.getColumnModel();
         TableColumn column = columnModel.getColumn(5);
         this.button.setBounds(new Rectangle(column.getWidth(), jbTable.getRowHeight()));
@@ -57,6 +56,7 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
             for (int i = 0; i < columnCount; i++) {
                 Object obj = model.getValueAt(selectedRow, i);
                 System.out.print(JSON.toJSONString(obj) + "\t");
+                System.out.println("");
             }
             model.removeRow(selectedRow);
         });
@@ -64,12 +64,11 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
 
     private void initPanel() {
         this.panel = new JPanel();
-        this.panel.setLayout(null);
+        this.panel.setLayout(new FlowLayout());
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        this.button.setText(BatsLogBundle.message("delete"));
         return this.panel;
     }
 

@@ -1,14 +1,13 @@
 package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
-import com.alibaba.fastjson.JSON;
+import com.intellij.icons.AllIcons;
 import com.intellij.ui.table.JBTable;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 
 /**
@@ -35,7 +34,10 @@ public class MyDeleteButtonRender implements TableCellRenderer {
     }
 
     private void initButton() {
-        this.button = new JButton(BatsLogBundle.message("delete"));
+        this.button = new JButton();
+        this.button.setIcon(AllIcons.Actions.GC);
+        this.button.setBackground(null);
+        this.button.setBorder(null);
         TableColumnModel columnModel = jbTable.getColumnModel();
         TableColumn column = columnModel.getColumn(5);
         this.button.setBounds(new Rectangle(column.getWidth(), jbTable.getRowHeight()));
@@ -43,12 +45,11 @@ public class MyDeleteButtonRender implements TableCellRenderer {
 
     private void initPanel() {
         this.panel = new JPanel();
-        this.panel.setLayout(null);
+        this.panel.setLayout(new FlowLayout());
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        this.button.setText(BatsLogBundle.message("delete"));
         return this.panel;
     }
 }

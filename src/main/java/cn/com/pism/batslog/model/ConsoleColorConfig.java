@@ -21,8 +21,9 @@ public class ConsoleColorConfig {
     private String keyWord;
     private Color backgroundColor;
     private Color foregroundColor;
+    private boolean enabled;
 
     public Object[] toArray() {
-        return new Object[]{id, sort, keyWord, backgroundColor, foregroundColor};
+        return new Object[]{id, sort, keyWord, backgroundColor, foregroundColor, enabled};
     }
 }
