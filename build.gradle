@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.05.27.2253-RE'
+version '21.07.04.1838-RE'
 
 
 java {
@@ -54,6 +54,21 @@ patchPluginXml {
 <h1>$version</h1>
 
 <ul>
+<li>ADD #15 print colored SQL</li>
+<li>ADD #15 SQL color configuration</li>
+<li>ADD add serial number</li>
+<li>OPT ui beautification</li>
+<li>ADD #15 打印有颜色的SQL</li>
+<li>ADD #15 SQL颜色配置</li>
+<li>ADD 添加序号</li>
+<li>OPT UI美化</li>
+</ul>
+</div>
+
+
+<h1>21.05.27.2253-RE</h1>
+
+<ul>
 <li>FIX some bugs</li>
 <li>ADD One click beautification configuration</li>
 <li>ADD Print at the end of SQL [;] semicolon</li>
@@ -67,7 +82,6 @@ patchPluginXml {
 <li>OPT 一些文案</li>
 <li>OPT 工具栏显示名称，减少空间占用</li>
 </ul>
-</div>
 
 <h1>21.03.14.0107-Release</h1>
 
