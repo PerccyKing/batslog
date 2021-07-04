@@ -14,10 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
 import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
@@ -240,6 +237,17 @@ public class SqlFormatUtils {
      */
     public static void printSql(String sql, Project project, ConsoleViewImpl consoleView) {
 
+        Map<String, ConsoleViewContentType> keyColorMap = BatsLogUtil.KEY_COLOR_MAP;
+
+        ConsoleViewContentType defaultContentType = ConsoleViewContentType.NORMAL_OUTPUT;
+
+        for (Map.Entry<String, ConsoleViewContentType> entry : keyColorMap.entrySet()) {
+            String k = entry.getKey();
+            ConsoleViewContentType v = entry.getValue();
+            if (sql.trim().toUpperCase(Locale.ROOT).startsWith(k)) {
+                defaultContentType = v;
+            }
+        }
         String[] chars = sql.split("");
         //关键字校验
         String[] words = sql.split(" |\t\n|\n|\t");
@@ -250,17 +258,17 @@ public class SqlFormatUtils {
             String supplement = "";
 
             if (keyword) {
-                printKeyWord(consoleView, project, word);
+                printKeyWord(consoleView, project, word, defaultContentType);
             } else {
-                consoleView.print(StringUtil.encoding(word), ConsoleViewContentType.NORMAL_OUTPUT);
+                consoleView.print(StringUtil.encoding(word), defaultContentType);
             }
             if (charLength < chars.length) {
                 supplement = chars[charLength];
                 charLength = charLength + supplement.length();
-                consoleView.print(supplement, ConsoleViewContentType.NORMAL_OUTPUT);
+                consoleView.print(supplement, defaultContentType);
             }
         }
-        consoleView.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
+        consoleView.print("\n", defaultContentType);
     }
 
 
@@ -283,8 +291,10 @@ public class SqlFormatUtils {
         return words.contains(nameLower);
     }
 
-    public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord) {
-        consoleView.print(StringUtil.encoding(keyWord), ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project));
+    public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord, ConsoleViewContentType contentType) {
+        ConsoleViewContentType keyWordContentType = ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project);
+        keyWordContentType.getAttributes().setBackgroundColor(contentType.getAttributes().getBackgroundColor());
+        consoleView.print(StringUtil.encoding(keyWord), keyWordContentType);
     }
 
 }

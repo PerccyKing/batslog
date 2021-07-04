@@ -1,6 +1,5 @@
-package cn.com.pism.batslog.ui;
+package cn.com.pism.batslog.ui.tablehelp;
 
-import com.alibaba.fastjson.JSON;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.table.JBTable;
 
@@ -51,12 +50,6 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
             MyDeleteButtonEditor.this.fireEditingCanceled();
             int selectedRow = jbTable.getSelectedRow();
             DefaultTableModel model = (DefaultTableModel) jbTable.getModel();
-            int columnCount = model.getColumnCount();
-            for (int i = 0; i < columnCount; i++) {
-                Object obj = model.getValueAt(selectedRow, i);
-                System.out.print(JSON.toJSONString(obj) + "\t");
-                System.out.println("");
-            }
             model.removeRow(selectedRow);
         });
     }

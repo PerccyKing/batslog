@@ -121,7 +121,9 @@ public class SettingForm {
      * @date 2021/06/26 下午 03:40
      */
     private void initKeyWordColorButton(Project project) {
-        ColorButton colorButton = new ColorButton(project, service.getKeyWordDefCol());
+        ColorButton colorButton = new ColorButton(project, service.getKeyWordDefCol(), 16, 16, choseColor -> {
+            service.setKeyWordDefCol(choseColor);
+        });
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
         layout.removeLayoutComponent(keyWord);

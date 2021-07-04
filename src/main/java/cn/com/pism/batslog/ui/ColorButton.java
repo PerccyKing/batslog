@@ -1,7 +1,5 @@
 package cn.com.pism.batslog.ui;
 
-import cn.com.pism.batslog.settings.BatsLogSettingState;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
 import com.intellij.util.ui.JBUI;
@@ -10,8 +8,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
 
@@ -25,29 +21,38 @@ public class ColorButton extends JButton {
 
     private Color selectColor;
 
-    private BatsLogSettingState service;
+    private int width;
+    private int height;
 
     @Override
     protected void init(String text, Icon icon) {
         super.init(text, icon);
     }
 
-    ColorButton(Project project, Color color) {
-        this.service = ServiceManager.getService(project, BatsLogSettingState.class);
+    public ColorButton(Project project, Color color, int width, int height, Callback callback) {
+        this.width = width;
+        this.height = height;
         if (color != null) {
             this.selectColor = color;
         } else {
             this.selectColor = KEY_WORD_DEF_COL;
-            service.setKeyWordDefCol(KEY_WORD_DEF_COL);
         }
-        buttonInit(project, color);
+        buttonInit(project, color, callback);
     }
 
-    ColorButton() {
-        buttonInit(null, null);
+    public ColorButton(Project project, Color color) {
+        new ColorButton(project, color, 12, 12);
     }
 
-    private void buttonInit(Project project, Color color) {
+    public ColorButton(Project project, Color color, int width, int height) {
+        new ColorButton(project, color, width, height, color1 -> this.selectColor = color);
+    }
+
+    public ColorButton() {
+        buttonInit(null, null, color -> this.selectColor = color);
+    }
+
+    private void buttonInit(Project project, Color color, Callback callback) {
         setMargin(JBUI.emptyInsets());
         setFocusable(false);
         setDefaultCapable(false);
@@ -55,26 +60,25 @@ public class ColorButton extends JButton {
         if (color != null) {
             selectColor = color;
         }
-        MouseAdapter adapter = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Color color = ColorChooser.chooseColor(new JPanel(), "选择颜色", selectColor);
-                if (color != null) {
-                    selectColor = color;
-                    service.setKeyWordDefCol(color);
-                }
-                super.mouseClicked(e);
+        addActionListener(e -> {
+            Color color1 = ColorChooser.chooseColor(new JPanel(), "选择颜色", selectColor);
+            if (color1 != null) {
+                selectColor = color1;
+                callback.callback(selectColor);
             }
-        };
-        addMouseListener(adapter);
+        });
     }
 
 
     @Override
     public void paint(Graphics g) {
         final Color color = g.getColor();
-        g.setColor(selectColor);
-        g.fillRect(0, 0, 12, 12);
+        if (selectColor == null) {
+            g.setColor(KEY_WORD_DEF_COL);
+        } else {
+            g.setColor(selectColor);
+        }
+        g.fillRect(0, 0, this.width, this.height);
         g.setColor(color);
     }
 
@@ -90,8 +94,15 @@ public class ColorButton extends JButton {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(12, 12);
+        return new Dimension(this.width, this.height);
     }
 
-
+    public interface Callback {
+        /**
+         * 回调
+         *
+         * @param choseColor 选中的颜色
+         */
+        void callback(Color choseColor);
+    }
 }

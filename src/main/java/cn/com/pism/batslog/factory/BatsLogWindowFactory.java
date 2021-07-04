@@ -3,14 +3,18 @@ package cn.com.pism.batslog.factory;
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.CopySqlAction;
 import cn.com.pism.batslog.action.FormatSqlAction;
+import cn.com.pism.batslog.model.ConsoleColorConfig;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -20,6 +24,8 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 /**
@@ -58,6 +64,11 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         ActionManager instance = ActionManager.getInstance();
         instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("formatSql"), "", BatsLogIcons.BATS_LOG));
         instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("copySql"), "", BatsLogIcons.BATS_LOG_COPY));
+
+        BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
+
+        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        BatsLogUtil.KEY_COLOR_MAP = ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs);
     }
 
 }

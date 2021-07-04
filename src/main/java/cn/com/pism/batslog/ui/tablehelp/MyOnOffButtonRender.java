@@ -1,4 +1,4 @@
-package cn.com.pism.batslog.ui;
+package cn.com.pism.batslog.ui.tablehelp;
 
 import com.intellij.ui.components.OnOffButton;
 

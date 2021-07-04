@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.util;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -31,6 +32,7 @@ public class BatsLogUtil {
 
     public static Map<Project, List<String>> SQL_CACHE = new HashMap<>();
 
+    public static Map<String, ConsoleViewContentType> KEY_COLOR_MAP = new HashMap<>();
 
     public static void copySqlToClipboard(AnActionEvent e, String text) {
 

@@ -3,20 +3,24 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
-import com.alibaba.fastjson.JSON;
+import cn.com.pism.batslog.ui.tablehelp.*;
+import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.Gray;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author PerccyKing
@@ -42,9 +46,29 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         initForm();
         addButton.addActionListener(e -> {
             DefaultTableModel tableModel = (DefaultTableModel) colorSettingTable.getModel();
-            tableModel.addRow(mock(1).get(0).toArray());
+            tableModel.addRow(addRow());
         });
         show();
+    }
+
+    private Object[] addRow() {
+        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        int sort = 1;
+        Optional<ConsoleColorConfig> max = colorConfigs.stream().max(Comparator.comparingInt(ConsoleColorConfig::getSort));
+        if (max.isPresent()) {
+            sort = max.get().getSort() + 1;
+        }
+        List<ConsoleColorConfig> notSaveConfigs = getColorConfigs();
+        Optional<ConsoleColorConfig> max1 = notSaveConfigs.stream().max(Comparator.comparingInt(ConsoleColorConfig::getSort));
+        if (max1.isPresent()) {
+            sort = Math.max(sort, max1.get().getSort()) + 1;
+        }
+        return new ConsoleColorConfig(UUID.randomUUID().toString(),
+                sort,
+                BatsLogBundle.message("modifyTheKeyword"),
+                JBColor.BLUE,
+                JBColor.YELLOW,
+                false).toArray();
     }
 
     private void initForm() {
@@ -117,6 +141,23 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
+        List<ConsoleColorConfig> configData = getColorConfigs();
+        for (int i = 0; i < configData.size(); i++) {
+            ConsoleColorConfig colorConfig = configData.get(i);
+            colorConfig.setSort(i + 1);
+            if (StringUtils.isNotBlank(colorConfig.getKeyWord())) {
+                colorConfig.setKeyWord(colorConfig.getKeyWord().toUpperCase(Locale.ROOT));
+            }
+        }
+        service.setColorConfigs(configData);
+
+        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        BatsLogUtil.KEY_COLOR_MAP = ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs);
+        super.doOKAction();
+    }
+
+    @NotNull
+    private List<ConsoleColorConfig> getColorConfigs() {
         int columnCount = colorSettingTable.getColumnCount();
         DefaultTableModel tableModel = (DefaultTableModel) colorSettingTable.getModel();
         int rowCount = tableModel.getRowCount();
@@ -128,16 +169,14 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
             }
             configData.add(new ConsoleColorConfig().toConfig(row));
         }
-        service.setColorConfigs(configData);
-        System.out.println(JSON.toJSONString(configData));
-        super.doOKAction();
+        return configData;
     }
 
 
     private List<ConsoleColorConfig> mock(int size) {
         List<ConsoleColorConfig> configs = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", Gray._15, Gray._40, i % 2 > 0));
+            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", Gray._150, Gray._130, i % 2 > 0));
         }
         return configs;
     }
