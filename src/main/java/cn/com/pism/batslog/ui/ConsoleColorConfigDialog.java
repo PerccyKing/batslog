@@ -56,13 +56,14 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         int sort = 1;
         Optional<ConsoleColorConfig> max = colorConfigs.stream().max(Comparator.comparingInt(ConsoleColorConfig::getSort));
         if (max.isPresent()) {
-            sort = max.get().getSort() + 1;
+            sort = max.get().getSort();
         }
         List<ConsoleColorConfig> notSaveConfigs = getColorConfigs();
         Optional<ConsoleColorConfig> max1 = notSaveConfigs.stream().max(Comparator.comparingInt(ConsoleColorConfig::getSort));
         if (max1.isPresent()) {
-            sort = Math.max(sort, max1.get().getSort()) + 1;
+            sort = Math.max(sort, max1.get().getSort());
         }
+        sort++;
         return new ConsoleColorConfig(UUID.randomUUID().toString(),
                 sort,
                 BatsLogBundle.message("modifyTheKeyword"),

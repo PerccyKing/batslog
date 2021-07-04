@@ -61,7 +61,7 @@ public class BatsLogUtil {
     }
 
     public static Color toColor(RgbColor rgbColor) {
-        return new JBColor(new Color(rgbColor.getR(), rgbColor.getR(), rgbColor.getB()),
-                new Color(rgbColor.getR(), rgbColor.getR(), rgbColor.getB()));
+        return new JBColor(new Color(rgbColor.getR(), rgbColor.getG(), rgbColor.getB()),
+                new Color(rgbColor.getR(), rgbColor.getG(), rgbColor.getB()));
     }
 }

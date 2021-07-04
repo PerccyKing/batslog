@@ -5,6 +5,7 @@ import cn.com.pism.batslog.action.CopySqlAction;
 import cn.com.pism.batslog.action.FormatSqlAction;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.settings.RgbColor;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
@@ -25,6 +26,7 @@ import com.intellij.ui.content.ContentManager;
 import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -68,6 +70,13 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
 
         List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        if (colorConfigs == null || colorConfigs.isEmpty()) {
+            colorConfigs = new ArrayList<>();
+            colorConfigs.add(new ConsoleColorConfig("1", 1, "INSERT", new RgbColor(154, 255, 154), new RgbColor(255, 255, 255), true));
+            colorConfigs.add(new ConsoleColorConfig("2", 2, "UPDATE", new RgbColor(255, 255, 160), new RgbColor(0, 0, 255), true));
+            colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 150, 150), new RgbColor(255, 255, 255), true));
+            service.setColorConfigs(colorConfigs);
+        }
         BatsLogUtil.KEY_COLOR_MAP = ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs);
     }
 
