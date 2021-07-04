@@ -69,7 +69,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 BatsLogBundle.message("modifyTheKeyword"),
                 new RgbColor(JBColor.BLUE.getRed(), JBColor.BLUE.getGreen(), JBColor.BLUE.getBlue()),
                 new RgbColor(JBColor.YELLOW.getRed(), JBColor.YELLOW.getGreen(), JBColor.YELLOW.getBlue()),
-                false).toArray();
+                true).toArray();
     }
 
     private void initForm() {
