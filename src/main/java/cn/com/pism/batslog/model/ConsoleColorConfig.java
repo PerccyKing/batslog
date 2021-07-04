@@ -1,10 +1,9 @@
 package cn.com.pism.batslog.model;
 
+import cn.com.pism.batslog.settings.RgbColor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.awt.*;
 
 /**
  * @author PerccyKing
@@ -19,8 +18,8 @@ public class ConsoleColorConfig {
     private String id;
     private int sort;
     private String keyWord;
-    private Color backgroundColor;
-    private Color foregroundColor;
+    private RgbColor backgroundColor;
+    private RgbColor foregroundColor;
     private boolean enabled;
 
     public Object[] toArray() {
@@ -32,8 +31,8 @@ public class ConsoleColorConfig {
                 (String) objects[0],
                 (int) objects[1],
                 (String) objects[2],
-                (Color) objects[3],
-                (Color) objects[4],
+                (RgbColor) objects[3],
+                (RgbColor) objects[4],
                 (Boolean) objects[5]
         );
     }

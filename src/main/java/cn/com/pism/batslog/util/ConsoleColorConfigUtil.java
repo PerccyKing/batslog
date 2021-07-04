@@ -30,8 +30,8 @@ public class ConsoleColorConfigUtil {
     public static Map<String, ConsoleViewContentType> toConsoleViewContentTypeMap(Project project, List<ConsoleColorConfig> colorConfigs) {
         Map<String, ConsoleViewContentType> map = new HashMap<>(0);
         for (ConsoleColorConfig colorConfig : colorConfigs) {
-            TextAttributes textAttributes = new TextAttributes(colorConfig.getForegroundColor(), colorConfig.getBackgroundColor(), null, EffectType.BOXED, Font.PLAIN);
-            if (StringUtils.isNotBlank(colorConfig.getKeyWord())) {
+            TextAttributes textAttributes = new TextAttributes(BatsLogUtil.toColor(colorConfig.getForegroundColor()), BatsLogUtil.toColor(colorConfig.getBackgroundColor()), null, EffectType.BOXED, Font.PLAIN);
+            if (StringUtils.isNotBlank(colorConfig.getKeyWord()) && colorConfig.isEnabled()) {
                 map.put(colorConfig.getKeyWord(), new ConsoleViewContentType(project.getName() + "ConsoleColor" + colorConfig.getKeyWord(), textAttributes));
             }
         }

@@ -1,6 +1,8 @@
 package cn.com.pism.batslog.ui.tablehelp;
 
+import cn.com.pism.batslog.settings.RgbColor;
 import cn.com.pism.batslog.ui.ColorButton;
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;
@@ -37,7 +39,8 @@ public class MyColorButtonEditor extends DefaultCellEditor {
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        this.button = new ColorButton(project, (Color) value, 18, 18,choseColor -> {});
+        this.button = new ColorButton(project, BatsLogUtil.toColor((RgbColor) value), 18, 18, choseColor -> {
+        });
         this.button.setBounds(new Rectangle(18, 18));
 
         initPanel();
@@ -48,6 +51,8 @@ public class MyColorButtonEditor extends DefaultCellEditor {
 
     @Override
     public Object getCellEditorValue() {
-        return this.button.getSelectColor();
+        Color selectColor = this.button.getSelectColor();
+
+        return new RgbColor(selectColor.getRed(), selectColor.getGreen(), selectColor.getBlue());
     }
 }

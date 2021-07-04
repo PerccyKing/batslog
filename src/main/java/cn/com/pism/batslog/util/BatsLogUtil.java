@@ -1,11 +1,13 @@
 package cn.com.pism.batslog.util;
 
+import cn.com.pism.batslog.settings.RgbColor;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.OnOffButton;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -56,5 +58,10 @@ public class BatsLogUtil {
         Boolean tailStatus = TAIL_STATUS.get(project);
         tailStatus = tailStatus == null ? Boolean.FALSE : tailStatus;
         return tailStatus;
+    }
+
+    public static Color toColor(RgbColor rgbColor) {
+        return new JBColor(new Color(rgbColor.getR(), rgbColor.getR(), rgbColor.getB()),
+                new Color(rgbColor.getR(), rgbColor.getR(), rgbColor.getB()));
     }
 }

@@ -3,13 +3,13 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.settings.RgbColor;
 import cn.com.pism.batslog.ui.tablehelp.*;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
 import org.apache.commons.lang3.StringUtils;
@@ -66,8 +66,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         return new ConsoleColorConfig(UUID.randomUUID().toString(),
                 sort,
                 BatsLogBundle.message("modifyTheKeyword"),
-                JBColor.BLUE,
-                JBColor.YELLOW,
+                new RgbColor(JBColor.BLUE.getRed(), JBColor.BLUE.getGreen(), JBColor.BLUE.getBlue()),
+                new RgbColor(JBColor.YELLOW.getRed(), JBColor.YELLOW.getGreen(), JBColor.YELLOW.getBlue()),
                 false).toArray();
     }
 
@@ -176,7 +176,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     private List<ConsoleColorConfig> mock(int size) {
         List<ConsoleColorConfig> configs = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", Gray._150, Gray._130, i % 2 > 0));
+            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", new RgbColor(150, 150, 150),
+                    new RgbColor(130, 130, 130), i % 2 > 0));
         }
         return configs;
     }

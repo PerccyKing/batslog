@@ -10,14 +10,12 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.RoamingType;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.ui.JBColor;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.OptionTag;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +70,7 @@ public class BatsLogSettingState implements PersistentStateComponent<BatsLogSett
     public DbType dbType = DbType.MYSQL;
 
     @OptionTag(converter = ColorConverter.class)
-    private Color keyWordDefCol = new JBColor(new Color(204, 120, 50), new Color(204, 120, 50));
+    private RgbColor keyWordDefCol = new RgbColor(204, 120, 50);
 
     @OptionTag(converter = ConsoleColorConfigConverter.class)
     private List<ConsoleColorConfig> colorConfigs = new ArrayList<>();

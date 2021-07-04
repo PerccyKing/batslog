@@ -5,6 +5,7 @@ import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.settings.RgbColor;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -121,8 +122,8 @@ public class SettingForm {
      * @date 2021/06/26 下午 03:40
      */
     private void initKeyWordColorButton(Project project) {
-        ColorButton colorButton = new ColorButton(project, service.getKeyWordDefCol(), 16, 16, choseColor -> {
-            service.setKeyWordDefCol(choseColor);
+        ColorButton colorButton = new ColorButton(project, BatsLogUtil.toColor(service.getKeyWordDefCol()), 16, 16, choseColor -> {
+            service.setKeyWordDefCol(new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue()));
         });
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
