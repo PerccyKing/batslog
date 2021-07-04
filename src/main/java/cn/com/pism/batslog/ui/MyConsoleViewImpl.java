@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.ui;
 
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.ide.CommonActionsManager;
@@ -156,6 +157,7 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
 
         @Override
         public void actionPerformed(@NotNull final AnActionEvent e) {
+            BatsLogUtil.NUM = 0;
             myConsoleView.clear();
         }
     }

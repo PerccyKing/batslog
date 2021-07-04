@@ -179,7 +179,10 @@ public class SqlFormatUtils {
     private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name) {
         console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
         if (StringUtils.isNotBlank(name)) {
-            console.print(StringUtil.encoding("### " + name + "\n"), ColoringUtil.getNoteColor(project));
+            int num = BatsLogUtil.NUM;
+            num++;
+            BatsLogUtil.NUM = num;
+            console.print(StringUtil.encoding("# " + String.format("%04d", num) + " " + name + "\n"), ColoringUtil.getNoteColor(project));
         }
     }
 

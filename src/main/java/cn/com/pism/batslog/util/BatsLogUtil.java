@@ -36,6 +36,8 @@ public class BatsLogUtil {
 
     public static Map<String, ConsoleViewContentType> KEY_COLOR_MAP = new HashMap<>();
 
+    public static int NUM = 0;
+
     public static void copySqlToClipboard(AnActionEvent e, String text) {
 
         SqlFormatUtils.format(text, e.getProject(), Boolean.FALSE);
