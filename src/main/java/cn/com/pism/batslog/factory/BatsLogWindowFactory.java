@@ -5,7 +5,7 @@ import cn.com.pism.batslog.action.CopySqlAction;
 import cn.com.pism.batslog.action.FormatSqlAction;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
-import cn.com.pism.batslog.settings.RgbColor;
+import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;

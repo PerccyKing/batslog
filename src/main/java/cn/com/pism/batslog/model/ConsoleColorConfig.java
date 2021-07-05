@@ -1,6 +1,5 @@
 package cn.com.pism.batslog.model;
 
-import cn.com.pism.batslog.settings.RgbColor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

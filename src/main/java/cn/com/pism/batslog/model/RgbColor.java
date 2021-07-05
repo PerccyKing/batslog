@@ -1,4 +1,4 @@
-package cn.com.pism.batslog.settings;
+package cn.com.pism.batslog.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

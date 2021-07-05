@@ -6,6 +6,7 @@ import cn.com.pism.batslog.converter.ConsoleColorConfigConverter;
 import cn.com.pism.batslog.converter.DbTypeConverter;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
+import cn.com.pism.batslog.model.RgbColor;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.RoamingType;
 import com.intellij.openapi.components.State;

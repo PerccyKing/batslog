@@ -3,7 +3,7 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
-import cn.com.pism.batslog.settings.RgbColor;
+import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.ui.tablehelp.*;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;

@@ -5,7 +5,7 @@ import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
-import cn.com.pism.batslog.settings.RgbColor;
+import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;

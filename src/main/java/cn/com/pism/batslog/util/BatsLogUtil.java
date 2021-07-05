@@ -1,6 +1,6 @@
 package cn.com.pism.batslog.util;
 
-import cn.com.pism.batslog.settings.RgbColor;
+import cn.com.pism.batslog.model.RgbColor;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;

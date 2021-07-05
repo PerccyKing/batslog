@@ -1,6 +1,6 @@
 package cn.com.pism.batslog.ui.tablehelp;
 
-import cn.com.pism.batslog.settings.RgbColor;
+import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.ui.ColorButton;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.project.Project;
