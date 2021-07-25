@@ -1,7 +1,7 @@
 package cn.com.pism.batslog.points;
 
 import cn.com.pism.batslog.util.BatsLogUtil;
-import cn.com.pism.batslog.util.SqlFormatUtils;
+import cn.com.pism.batslog.util.SqlFormatUtil;
 import com.intellij.execution.ConsoleFolding;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
@@ -49,7 +49,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
                 sourceSqlList.add(line);
                 SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
                 if (sourceSqlList.size() == LIST_SIZE) {
-                    SqlFormatUtils.format(String.join("\n", sourceSqlList), project);
+                    SqlFormatUtil.format(String.join("\n", sourceSqlList), project);
                     SOURCE_SQL_LIST_MAP.remove(project);
                 }
             }

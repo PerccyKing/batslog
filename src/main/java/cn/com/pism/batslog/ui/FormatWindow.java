@@ -1,10 +1,7 @@
 package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
-import cn.com.pism.batslog.util.BatsLogUtil;
-import cn.com.pism.batslog.util.Editors;
-import cn.com.pism.batslog.util.SqlFormatUtils;
-import cn.com.pism.batslog.util.StringUtil;
+import cn.com.pism.batslog.util.*;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
@@ -101,7 +98,7 @@ public class FormatWindow extends DialogWrapper {
 
     private void format(@Nullable Project project, String text, boolean b, ConsoleViewImpl consoleView) {
         if (StringUtils.isNotBlank(text)) {
-            SqlFormatUtils.format(text, project, b, consoleView);
+            SqlFormatUtil.format(text, project, b, consoleView);
         }
     }
 

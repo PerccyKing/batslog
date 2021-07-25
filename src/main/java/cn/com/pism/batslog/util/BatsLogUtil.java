@@ -40,7 +40,7 @@ public class BatsLogUtil {
 
     public static void copySqlToClipboard(AnActionEvent e, String text) {
 
-        SqlFormatUtils.format(text, e.getProject(), Boolean.FALSE);
+        SqlFormatUtil.format(text, e.getProject(), Boolean.FALSE);
         List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(e.getProject());
         if (CollectionUtils.isNotEmpty(sqlCache)) {
             String cache = String.join("\n\n", sqlCache);
