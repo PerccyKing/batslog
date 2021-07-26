@@ -62,6 +62,8 @@ public class SqlFormatUtil {
         //提取全部的sql和params
         String[] lines = new String[0];
         if (StringUtils.isNotBlank(str)) {
+            //先截断一次，从SQL_PREFIX 开始解析
+            str = str.substring(str.indexOf(sqlPrefix));
             lines = str.split("\n");
         }
 

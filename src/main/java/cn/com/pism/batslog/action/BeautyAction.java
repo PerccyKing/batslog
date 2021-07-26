@@ -3,25 +3,17 @@ package cn.com.pism.batslog.action;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
-import cn.com.pism.batslog.util.SqlFormatUtils;
-import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.jetbrains.rd.util.string.StingUtilKt;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
