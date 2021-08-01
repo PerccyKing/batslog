@@ -70,7 +70,7 @@ public class SqlFormatUtil {
         for (String line : lines) {
             int sqlStart = StringUtils.indexOf(line, sqlPrefix);
             int paramsStart = StringUtils.indexOf(line, paramsPrefix);
-            if (sqlStart > 0) {
+            if (sqlStart >= 0) {
                 sqlList.add(line.substring(sqlStart + sqlPrefix.getBytes().length));
                 nameList.add(getName(line, sqlPrefix, sqlStart));
             } else if (paramsStart > 0) {
