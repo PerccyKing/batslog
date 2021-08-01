@@ -67,6 +67,9 @@ public class SqlFormatUtil {
             lines = str.split("\n");
         }
 
+        //下一行是否是参数
+        boolean nextLineIsParams = false;
+
         for (String line : lines) {
             int sqlStart = StringUtils.indexOf(line, sqlPrefix);
             int paramsStart = StringUtils.indexOf(line, paramsPrefix);
@@ -75,6 +78,13 @@ public class SqlFormatUtil {
                 nameList.add(getName(line, sqlPrefix, sqlStart));
             } else if (paramsStart > 0) {
                 paramsList.add(line.substring(paramsStart + paramsPrefix.getBytes().length));
+                //最后一个字符不是 )
+                nextLineIsParams = !line.endsWith(")");
+            } else if (nextLineIsParams) {
+                int index = paramsList.size() - 1;
+                paramsList.set(index, paramsList.get(index) + "\r\n" + line);
+                //下一行可能还是换行符
+                nextLineIsParams = !line.endsWith(")");
             }
         }
 
