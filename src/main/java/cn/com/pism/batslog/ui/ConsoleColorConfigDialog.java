@@ -2,21 +2,37 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
-import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.model.RgbColor;
+import cn.com.pism.batslog.model.ShowColorConfig;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.tablehelp.*;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.ColoringUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONValidator;
+import com.intellij.json.JsonFileType;
+import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.ui.EditorTextField;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -32,8 +48,16 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     private JPanel root;
     private JButton addButton;
     private JBTable colorSettingTable;
+    private JButton clearButton;
+    private JPanel configEditor;
 
     private Project project;
+
+    private EditorTextField textField;
+
+    private boolean execReloadConfig = false;
+
+    private boolean execReloadTable = false;
 
 
     private BatsLogSettingState service;
@@ -43,12 +67,25 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         this.service = ServiceManager.getService(project, BatsLogSettingState.class);
         this.project = project;
         init();
-        initForm();
+        initForm(project);
+        addListener();
+        getTableModel().addTableModelListener(e -> {
+            //是否执行
+            reloadConfig();
+        });
+        show();
+    }
+
+    private void addListener() {
         addButton.addActionListener(e -> {
             DefaultTableModel tableModel = (DefaultTableModel) colorSettingTable.getModel();
             tableModel.addRow(addRow());
+            reloadConfig();
         });
-        show();
+        clearButton.addActionListener(e -> {
+            deleteAllData(getTableModel());
+            reloadConfig();
+        });
     }
 
     private Object[] addRow() {
@@ -72,10 +109,37 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 true).toArray();
     }
 
-    private void initForm() {
+    private void initForm(Project project) {
         setTitle(BatsLogBundle.message("consoleColorConfig"));
         initColorSettingTable();
+        initConfigPanel(project);
         setAutoAdjustable(true);
+    }
+
+    private void initConfigPanel(Project project) {
+
+        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        List<ShowColorConfig> showConfig = ColoringUtil.toShowConfig(colorConfigs);
+        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(JsonLanguage.INSTANCE, "[]");
+
+        Document document = PsiDocumentManager.getInstance(project).getDocument(psiFile);
+
+        EditorTextField textField = new EditorTextField(document, project, JsonFileType.INSTANCE, false, false);
+        textField.setOneLineMode(false);
+        textField.setEnabled(true);
+        textField.addDocumentListener(new DocumentListener() {
+            @Override
+            public void documentChanged(@NotNull DocumentEvent event) {
+                //判断是否需要重新加载config
+                String text = event.getDocument().getText();
+                reloadTable(text);
+                DocumentListener.super.documentChanged(event);
+            }
+        });
+        textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, true) : "[]");
+
+        this.textField = textField;
+        configEditor.add(textField);
     }
 
 
@@ -90,8 +154,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 BatsLogBundle.message("enable"),
                 BatsLogBundle.message("operation")
         };
-        int[] columnWidth = {0, 50, 200, 50, 50, 100, 100};
-
+        int[] columnWidth = {0, 50, 200, 100, 100, 100, 100};
         DefaultTableModel tableModel = new DefaultTableModel(null, columns) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -112,6 +175,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         column4.setCellRenderer(new MyColorButtonRender(project));
         column3.setCellEditor(new MyColorButtonEditor(project));
         column3.setCellRenderer(new MyColorButtonRender(project));
+
         columnModel.getColumn(5).setCellEditor(new MyOnOffButtonEditor());
         columnModel.getColumn(5).setCellRenderer(new MyOnOffButtonRender());
         columnModel.getColumn(6).setCellEditor(new MyDeleteButtonEditor(colorSettingTable));
@@ -181,5 +245,43 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                     new RgbColor(130, 130, 130), i % 2 > 0));
         }
         return configs;
+    }
+
+    private void reloadTable(String text) {
+        boolean validate = StringUtils.isNotBlank(text) && JSONValidator.from(text).validate();
+        if (validate) {
+            List<ShowColorConfig> configs = JSON.parseArray(text, ShowColorConfig.class);
+            try {
+                List<ConsoleColorConfig> colorConfigs = ColoringUtil.toColorConfig(configs);
+                reloadTable(colorConfigs);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void reloadTable(List<ConsoleColorConfig> colorConfigs) {
+        DefaultTableModel tableModel = (DefaultTableModel) colorSettingTable.getModel();
+        deleteAllData(tableModel);
+        colorConfigs.forEach(c -> tableModel.addRow(c.toArray()));
+    }
+
+    private void deleteAllData(DefaultTableModel tableModel) {
+        int rowCount = tableModel.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            tableModel.removeRow(i);
+        }
+    }
+
+    private DefaultTableModel getTableModel() {
+        return (DefaultTableModel) colorSettingTable.getModel();
+    }
+
+    private void reloadConfig() {
+        List<ConsoleColorConfig> colorConfigs = getColorConfigs();
+        List<ShowColorConfig> showConfig = ColoringUtil.toShowConfig(colorConfigs);
+        if (this.textField != null) {
+            this.textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, true) : "[]");
+        }
     }
 }
