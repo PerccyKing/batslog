@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.08.05.1147-TE'
+version '21.08.08.2003-TE'
 
 
 java {
@@ -54,6 +54,27 @@ patchPluginXml {
 <h1>$version</h1>
 
 <ul>
+<li>OPT 将默认不启用颜色配置改为默认启用颜色配置</li>
+<li>OPT 算法优化</li>
+<li>OPT 格式化算法适配 #14</li>
+<li>OPT 格式化算法适配换行参数 #18</li>
+<li>OPT 修改默认的配色方案</li>
+<li>OPT 优化颜色配置UI</li>
+<li>ADD 添加颜色动态配置，配色方案可以快速分享</li>
+<li>OPT 将默认不启用颜色配置改为默认启用颜色配置</li>
+<li>OPT 算法优化</li>
+<li>OPT 格式化算法适配 #14</li>
+<li>OPT 格式化算法适配换行参数 #18</li>
+<li>OPT 修改默认的配色方案</li>
+<li>OPT 优化颜色配置UI</li>
+<li>ADD 添加颜色动态配置，配色方案可以快速分享</li>
+</ul>
+</div>
+
+
+<h1>21.07.04.1838-RE</h1>
+
+<ul>
 <li>ADD #15 print colored SQL</li>
 <li>ADD #15 SQL color configuration</li>
 <li>ADD add serial number</li>
@@ -63,7 +84,6 @@ patchPluginXml {
 <li>ADD 添加序号</li>
 <li>OPT UI美化</li>
 </ul>
-</div>
 
 
 <h1>21.05.27.2253-RE</h1>
