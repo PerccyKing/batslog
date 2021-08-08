@@ -24,6 +24,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.EditorTextField;
+import com.intellij.ui.HyperlinkLabel;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
 import org.apache.commons.collections.CollectionUtils;
@@ -49,6 +50,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     private JBTable colorSettingTable;
     private JButton clearButton;
     private JPanel configEditor;
+    private HyperlinkLabel oac;
+
 
     private Project project;
 
@@ -103,6 +106,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     private void initForm(Project project) {
         setTitle(BatsLogBundle.message("consoleColorConfig"));
+        oac.setHyperlinkTarget("https://perccyking.github.io/batslog/");
+        oac.setHyperlinkText(BatsLogBundle.message("OAC"));
         initColorSettingTable();
         initConfigPanel(project);
         setAutoAdjustable(true);
