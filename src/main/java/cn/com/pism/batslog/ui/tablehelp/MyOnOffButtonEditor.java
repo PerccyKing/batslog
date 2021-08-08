@@ -4,6 +4,7 @@ import com.intellij.ui.components.OnOffButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 /**
  * @author PerccyKing
@@ -17,21 +18,15 @@ public class MyOnOffButtonEditor extends DefaultCellEditor {
 
     private OnOffButton button;
 
-    public MyOnOffButtonEditor() {
+    private Consumer<Boolean> consumer;
+
+    public MyOnOffButtonEditor(Consumer<Boolean> consumer) {
         super(new JTextField());
         this.setClickCountToStart(1);
 
-        initButton();
-
-        initPanel();
-        this.panel.add(this.button);
+        this.consumer = consumer;
     }
 
-    private void initButton() {
-        button = new OnOffButton();
-        this.button.setBounds(new Rectangle(50, 24));
-        fireEditingCanceled();
-    }
 
     private void initPanel() {
         this.panel = new JPanel();
@@ -40,6 +35,17 @@ public class MyOnOffButtonEditor extends DefaultCellEditor {
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        this.button = new OnOffButton();
+        this.button.setBounds(new Rectangle(50, 24));
+        fireEditingCanceled();
+        this.button.addChangeListener(e -> {
+            table.getModel().setValueAt(button.isSelected(), row, column);
+            consumer.accept(button.isSelected());
+        });
+
+        initPanel();
+        this.panel.add(this.button);
+
         return this.panel;
     }
 

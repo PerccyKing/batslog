@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.util.function.Consumer;
 
 /**
  * @author PerccyKing
@@ -27,19 +28,19 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
         super(new JTextField());
     }
 
-    public MyDeleteButtonEditor(JBTable jbTable) {
+    public MyDeleteButtonEditor(JBTable jbTable, Consumer<String> consumer) {
         super(new JTextField());
 
         this.jbTable = jbTable;
         this.setClickCountToStart(1);
 
-        initButton();
+        initButton(consumer);
 
         initPanel();
         this.panel.add(this.button);
     }
 
-    private void initButton() {
+    private void initButton(Consumer<String> consumer) {
         this.button = new JButton();
         this.button.setIcon(AllIcons.Actions.GC);
         TableColumnModel columnModel = jbTable.getColumnModel();
@@ -51,6 +52,7 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
             int selectedRow = jbTable.getSelectedRow();
             DefaultTableModel model = (DefaultTableModel) jbTable.getModel();
             model.removeRow(selectedRow);
+            consumer.accept("");
         });
     }
 

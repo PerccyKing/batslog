@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONValidator;
 import com.intellij.json.JsonFileType;
 import com.intellij.json.JsonLanguage;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -31,8 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -55,10 +54,6 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     private EditorTextField textField;
 
-    private boolean execReloadConfig = false;
-
-    private boolean execReloadTable = false;
-
 
     private BatsLogSettingState service;
 
@@ -69,10 +64,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         init();
         initForm(project);
         addListener();
-        getTableModel().addTableModelListener(e -> {
-            //是否执行
-            reloadConfig();
-        });
+        colorSettingTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         show();
     }
 
@@ -171,14 +163,20 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         columnModel.getColumn(0).setMinWidth(0);
         TableColumn column4 = columnModel.getColumn(4);
         TableColumn column3 = columnModel.getColumn(3);
-        column4.setCellEditor(new MyColorButtonEditor(project));
+        column4.setCellEditor(new MyColorButtonEditor(project, color -> {
+            getTableModel().fireTableDataChanged();
+            reloadConfig();
+        }));
         column4.setCellRenderer(new MyColorButtonRender(project));
-        column3.setCellEditor(new MyColorButtonEditor(project));
+        column3.setCellEditor(new MyColorButtonEditor(project, color -> {
+            getTableModel().fireTableDataChanged();
+            reloadConfig();
+        }));
         column3.setCellRenderer(new MyColorButtonRender(project));
 
-        columnModel.getColumn(5).setCellEditor(new MyOnOffButtonEditor());
+        columnModel.getColumn(5).setCellEditor(new MyOnOffButtonEditor(c -> reloadConfig()));
         columnModel.getColumn(5).setCellRenderer(new MyOnOffButtonRender());
-        columnModel.getColumn(6).setCellEditor(new MyDeleteButtonEditor(colorSettingTable));
+        columnModel.getColumn(6).setCellEditor(new MyDeleteButtonEditor(colorSettingTable, cel -> reloadConfig()));
         columnModel.getColumn(6).setCellRenderer(new MyDeleteButtonRender(colorSettingTable));
 
         TableColumnModel headerModel = colorSettingTable.getTableHeader().getColumnModel();
@@ -248,7 +246,15 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     }
 
     private void reloadTable(String text) {
-        boolean validate = StringUtils.isNotBlank(text) && JSONValidator.from(text).validate();
+        if (StringUtils.isBlank(text)) {
+            ApplicationManager.getApplication().invokeLater(() -> textField.setText("[]"));
+        }
+        boolean validate = false;
+        try {
+            validate = StringUtils.isNotBlank(text) && JSONValidator.from(text).validate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (validate) {
             List<ShowColorConfig> configs = JSON.parseArray(text, ShowColorConfig.class);
             try {
@@ -281,7 +287,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         List<ConsoleColorConfig> colorConfigs = getColorConfigs();
         List<ShowColorConfig> showConfig = ColoringUtil.toShowConfig(colorConfigs);
         if (this.textField != null) {
-            this.textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, true) : "[]");
+            ApplicationManager.getApplication().invokeLater(() ->
+                    this.textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, true) : "[]"));
         }
     }
 }

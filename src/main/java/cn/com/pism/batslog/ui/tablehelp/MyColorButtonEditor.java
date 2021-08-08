@@ -6,7 +6,9 @@ import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.awt.*;
+import java.util.function.Consumer;
 
 /**
  * @author PerccyKing
@@ -21,10 +23,13 @@ public class MyColorButtonEditor extends DefaultCellEditor {
 
     private Project project;
 
-    public MyColorButtonEditor(Project project) {
+    private Consumer<RgbColor> consumer;
+
+    public MyColorButtonEditor(Project project, Consumer<RgbColor> consumer) {
         super(new JTextField());
         this.setClickCountToStart(1);
         this.project = project;
+        this.consumer = consumer;
         fireEditingCanceled();
     }
 
@@ -40,6 +45,10 @@ public class MyColorButtonEditor extends DefaultCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         this.button = new ColorButton(project, BatsLogUtil.toColor((RgbColor) value), 18, 18, choseColor -> {
+            TableModel model = table.getModel();
+            RgbColor rgbColor = new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue());
+            model.setValueAt(rgbColor, row, column);
+            consumer.accept(rgbColor);
         });
         this.button.setBounds(new Rectangle(18, 18));
 
