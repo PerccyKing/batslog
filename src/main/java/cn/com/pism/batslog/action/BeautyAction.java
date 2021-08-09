@@ -24,6 +24,8 @@ import java.util.Objects;
  */
 public class BeautyAction extends ToggleAction {
 
+    private Project project;
+
     public BeautyAction() {
     }
 
@@ -31,8 +33,9 @@ public class BeautyAction extends ToggleAction {
         super(text);
     }
 
-    public BeautyAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
+    public BeautyAction(@Nullable String text, @Nullable String description, @Nullable Icon icon, Project project) {
         super(text, description, icon);
+        this.project = project;
     }
 
     /**
@@ -47,7 +50,7 @@ public class BeautyAction extends ToggleAction {
     }
 
     private BatsLogSettingState getService(@NotNull AnActionEvent e) {
-        return ServiceManager.getService(Objects.requireNonNull(e.getProject()), BatsLogSettingState.class);
+        return ServiceManager.getService(Objects.requireNonNull(getProject()), BatsLogSettingState.class);
     }
 
     /**
@@ -91,5 +94,13 @@ public class BeautyAction extends ToggleAction {
             }
         }
 
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

@@ -1,8 +1,10 @@
 package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.util.BatsLogUtil;
+import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.CommonActionsManager;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
@@ -12,6 +14,7 @@ import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.impl.ContextMenuPopupHandler;
 import com.intellij.openapi.editor.impl.softwrap.SoftWrapAppliancePlaces;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -159,6 +162,27 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
         public void actionPerformed(@NotNull final AnActionEvent e) {
             BatsLogUtil.NUM = 0;
             myConsoleView.clear();
+        }
+    }
+
+    public static class ClearAllAction extends DumbAwareAction {
+        public ClearAllAction() {
+            super(ExecutionBundle.message("clear.all.from.console.action.name"), "Clear the contents of the console", AllIcons.Actions.GC);
+        }
+
+        @Override
+        public void update(@NotNull AnActionEvent e) {
+            ConsoleView data = e.getData(LangDataKeys.CONSOLE_VIEW);
+            boolean enabled = data != null && data.getContentSize() > 0;
+            e.getPresentation().setEnabled(enabled);
+        }
+
+        @Override
+        public void actionPerformed(@NotNull final AnActionEvent e) {
+            final ConsoleView consoleView = e.getData(LangDataKeys.CONSOLE_VIEW);
+            if (consoleView != null) {
+                consoleView.clear();
+            }
         }
     }
 }
