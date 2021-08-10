@@ -67,7 +67,6 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         init();
         initForm(project);
         addListener();
-        colorSettingTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         show();
     }
 
@@ -80,6 +79,13 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         clearButton.addActionListener(e -> {
             deleteAllData(getTableModel());
             reloadConfig();
+        });
+        colorSettingTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        getTableModel().addTableModelListener(e -> {
+            if (2 == e.getColumn()) {
+                getTableModel().fireTableDataChanged();
+                reloadConfig();
+            }
         });
     }
 

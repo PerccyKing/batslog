@@ -36,7 +36,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
         if ((CollectionUtils.isEmpty(sourceSqlList)) || (sourceSqlList.size() > LIST_SIZE)) {
             sourceSqlList = new ArrayList<>();
         }
-        //sql和参数占用两行
+        //sql和参数占用多行
         if (BatsLogUtil.getTailStatus(project)) {
             if (line.contains(SQL_PREFIX) && sourceSqlList.size() == 0) {
                 sourceSqlList.add(line);
