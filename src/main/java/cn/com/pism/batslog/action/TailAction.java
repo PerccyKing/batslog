@@ -25,6 +25,7 @@ public class TailAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
+        BatsLogUtil.SOURCE_SQL_LIST_MAP.remove(project);
         if (project != null) {
             Boolean tailStatus = BatsLogUtil.getTailStatus(project);
             BatsLogUtil.TAIL_STATUS.put(project, !tailStatus);
