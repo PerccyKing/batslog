@@ -53,17 +53,25 @@ public class SqlFormatUtil {
 
         BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
 
-        String sqlPrefix = service.getSqlPrefix();
-        sqlPrefix = StringUtils.isBlank(sqlPrefix) ? SQL_PREFIX : sqlPrefix;
-        String paramsPrefix = service.getParamsPrefix();
-        paramsPrefix = StringUtils.isBlank(paramsPrefix) ? PARAMS_PREFIX : paramsPrefix;
+        String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
+        String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
 
 
         //提取全部的sql和params
         String[] lines = new String[0];
         if (StringUtils.isNotBlank(str)) {
-            //先截断一次，从SQL_PREFIX 开始解析
+            //先截断一次，从SQL_PREFIX 行开始解析
+            String includeFirstLine = str.substring(0, str.indexOf(sqlPrefix));
+            boolean lineFeed = includeFirstLine.contains("\n");
+            String firstName = " ";
+            if (lineFeed) {
+                String[] includeFirstLineArr = includeFirstLine.split("\n");
+                firstName = includeFirstLineArr[includeFirstLineArr.length - 1];
+            } else {
+                firstName = includeFirstLine;
+            }
             str = str.substring(str.indexOf(sqlPrefix));
+            str = firstName + str;
             lines = str.split("\n");
         }
 
@@ -92,7 +100,8 @@ public class SqlFormatUtil {
         print(project, printToConsole, console, sqlList, paramsList, nameList, service);
     }
 
-    private static void print(Project project, Boolean printToConsole, ConsoleViewImpl console, List<String> sqlList, List<String> paramsList, List<String> nameList, BatsLogSettingState service) {
+    private static void print(Project project, Boolean printToConsole, ConsoleViewImpl console, List<String> sqlList,
+                              List<String> paramsList, List<String> nameList, BatsLogSettingState service) {
         String dbTypeStr = JdbcConstants.MYSQL;
         DbType dbType = service.getDbType();
         if (!DbType.NONE.equals(dbType)) {
@@ -217,12 +226,10 @@ public class SqlFormatUtil {
      */
     private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name) {
         console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
-        if (StringUtils.isNotBlank(name)) {
-            int num = BatsLogUtil.NUM;
-            num++;
-            BatsLogUtil.NUM = num;
-            console.print(StringUtil.encoding("# " + String.format("%04d", num) + " " + name + "\n"), ColoringUtil.getNoteColor(project));
-        }
+        int num = BatsLogUtil.NUM;
+        num++;
+        BatsLogUtil.NUM = num;
+        console.print(StringUtil.encoding("# " + String.format("%04d", num) + " " + name + "\n"), ColoringUtil.getNoteColor(project));
     }
 
     /**
