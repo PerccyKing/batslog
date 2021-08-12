@@ -80,7 +80,12 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
                 }
             } else {
                 //缓存不为空，判断缓存中 最后一行日志是否以 `)`结束
-                if (sourceSqlList.get(sourceSqlList.size() - 1).replace("\n", "").endsWith(")")) {
+                String lastLine = sourceSqlList.get(sourceSqlList.size() - 1);
+                boolean maybeEndLine = lastLine.replace("\n", "").endsWith(")");
+                if (maybeEndLine) {
+                    maybeEndLine = !SqlFormatUtil.nextLineIsParams(lastLine);
+                }
+                if (maybeEndLine) {
                     //缓存末行正常结束，判断日志中 参数和SQL存在数量，数量一致，进行格式化
                     String logs = String.join("\n", sourceSqlList);
                     if (StringUtils.countMatches(logs, sqlPrefix) != 0 &&

@@ -31,6 +31,15 @@ public class SqlFormatUtil {
     public static final String[] TYPES = new String[]{"Integer", "Long", "Double", "String",
             "Boolean", "Byte", "Short", "Float"};
 
+    public static final String[] CLOUD_BE_TYPES = new String[]{
+            "boolean", "byte", "short", "int",
+            "long", "float", "double", "BigDecimal",
+            "String", "Date", "Time", "Timestamp",
+            "InputStream", "Object", "Reader", "Ref",
+            "Blob", "Clob", "Array", "URL", "RowId",
+            "NClob", "SQLXML"
+    };
+
     private static final int CACHE_LENGTH = 100;
 
     private static Set<String> keywords;
@@ -87,17 +96,47 @@ public class SqlFormatUtil {
             } else if (paramsStart > 0) {
                 paramsList.add(line.substring(paramsStart + paramsPrefix.getBytes().length));
                 //最后一个字符不是 )
-                nextLineIsParams = !line.endsWith(")");
+                nextLineIsParams = nextLineIsParams(line);
             } else if (nextLineIsParams) {
                 int index = paramsList.size() - 1;
                 paramsList.set(index, paramsList.get(index) + "\r\n" + line);
-                //下一行可能还是换行符
-                nextLineIsParams = !line.endsWith(")");
+                //下一行可能还是参数，只是参数被换行符换到下一行了，先判断是否为 ) 结尾
+                if (line.endsWith(")")) {
+                    //校验末尾是否为参数
+                    nextLineIsParams = nextLineIsParams(line);
+                }
             }
         }
 
 
         print(project, printToConsole, console, sqlList, paramsList, nameList, service);
+    }
+
+    /**
+     * <p>
+     * 判断下一行是否为参数
+     * </p>
+     *
+     * @param line : 当前行
+     * @return {@link boolean}
+     * @author PerccyKing
+     * @date 2021/08/12 上午 10:05
+     */
+    public static boolean nextLineIsParams(String line) {
+        //先检查当前行有没有左括号
+        int leftIndex = StringUtils.lastIndexOf(line, "(");
+        //没有左括号，先占时判定为当前行不是最后一行，下一行可能为参数行
+        if (leftIndex >= 0 && line.endsWith(")")) {
+            //断言括号之间可能是某个参数类型
+            String assertType = StringUtils.substring(line, leftIndex);
+            assertType = assertType.substring(assertType.indexOf("(") + 1, assertType.lastIndexOf(")"));
+            //如果能匹配上预置参数类型，说明当前行就是最后一行，下一行不为参数行
+            return !(Arrays.stream(TYPES).anyMatch(assertType::equalsIgnoreCase)
+                    || Arrays.stream(CLOUD_BE_TYPES).anyMatch(assertType::equalsIgnoreCase));
+        } else {
+            return true;
+        }
+
     }
 
     private static void print(Project project, Boolean printToConsole, ConsoleViewImpl console, List<String> sqlList,
@@ -272,9 +311,9 @@ public class SqlFormatUtil {
                 String par;
                 String type = null;
                 if (s.trim().contains("(")) {
-                    int i = s.trim().indexOf("(") + 1;
+                    int i = s.trim().lastIndexOf("(") + 1;
                     par = s.substring(0, i);
-                    type = s.substring(i + 1, s.trim().indexOf(")") + 1);
+                    type = s.substring(i + 1, s.trim().lastIndexOf(")") + 1);
                 } else {
                     par = s;
                 }
