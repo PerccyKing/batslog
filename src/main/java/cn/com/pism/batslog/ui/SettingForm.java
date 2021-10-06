@@ -55,6 +55,8 @@ public class SettingForm {
     private OnOffButton prettyFormat;
     private OnOffButton parameterized;
     private OnOffButton toUpperCase;
+    private OnOffButton addTimestamp;
+    private JTextField textField1;
 
     private BatsLogSettingState service;
 
@@ -105,6 +107,7 @@ public class SettingForm {
             this.toUpperCase.setSelected(false);
         }
         setOnOffText(this.toUpperCase);
+        setOnOffText(addTimestamp);
     }
 
     private void setOnOffText(OnOffButton offButton) {
