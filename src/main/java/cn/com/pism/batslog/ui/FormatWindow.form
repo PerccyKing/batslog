@@ -112,7 +112,7 @@
                   <maximumSize width="58" height="38"/>
                   <minimumSize width="58" height="38"/>
                   <preferredSize width="58" height="38"/>
-                  <text resource-bundle="text/BatsLogBundle" key="FormatButton"/>
+                  <text resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.formatButton"/>
                 </properties>
               </component>
               <component id="fdceb" class="javax.swing.JButton" binding="clearAndFormat">
@@ -122,15 +122,15 @@
                   <hideActionText value="false"/>
                   <horizontalTextPosition value="0"/>
                   <inheritsPopupMenu value="false"/>
-                  <label resource-bundle="text/BatsLogBundle" key="clearAndFormat"/>
+                  <label resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.clearAndFormat"/>
                   <maximumSize width="58" height="60"/>
                   <minimumSize width="58" height="60"/>
                   <opaque value="false"/>
                   <preferredSize width="58" height="60"/>
                   <requestFocusEnabled value="true"/>
                   <rolloverEnabled value="true"/>
-                  <text resource-bundle="text/BatsLogBundle" key="clearAndFormat"/>
-                  <toolTipText resource-bundle="text/BatsLogBundle" key="clearAndFormatTips"/>
+                  <text resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.clearAndFormat"/>
+                  <toolTipText resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.clearAndFormatTips"/>
                   <verifyInputWhenFocusTarget value="true"/>
                   <verticalTextPosition value="0"/>
                 </properties>
@@ -141,8 +141,8 @@
                   <maximumSize width="58" height="60"/>
                   <minimumSize width="58" height="60"/>
                   <preferredSize width="58" height="60"/>
-                  <text resource-bundle="text/BatsLogBundle" key="formatAndClear"/>
-                  <toolTipText resource-bundle="text/BatsLogBundle" key="formatAndClearTips"/>
+                  <text resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.formatAndClear"/>
+                  <toolTipText resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.formatAndClearTips"/>
                 </properties>
               </component>
               <component id="544fc" class="javax.swing.JButton" binding="clearAll">
@@ -151,8 +151,8 @@
                   <maximumSize width="58" height="38"/>
                   <minimumSize width="58" height="38"/>
                   <preferredSize width="58" height="38"/>
-                  <text resource-bundle="text/BatsLogBundle" key="clear"/>
-                  <toolTipText resource-bundle="text/BatsLogBundle" key="clearTips"/>
+                  <text resource-bundle="text/BatsLogBundle" key="batslog.action.console.clear"/>
+                  <toolTipText resource-bundle="text/BatsLogBundle" key="batslog.action.formatForm.clearTips"/>
                 </properties>
               </component>
             </children>

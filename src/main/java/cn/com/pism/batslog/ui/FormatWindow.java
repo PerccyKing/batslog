@@ -124,8 +124,8 @@ public class FormatWindow extends DialogWrapper {
         //添加操作栏,调用一次getComponent ，editor才会创建
         JComponent component = consoleView.getComponent();
         List<AnAction> consoleActionList = new ArrayList<>();
-        consoleActionList.add(new AnAction(BatsLogBundle.message("copyAllSQL"),
-                BatsLogBundle.message("copyAllSQL"),
+        consoleActionList.add(new AnAction(BatsLogBundle.message("batslog.action.copyAllSQL"),
+                BatsLogBundle.message("batslog.action.copyAllSQL"),
                 BatsLogIcons.BATS_LOG_COPY) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
@@ -208,14 +208,14 @@ public class FormatWindow extends DialogWrapper {
      */
     public List<AnAction> getLogActions(Editor editor) {
         List<AnAction> logActions = new ArrayList<>();
-        AnAction clear = new AnAction(BatsLogBundle.message("clear"), BatsLogBundle.message("clearEditor"), AllIcons.Actions.GC) {
+        AnAction clear = new AnAction(BatsLogBundle.message("batslog.action.console.clear"), BatsLogBundle.message("batslog.action.formatForm.clearEditor"), AllIcons.Actions.GC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 clearLogEditor(editor);
             }
         };
-        AnAction copySqlToClipboard = new AnAction(BatsLogBundle.message("copySQLToClipboard"),
-                BatsLogBundle.message("copySQLToClipboard"), BatsLogIcons.BATS_LOG_COPY) {
+        AnAction copySqlToClipboard = new AnAction(BatsLogBundle.message("batslog.action.copySQLToClipboard"),
+                BatsLogBundle.message("batslog.action.copySQLToClipboard"), BatsLogIcons.BATS_LOG_COPY) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 BatsLogUtil.copySqlToClipboard(e, editor.getDocument().getText());

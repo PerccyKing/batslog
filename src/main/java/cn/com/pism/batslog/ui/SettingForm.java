@@ -111,8 +111,8 @@ public class SettingForm {
     }
 
     private void setOnOffText(OnOffButton offButton) {
-        offButton.setOffText(BatsLogBundle.message("off"));
-        offButton.setOnText(BatsLogBundle.message("on"));
+        offButton.setOffText(BatsLogBundle.message("batslog.action.onOffButton.off"));
+        offButton.setOnText(BatsLogBundle.message("batslog.action.onOffButton.on"));
     }
 
     /**

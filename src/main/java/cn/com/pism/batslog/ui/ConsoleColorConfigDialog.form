@@ -24,7 +24,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="text/BatsLogBundle" key="ADD"/>
+              <text resource-bundle="text/BatsLogBundle" key="config.console.colorConfigForm.button.add"/>
             </properties>
           </component>
           <hspacer id="dde25">
@@ -38,7 +38,7 @@
             </constraints>
             <properties>
               <icon value="actions/gc.png"/>
-              <text resource-bundle="text/BatsLogBundle" key="clear"/>
+              <text resource-bundle="text/BatsLogBundle" key="batslog.action.console.clear"/>
             </properties>
           </component>
           <component id="ece2a" class="com.intellij.ui.HyperlinkLabel" binding="oac">
@@ -46,7 +46,7 @@
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="text/BatsLogBundle" key="OAC"/>
+              <text resource-bundle="text/BatsLogBundle" key="config.form.console.colorConfigForm.OAC"/>
             </properties>
           </component>
         </children>

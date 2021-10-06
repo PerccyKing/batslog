@@ -72,7 +72,7 @@ public class FormatConsole {
     }
 
     private void initConsoleAction(Project project) {
-        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("formatWindow"), BatsLogBundle.message("formatWindow"), Applet);
+        OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("batslog.formatWindow"), BatsLogBundle.message("batslog.formatWindow"), Applet);
 
         TailAction tailAction = new TailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute,
                 () -> load(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project)));

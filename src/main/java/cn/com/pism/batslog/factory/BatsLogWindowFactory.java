@@ -47,8 +47,8 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         FormatConsole formatConsole = new FormatConsole(project);
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("console"), false);
-        Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("consoleSetting"), false);
+        Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("batslog.console"), false);
+        Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("batslog.config"), false);
         ContentManager contentManager = toolWindow.getContentManager();
         ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
             @Override
@@ -64,8 +64,8 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         contentManager.addContent(formatConsoleContent);
         contentManager.addContent(settingFormContent);
         ActionManager instance = ActionManager.getInstance();
-        instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("formatSql"), "", BatsLogIcons.BATS_LOG));
-        instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("copySql"), "", BatsLogIcons.BATS_LOG_COPY));
+        instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("batslog.action.formatSql"), "", BatsLogIcons.BATS_LOG));
+        instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("batslog.action.copySql"), "", BatsLogIcons.BATS_LOG_COPY));
 
         BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
 

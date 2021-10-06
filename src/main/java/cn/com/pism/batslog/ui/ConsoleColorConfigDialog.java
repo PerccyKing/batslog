@@ -111,9 +111,9 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     }
 
     private void initForm(Project project) {
-        setTitle(BatsLogBundle.message("consoleColorConfig"));
+        setTitle(BatsLogBundle.message("config.form.label.consoleColorConfig"));
         oac.setHyperlinkTarget("https://perccyking.github.io/batslog/");
-        oac.setHyperlinkText(BatsLogBundle.message("OAC"));
+        oac.setHyperlinkText(BatsLogBundle.message("config.form.console.colorConfigForm.OAC"));
         initColorSettingTable();
         initConfigPanel(project);
         setAutoAdjustable(true);
@@ -150,12 +150,12 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
         String[] columns = new String[]{
                 "id",
-                BatsLogBundle.message("serialNumber"),
-                BatsLogBundle.message("keyword"),
-                BatsLogBundle.message("backgroundColor"),
-                BatsLogBundle.message("foregroundColor"),
-                BatsLogBundle.message("enable"),
-                BatsLogBundle.message("operation")
+                BatsLogBundle.message("config.form.console.colorConfigForm.table.label.serialNumber"),
+                BatsLogBundle.message("config.form.console.colorConfigForm.table.label.keyword"),
+                BatsLogBundle.message("config.form.console.colorConfigForm.table.label.bgColor"),
+                BatsLogBundle.message("config.form.console.colorConfigForm.table.label.fgColor"),
+                BatsLogBundle.message("config.form.console.colorConfigForm.table.label.enable"),
+                BatsLogBundle.message("config.form.console.colorConfigForm.table.label.operation")
         };
         int[] columnWidth = {0, 50, 200, 100, 100, 100, 100};
         DefaultTableModel tableModel = new DefaultTableModel(null, columns) {
