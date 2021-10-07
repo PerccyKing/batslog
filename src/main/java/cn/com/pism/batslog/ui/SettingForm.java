@@ -57,6 +57,7 @@ public class SettingForm {
     private OnOffButton toUpperCase;
     private OnOffButton addTimestamp;
     private JTextField timestampFormat;
+    private OnOffButton startWithProject;
 
     private BatsLogSettingState service;
 
@@ -115,6 +116,8 @@ public class SettingForm {
         setOnOffText(this.toUpperCase);
         addTimestamp.setSelected(service.getAddTimestamp());
         setOnOffText(addTimestamp);
+        startWithProject.setSelected(service.getStartWithProject());
+        setOnOffText(startWithProject);
     }
 
     private void setOnOffText(OnOffButton offButton) {
@@ -228,6 +231,7 @@ public class SettingForm {
         parameterized.addActionListener(ac -> service.setParameterized(parameterized.isSelected()));
         toUpperCase.addActionListener(ac -> service.setToUpperCase(toUpperCase.isSelected()));
         addTimestamp.addActionListener(ac -> service.setAddTimestamp(addTimestamp.isSelected()));
+        startWithProject.addActionListener(ac -> service.setStartWithProject(startWithProject.isSelected()));
     }
 
     private void updateParamsPrefix(DocumentEvent e, Project project) {

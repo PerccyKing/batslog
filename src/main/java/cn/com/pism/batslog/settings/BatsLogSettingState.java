@@ -74,6 +74,8 @@ public class BatsLogSettingState implements PersistentStateComponent<BatsLogSett
      */
     private Boolean addTimestamp = Boolean.FALSE;
 
+    private Boolean startWithProject = Boolean.FALSE;
+
     /**
      * 数据库类型
      */
