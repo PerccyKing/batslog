@@ -45,6 +45,11 @@ public class BatsLogSettingState implements PersistentStateComponent<BatsLogSett
     private String paramsPrefix = BatsLogConstant.PARAMS_PREFIX;
 
     /**
+     * 时间格式化
+     */
+    private String timeFormat = BatsLogConstant.TIME_FORMAT;
+
+    /**
      * 脱敏
      */
     private Boolean desensitize = Boolean.FALSE;
@@ -63,6 +68,11 @@ public class BatsLogSettingState implements PersistentStateComponent<BatsLogSett
      * 关键字转大写
      */
     private Boolean toUpperCase = Boolean.FALSE;
+
+    /**
+     * 日志开启时间戳
+     */
+    private Boolean addTimestamp = Boolean.FALSE;
 
     /**
      * 数据库类型

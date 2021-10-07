@@ -12,6 +12,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -165,7 +166,7 @@ public class SqlFormatUtil {
                     console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
                 }
 
-                printSeparatorAndName(project, console, name);
+                printSeparatorAndName(project, console, name, service);
                 printSql(formatSql, project, console);
             } else {
                 //放入缓存
@@ -260,15 +261,24 @@ public class SqlFormatUtil {
      * @param project : 项目
      * @param console : console
      * @param name    : 行名称
+     * @param service
      * @author PerccyKing
      * @date 2021/04/26 下午 08:42
      */
-    private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name) {
+    private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name, BatsLogSettingState service) {
         console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
         int num = BatsLogUtil.NUM;
         num++;
         BatsLogUtil.NUM = num;
-        console.print(StringUtil.encoding("# " + String.format("%04d", num) + " " + name + "\n"), ColoringUtil.getNoteColor(project));
+        String timestamp = " ";
+        long timeMillis = System.currentTimeMillis();
+        if (Boolean.TRUE.equals(service.getAddTimestamp())) {
+            String timeFormat = service.getTimeFormat();
+            timestamp = " " + (StringUtils.isBlank(timeFormat) ? timeMillis : DateFormatUtils.format(timeMillis, timeFormat)) + " ";
+        }
+        console.print(StringUtil.encoding("# " + String.format("%04d", num)), ColoringUtil.getNoteColor(project));
+        console.print(timestamp, ConsoleViewContentType.ERROR_OUTPUT);
+        console.print(name + "\n", ColoringUtil.getNoteColor(project));
     }
 
     /**

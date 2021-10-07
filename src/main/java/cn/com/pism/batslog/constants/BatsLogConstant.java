@@ -28,4 +28,6 @@ public class BatsLogConstant {
 
     public static String SQL_PREFIX = "Preparing:";
     public static String PARAMS_PREFIX = "Parameters:";
+
+    public static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 }

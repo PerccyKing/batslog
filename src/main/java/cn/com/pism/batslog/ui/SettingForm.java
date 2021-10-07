@@ -4,8 +4,8 @@ import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
-import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.model.RgbColor;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -56,7 +56,7 @@ public class SettingForm {
     private OnOffButton parameterized;
     private OnOffButton toUpperCase;
     private OnOffButton addTimestamp;
-    private JTextField textField1;
+    private JTextField timestampFormat;
 
     private BatsLogSettingState service;
 
@@ -81,6 +81,12 @@ public class SettingForm {
             paramsPrefixStr = BatsLogConstant.PARAMS_PREFIX;
         }
         paramsPrefix.setText(paramsPrefixStr);
+
+        String timeFormat = service.getTimeFormat();
+        if (StringUtils.isBlank(timeFormat)) {
+            timeFormat = BatsLogConstant.TIME_FORMAT;
+        }
+        timestampFormat.setText(timeFormat);
         addListen(project);
         RevertAction revertSqlAction = new RevertAction(AllIcons.Actions.Rollback, SQL_PREFIX, sqlPrefix);
         revertSqlPanel.add(new ActionButton(revertSqlAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
@@ -107,6 +113,7 @@ public class SettingForm {
             this.toUpperCase.setSelected(false);
         }
         setOnOffText(this.toUpperCase);
+        addTimestamp.setSelected(service.getAddTimestamp());
         setOnOffText(addTimestamp);
     }
 
@@ -200,23 +207,36 @@ public class SettingForm {
                 updateParamsPrefix(e, project);
             }
         });
-        desensitize.addActionListener(ac -> {
-            service.setDesensitize(desensitize.isSelected());
+        timestampFormat.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTimeFormat(e, project);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTimeFormat(e, project);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateTimeFormat(e, project);
+            }
         });
-        prettyFormat.addActionListener(ac -> {
-            service.setPrettyFormat(prettyFormat.isSelected());
-        });
-        parameterized.addActionListener(ac -> {
-            service.setParameterized(parameterized.isSelected());
-        });
-        toUpperCase.addActionListener(ac -> {
-            service.setToUpperCase(toUpperCase.isSelected());
-        });
+        desensitize.addActionListener(ac -> service.setDesensitize(desensitize.isSelected()));
+        prettyFormat.addActionListener(ac -> service.setPrettyFormat(prettyFormat.isSelected()));
+        parameterized.addActionListener(ac -> service.setParameterized(parameterized.isSelected()));
+        toUpperCase.addActionListener(ac -> service.setToUpperCase(toUpperCase.isSelected()));
+        addTimestamp.addActionListener(ac -> service.setAddTimestamp(addTimestamp.isSelected()));
     }
 
     private void updateParamsPrefix(DocumentEvent e, Project project) {
         String text = getSettingPrefix(e);
         service.setParamsPrefix(text);
+    }
+
+    private void updateTimeFormat(DocumentEvent e, Project project) {
+        service.setTimeFormat(getSettingPrefix(e));
     }
 
 
