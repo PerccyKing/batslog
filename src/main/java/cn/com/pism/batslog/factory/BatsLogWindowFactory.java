@@ -44,8 +44,15 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
 
         BatsLogUtil.TOOL_WINDOW = (ToolWindowEx) toolWindow;
         FormatConsole formatConsole = FORMAT_CONSOLE_MAP.get(project);
+        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
+        //当监听状态默认开启时，修改启动按钮状态
+        if (Boolean.TRUE.equals(service.getStartWithProject())) {
+            BatsLogUtil.TAIL_STATUS.put(project, Boolean.TRUE);
+        }
+        //当sql console没有实例化，将其实例化
         if (formatConsole == null) {
             formatConsole = new FormatConsole(project);
+            FORMAT_CONSOLE_MAP.put(project, formatConsole);
         }
         formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project));
         SettingForm settingForm = new SettingForm(project);
@@ -69,8 +76,6 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         ActionManager instance = ActionManager.getInstance();
         instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("batslog.action.formatSql"), "", BatsLogIcons.BATS_LOG));
         instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("batslog.action.copySql"), "", BatsLogIcons.BATS_LOG_COPY));
-
-        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
 
         List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
         if (colorConfigs == null || colorConfigs.isEmpty()) {

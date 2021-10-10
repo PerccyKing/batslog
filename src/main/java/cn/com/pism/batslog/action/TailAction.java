@@ -29,7 +29,7 @@ public class TailAction extends AnAction {
         if (project != null) {
             Boolean tailStatus = BatsLogUtil.getTailStatus(project);
             BatsLogUtil.TAIL_STATUS.put(project, !tailStatus);
-            MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(Objects.requireNonNull(project));
+            MyConsoleViewImpl consoleView = (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
             String tipMsg = tailStatus ? BatsLogBundle.message("SqlListenerHasStop") : BatsLogBundle.message("SqlListenerHasStarted");
             consoleView.print(tipMsg, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
             consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());

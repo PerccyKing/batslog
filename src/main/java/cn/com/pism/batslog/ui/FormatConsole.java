@@ -48,7 +48,6 @@ public class FormatConsole {
 
     public void initConsoleToComponent(Project project, MyConsoleViewImpl consoleView) {
         JComponent component = consoleView.getComponent();
-        consoleView.getEditor().getSettings().setLanguage(Language.findLanguageByID("SQL"));
         load(project, consoleView);
         sqlPanel.add(component);
         sqlPanel.setBorder(null);
