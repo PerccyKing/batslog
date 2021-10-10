@@ -61,10 +61,12 @@ public class SettingForm {
 
     private BatsLogSettingState service;
 
+    public SettingForm(){}
+
 
     public SettingForm(Project project) {
         this.project = project;
-        this.service = ServiceManager.getService(project, BatsLogSettingState.class);
+        this.service = BatsLogSettingState.getInstance(project);
 
         //初始化数据库选择
         initDbTypeBox();

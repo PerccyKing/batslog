@@ -63,7 +63,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
         //先判断有没有开启SQL监听
         if (BatsLogUtil.getTailStatus(project)) {
 
-            BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
+            BatsLogSettingState service = BatsLogSettingState.getInstance(project);
 
             String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
             String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();

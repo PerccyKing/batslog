@@ -7,6 +7,7 @@ import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
+import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
@@ -15,7 +16,6 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.com.pism.batslog.util.BatsLogUtil.FORMAT_CONSOLE_MAP;
+
 
 /**
  * @author PerccyKing
@@ -40,11 +42,12 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
 
-        //项目默认监听状态
-        BatsLogUtil.TAIL_STATUS.put(project, Boolean.FALSE);
-
         BatsLogUtil.TOOL_WINDOW = (ToolWindowEx) toolWindow;
-        FormatConsole formatConsole = new FormatConsole(project);
+        FormatConsole formatConsole = FORMAT_CONSOLE_MAP.get(project);
+        if (formatConsole == null) {
+            formatConsole = new FormatConsole(project);
+        }
+        formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project));
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("batslog.console"), false);
@@ -67,7 +70,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("batslog.action.formatSql"), "", BatsLogIcons.BATS_LOG));
         instance.replaceAction("$CopySql", new CopySqlAction(BatsLogBundle.message("batslog.action.copySql"), "", BatsLogIcons.BATS_LOG_COPY));
 
-        BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
+        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
 
         List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
         if (colorConfigs == null || colorConfigs.isEmpty()) {

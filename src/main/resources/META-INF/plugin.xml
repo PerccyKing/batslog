@@ -42,9 +42,14 @@
 
         <projectService serviceImplementation="cn.com.pism.batslog.settings.BatsLogSettingState"/>
 
+        <applicationService serviceImplementation="cn.com.pism.batslog.settings.BatsLogGlobalConfigState"/>
 
         <toolWindow id="BSL" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"
                     icon="BatsLogIcons.BATS_LOG"/>
+
+        <applicationConfigurable id="batslog.config" instance="cn.com.pism.batslog.settings.BatsLogConfigurable"/>
+
+        <backgroundPostStartupActivity implementation="cn.com.pism.batslog.action.StartUpAction"/>
     </extensions>
 
     <actions>

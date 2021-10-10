@@ -4,7 +4,6 @@ import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.BeautyAction;
 import cn.com.pism.batslog.action.OpenFormatWindowAction;
 import cn.com.pism.batslog.action.TailAction;
-import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -12,7 +11,6 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import icons.BatsLogIcons;
@@ -43,12 +41,15 @@ public class FormatConsole {
         initConsoleAction(project);
 
         MyConsoleViewImpl consoleView = new MyConsoleViewImpl(project, true);
+        consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
+        BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
+    }
+
+    public void initConsoleToComponent(Project project, MyConsoleViewImpl consoleView) {
         JComponent component = consoleView.getComponent();
         load(project, consoleView);
         sqlPanel.add(component);
         sqlPanel.setBorder(null);
-        consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
-        BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
     }
 
     private void load(Project project, MyConsoleViewImpl consoleView) {
@@ -76,10 +77,6 @@ public class FormatConsole {
     private void initConsoleAction(Project project) {
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("batslog.formatWindow"), BatsLogBundle.message("batslog.formatWindow"), Applet);
 
-        BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
-        if (Boolean.TRUE.equals(service.getStartWithProject())) {
-            BatsLogUtil.TAIL_STATUS.put(project, Boolean.TRUE);
-        }
         TailAction tailAction = new TailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute,
                 () -> load(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project)));
 

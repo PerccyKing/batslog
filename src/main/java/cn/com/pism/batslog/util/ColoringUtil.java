@@ -39,7 +39,7 @@ public class ColoringUtil {
 
 
     public static ConsoleViewContentType getKeyWordConsoleViewContentTypeFromConfig(Project project) {
-        BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
+        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
         Color value = BatsLogUtil.toColor(service.getKeyWordDefCol());
         TextAttributes textAttributes = new TextAttributes(value, null, null, EffectType.BOXED, Font.PLAIN);
         return new ConsoleViewContentType(project.getName() + "BatsLogKeywords", textAttributes);

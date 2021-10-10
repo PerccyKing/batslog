@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.util;
 
 import cn.com.pism.batslog.model.RgbColor;
+import cn.com.pism.batslog.ui.FormatConsole;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -37,6 +38,8 @@ public class BatsLogUtil {
     public static Map<String, ConsoleViewContentType> KEY_COLOR_MAP = new HashMap<>();
 
     public static int NUM = 0;
+
+    public static Map<Project, FormatConsole> FORMAT_CONSOLE_MAP = new HashMap<>();
 
     public static void copySqlToClipboard(AnActionEvent e, String text) {
 

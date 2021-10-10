@@ -61,7 +61,7 @@ public class SqlFormatUtil {
         List<String> paramsList = new ArrayList<>();
         List<String> nameList = new ArrayList<>();
 
-        BatsLogSettingState service = ServiceManager.getService(project, BatsLogSettingState.class);
+        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
 
         String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
         String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
