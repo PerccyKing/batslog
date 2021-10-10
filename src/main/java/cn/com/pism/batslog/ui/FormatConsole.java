@@ -8,6 +8,7 @@ import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.icons.AllIcons;
+import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -47,6 +48,7 @@ public class FormatConsole {
 
     public void initConsoleToComponent(Project project, MyConsoleViewImpl consoleView) {
         JComponent component = consoleView.getComponent();
+        consoleView.getEditor().getSettings().setLanguage(Language.findLanguageByID("SQL"));
         load(project, consoleView);
         sqlPanel.add(component);
         sqlPanel.setBorder(null);

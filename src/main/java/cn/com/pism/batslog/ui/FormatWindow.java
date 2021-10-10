@@ -104,7 +104,6 @@ public class FormatWindow extends DialogWrapper {
 
     private void initForm(@Nullable Project project) {
         //创建一个编辑器
-        Project defaultProject = ProjectManager.getInstance().getDefaultProject();
         Editor logEditor = Editors.createSourceEditor(project, PlainTextLanguage.INSTANCE, "", false);
         this.myEditor = logEditor;
 
@@ -118,7 +117,7 @@ public class FormatWindow extends DialogWrapper {
 
 
         //右边console
-        MyConsoleViewImpl consoleView = new MyConsoleViewImpl(defaultProject, true);
+        MyConsoleViewImpl consoleView = new MyConsoleViewImpl(project, true);
         this.consoleView = consoleView;
 
         //添加操作栏,调用一次getComponent ，editor才会创建
