@@ -49,7 +49,9 @@
 
         <applicationConfigurable id="batslog.config" instance="cn.com.pism.batslog.settings.BatsLogConfigurable"/>
 
-        <backgroundPostStartupActivity implementation="cn.com.pism.batslog.action.StartUpAction"/>
+        <postStartupActivity implementation="cn.com.pism.batslog.action.StartUpAction"/>
+
+        <notificationGroup displayType="BALLOON" id="cn.com.pism.batslog.notification" isLogByDefault="true"/>
     </extensions>
 
     <actions>
@@ -79,5 +81,5 @@
         </action>
     </actions>
 
-    <idea-version since-build="192"/>
+    <idea-version since-build="203"/>
 </idea-plugin>

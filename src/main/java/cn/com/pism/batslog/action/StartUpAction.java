@@ -10,6 +10,7 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManagerCore;
@@ -65,10 +66,8 @@ public class StartUpAction implements StartupActivity {
         if (jsonArray != null && !jsonArray.isEmpty()) {
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             String version = jsonObject.getString("version");
-            List<IdeaPluginDescriptor> loadedPlugins = PluginManagerCore.getLoadedPlugins();
-            loadedPlugins.forEach(lp -> {
-                handlePluginVersion(project, version, lp);
-            });
+            List<? extends IdeaPluginDescriptor> loadedPlugins = PluginManagerCore.getLoadedPlugins();
+            loadedPlugins.forEach(lp -> handlePluginVersion(project, version, lp));
         }
     }
 
@@ -84,7 +83,7 @@ public class StartUpAction implements StartupActivity {
                 //弹出更新提示
                 final Notification notifyInfo = Notifier.getInstance(NotificationType.INFORMATION);
                 notifyInfo.setTitle(BatsLogConstant.BATS_LOG_NAME, BatsLogBundle.message("batslog.versionCheck.notification.title"));
-                notifyInfo.setContent(pluginVersion + " - " + version);
+                notifyInfo.setContent(pluginVersion + " → " + version);
                 notifyInfo.addAction(new AnAction(BatsLogBundle.message("batslog.versionCheck.action.getNewVersion")) {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
