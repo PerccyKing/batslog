@@ -55,7 +55,7 @@ public class KeyWordsConstant {
                 "both", "default", "flush", "json", "nchar", "reads", "second_microsecond", "temptable", "with",
                 "btree", "definer", "for", "key", "ndb", "read_only", "security", "terminated", "without",
                 "by", "delayed", "force", "keys", "ndbcluster", "read_write", "select", "text", "work",
-                "byte", "batslog.action.delete", "foreign", "kill", "never", "real", "sensitive", "than", "wrapper",
+                "byte", "delete", "foreign", "kill", "never", "real", "sensitive", "than", "wrapper",
                 "cache", "desc", "format", "leading", "new", "rebuild", "separator", "then", "write",
                 "call", "describe", "found", "leave", "next", "recover", "serial", "time", "x509",
                 "cascade", "deterministic", "from", "leaves", "no", "redofile", "serializable", "timestamp", "xa",

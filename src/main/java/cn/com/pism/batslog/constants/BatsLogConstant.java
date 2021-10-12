@@ -30,4 +30,8 @@ public class BatsLogConstant {
     public static String PARAMS_PREFIX = "Parameters:";
 
     public static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    public static String BATS_LOG_ID = "cn.com.pism.batslog";
+
+    public static String BATS_LOG_NAME = "BatsLog";
 }

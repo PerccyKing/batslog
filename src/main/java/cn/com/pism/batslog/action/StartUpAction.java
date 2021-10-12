@@ -1,12 +1,30 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
+import cn.com.pism.batslog.ui.Notifier;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.intellij.ide.BrowserUtil;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManagerCore;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
+import static cn.com.pism.batslog.constants.BatsLogConstant.BATS_LOG_ID;
 import static cn.com.pism.batslog.util.BatsLogUtil.FORMAT_CONSOLE_MAP;
 
 /**
@@ -16,6 +34,8 @@ import static cn.com.pism.batslog.util.BatsLogUtil.FORMAT_CONSOLE_MAP;
  * @since 0.0.1
  */
 public class StartUpAction implements StartupActivity {
+    private static final Logger log = LoggerFactory.getLogger(StartUpAction.class);
+
     @Override
     public void runActivity(@NotNull Project project) {
 
@@ -30,6 +50,48 @@ public class StartUpAction implements StartupActivity {
                 FORMAT_CONSOLE_MAP.put(project, new FormatConsole(project));
             }
         }
+        try {
+            versionCheck(project);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
 
+    private void versionCheck(Project project) {
+        String res = HttpUtil.get("https://plugins.jetbrains.com/api/plugins/15301/updates?channel=&size=1");
+        log.info("version:{}", res);
+        JSONArray jsonArray = JSON.parseArray(res);
+        if (jsonArray != null && !jsonArray.isEmpty()) {
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            String version = jsonObject.getString("version");
+            List<IdeaPluginDescriptor> loadedPlugins = PluginManagerCore.getLoadedPlugins();
+            loadedPlugins.forEach(lp -> {
+                handlePluginVersion(project, version, lp);
+            });
+        }
+    }
+
+    private void handlePluginVersion(Project project, String version, IdeaPluginDescriptor lp) {
+        if (BATS_LOG_ID.equals(lp.getPluginId().getIdString())) {
+            //进行版本比较
+            String pluginVersion = lp.getVersion();
+            String[] versionNum = version.split("-");
+            String[] pluginVersionNum = pluginVersion.split("-");
+            int publishVersionInt = Integer.parseInt(versionNum[0].replace(".", ""));
+            int pluginVersionInt = Integer.parseInt(pluginVersionNum[0].replace(".", ""));
+            if (publishVersionInt > pluginVersionInt) {
+                //弹出更新提示
+                final Notification notifyInfo = Notifier.getInstance(NotificationType.INFORMATION);
+                notifyInfo.setTitle(BatsLogConstant.BATS_LOG_NAME, "发现新版本");
+                notifyInfo.setContent(pluginVersion + " - " + version);
+                notifyInfo.addAction(new AnAction("获取新版本") {
+                    @Override
+                    public void actionPerformed(@NotNull AnActionEvent e) {
+                        BrowserUtil.browse("https://plugins.jetbrains.com/plugin/15301-batslog");
+                    }
+                });
+                notifyInfo.notify(project);
+            }
+        }
     }
 }

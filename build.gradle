@@ -33,6 +33,7 @@ dependencies {
 
     implementation 'com.alibaba:fastjson:1.2.67'
     implementation 'com.alibaba:druid:1.1.9'
+    implementation 'cn.hutool:hutool-http:5.7.14'
     implementation 'org.apache.commons:commons-lang3:3.11'
     implementation 'commons-collections:commons-collections:3.2.2'
     compileOnly 'org.projectlombok:lombok:1.18.12'
