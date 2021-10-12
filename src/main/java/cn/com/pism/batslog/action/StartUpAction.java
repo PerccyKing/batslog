@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
@@ -82,9 +83,9 @@ public class StartUpAction implements StartupActivity {
             if (publishVersionInt > pluginVersionInt) {
                 //弹出更新提示
                 final Notification notifyInfo = Notifier.getInstance(NotificationType.INFORMATION);
-                notifyInfo.setTitle(BatsLogConstant.BATS_LOG_NAME, "发现新版本");
+                notifyInfo.setTitle(BatsLogConstant.BATS_LOG_NAME, BatsLogBundle.message("batslog.versionCheck.notification.title"));
                 notifyInfo.setContent(pluginVersion + " - " + version);
-                notifyInfo.addAction(new AnAction("获取新版本") {
+                notifyInfo.addAction(new AnAction(BatsLogBundle.message("batslog.versionCheck.action.getNewVersion")) {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
                         BrowserUtil.browse("https://plugins.jetbrains.com/plugin/15301-batslog");

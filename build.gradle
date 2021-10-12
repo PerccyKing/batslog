@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '21.08.17.1659-RE'
+version '20.10.12.1013-TE'
 
 
 java {
