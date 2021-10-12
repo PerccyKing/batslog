@@ -4,7 +4,9 @@ plugins {
 }
 
 group 'cn.com.pism'
-version '20.10.12.1013-TE'
+version new Date().format("yy.MM.dd.HHmm") + "-${PUBLISH}"
+
+buildSearchableOptions.enabled = false
 
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -44,6 +46,8 @@ intellij {
     version = '2020.3.4'
 }
 patchPluginXml {
+    sinceBuild = '203'
+    untilBuild = '212.*'
     changeNotes = """
 
 <div color='red'>
