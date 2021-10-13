@@ -1,6 +1,8 @@
 package cn.com.pism.batslog.settings;
 
+import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.ui.SettingForm;
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import org.jetbrains.annotations.Nls;
@@ -22,7 +24,7 @@ public class BatsLogConfigurable implements SearchableConfigurable {
     @NotNull
     @Override
     public String getId() {
-        return "BatsLog";
+        return BatsLogConstant.BATS_LOG_NAME;
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -37,7 +39,7 @@ public class BatsLogConfigurable implements SearchableConfigurable {
         if (settingForm == null) {
             settingForm = new SettingForm();
         }
-        return settingForm.getRoot();
+        return new JLabel("开发中...");
     }
 
     @Override

@@ -47,7 +47,7 @@
         <toolWindow id="BSL" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"
                     icon="BatsLogIcons.BATS_LOG"/>
 
-        <applicationConfigurable id="batslog.config" instance="cn.com.pism.batslog.settings.BatsLogConfigurable"/>
+<!--        <applicationConfigurable id="batslog.config" instance="cn.com.pism.batslog.settings.BatsLogConfigurable"/>-->
 
         <postStartupActivity implementation="cn.com.pism.batslog.action.StartUpAction"/>
 
