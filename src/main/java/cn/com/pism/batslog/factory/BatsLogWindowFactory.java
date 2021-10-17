@@ -6,6 +6,7 @@ import cn.com.pism.batslog.action.FormatSqlAction;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.ui.ErrorListPanel;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.ui.SettingForm;
@@ -26,6 +27,7 @@ import com.intellij.ui.content.ContentManager;
 import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("batslog.console"), false);
+        Content errorListContent = contentFactory.createContent(new ErrorListPanel(project).getRoot(), BatsLogBundle.message("batslog.error"), false);
         Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("batslog.config"), false);
         ContentManager contentManager = toolWindow.getContentManager();
         ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
@@ -72,6 +75,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
             }
         });
         contentManager.addContent(formatConsoleContent);
+        contentManager.addContent(errorListContent);
         contentManager.addContent(settingFormContent);
         ActionManager instance = ActionManager.getInstance();
         instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("batslog.action.formatSql"), "", BatsLogIcons.BATS_LOG));

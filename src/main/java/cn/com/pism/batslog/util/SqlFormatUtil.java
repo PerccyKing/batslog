@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.util;
 
+import cn.com.pism.batslog.action.StartUpAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
@@ -14,6 +15,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -27,6 +30,8 @@ import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
  * @since 0.0.1
  */
 public class SqlFormatUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(SqlFormatUtil.class);
 
 
     public static final String[] TYPES = new String[]{"Integer", "Long", "Double", "String",
@@ -154,28 +159,33 @@ public class SqlFormatUtil {
             String sql = sqlList.get(i);
             String name = nameList.get(i);
             String params = paramsList.get(i);
-            //提取参数
-            String[] paramArr = params.split(",");
-            List<Object> paramList = parseParamToList(paramArr);
-            String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
-            if (!formatSql.endsWith(";")) {
-                formatSql = formatSql + ";";
-            }
-            if (printToConsole) {
-                if (console == null) {
-                    console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+            try {
+                //提取参数
+                String[] paramArr = params.split(",");
+                List<Object> paramList = parseParamToList(paramArr);
+                String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
+                if (!formatSql.endsWith(";")) {
+                    formatSql = formatSql + ";";
                 }
+                if (printToConsole) {
+                    if (console == null) {
+                        console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+                    }
 
-                printSeparatorAndName(project, console, name, service);
-                printSql(formatSql, project, console);
-            } else {
-                //放入缓存
-                List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
-                if (!CollectionUtils.isNotEmpty(sqlCache)) {
-                    sqlCache = new ArrayList<>();
+                    printSeparatorAndName(project, console, name, service);
+                    printSql(formatSql, project, console);
+                } else {
+                    //放入缓存
+                    List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
+                    if (!CollectionUtils.isNotEmpty(sqlCache)) {
+                        sqlCache = new ArrayList<>();
+                    }
+                    sqlCache.add(formatSql);
+                    BatsLogUtil.SQL_CACHE.put(project, sqlCache);
                 }
-                sqlCache.add(formatSql);
-                BatsLogUtil.SQL_CACHE.put(project, sqlCache);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                //对错误解析的数据 进行补偿处理，先将参数行和SQL行加入列表
             }
         }
     }

@@ -12,6 +12,8 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.components.OnOffButton;
 import org.apache.commons.collections.CollectionUtils;
 
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -40,6 +42,8 @@ public class BatsLogUtil {
     public static int NUM = 0;
 
     public static Map<Project, FormatConsole> FORMAT_CONSOLE_MAP = new HashMap<>();
+
+    public static Map<Project, DefaultTableModel> ERROR_LIST_TABLE_MODEL = new HashMap<>();
 
     public static void copySqlToClipboard(AnActionEvent e, String text) {
 

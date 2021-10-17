@@ -111,7 +111,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     }
 
     private void initForm(Project project) {
-        setTitle(BatsLogBundle.message("config.form.label.consoleColorConfig"));
+        setTitle(BatsLogBundle.message("config.form.title.consoleColorConfig"));
         oac.setHyperlinkTarget("https://perccyking.github.io/batslog/");
         oac.setHyperlinkText(BatsLogBundle.message("config.form.console.colorConfigForm.OAC"));
         initColorSettingTable();
