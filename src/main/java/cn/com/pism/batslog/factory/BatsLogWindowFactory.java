@@ -19,6 +19,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.ui.content.Content;
@@ -27,7 +28,6 @@ import com.intellij.ui.content.ContentManager;
 import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,8 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
             formatConsole = new FormatConsole(project);
             FORMAT_CONSOLE_MAP.put(project, formatConsole);
         }
-        formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project));
+        boolean inBottom = ToolWindowAnchor.BOTTOM.equals(toolWindow.getAnchor());
+        formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project), inBottom);
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("batslog.console"), false);

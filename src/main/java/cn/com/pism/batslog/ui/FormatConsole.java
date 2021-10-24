@@ -8,12 +8,12 @@ import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.StringUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.icons.AllIcons;
-import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.ui.JBSplitter;
 import icons.BatsLogIcons;
 import lombok.Data;
 
@@ -46,16 +46,17 @@ public class FormatConsole {
         BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
     }
 
-    public void initConsoleToComponent(Project project, MyConsoleViewImpl consoleView) {
+    public void initConsoleToComponent(Project project, MyConsoleViewImpl consoleView, boolean inBottom) {
         JComponent component = consoleView.getComponent();
-        load(project, consoleView);
+        load(project, consoleView, inBottom);
+//        final JBSplitter jbSplitter = new JBSplitter(!inBottom, 0.7f, 0.1f, 0.85f);
+//        jbSplitter.setFirstComponent(component);
+//        jbSplitter.setSecondComponent(new ErrorListPanel(project).getRoot());
         sqlPanel.add(component);
         sqlPanel.setBorder(null);
     }
 
-    private void load(Project project, MyConsoleViewImpl consoleView) {
-        ToolWindowAnchor anchor = BatsLogUtil.TOOL_WINDOW.getAnchor();
-        boolean inBottom = ToolWindowAnchor.BOTTOM.equals(anchor);
+    private void load(Project project, MyConsoleViewImpl consoleView, boolean inBottom) {
         ActionToolbar actionToolBar = consoleView.createActionToolBar(ActionPlaces.UNKNOWN, !inBottom, BatsLogUtil.TAIL_ACTION.get(project));
         if (toolBar == null) {
             consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());
@@ -79,8 +80,8 @@ public class FormatConsole {
         OpenFormatWindowAction openFormatWindowAction = new OpenFormatWindowAction(BatsLogBundle.message("batslog.formatWindow"), BatsLogBundle.message("batslog.formatWindow"), Applet);
 
         TailAction tailAction = new TailAction(BatsLogBundle.message("start"), BatsLogBundle.message("startSqlListener"), AllIcons.Actions.Execute,
-                () -> load(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project)));
-
+                () -> load(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project),
+                        ToolWindowAnchor.BOTTOM.equals(BatsLogUtil.TOOL_WINDOW.getAnchor())));
         BeautyAction beautyAction = new BeautyAction("Beauty", "Beauty", BatsLogIcons.BEAUTY, project);
         List<AnAction> anActions = new ArrayList<>();
         anActions.add(tailAction);
