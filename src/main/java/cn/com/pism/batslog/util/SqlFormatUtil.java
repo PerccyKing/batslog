@@ -1,15 +1,14 @@
 package cn.com.pism.batslog.util;
 
-import cn.com.pism.batslog.action.StartUpAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
+import cn.com.pism.batslog.model.BslErrorMod;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
 import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
+import static cn.com.pism.batslog.util.BatsLogUtil.ERROR_LIST_TABLE_MODEL;
 
 /**
  * @author PerccyKing
@@ -129,6 +130,10 @@ public class SqlFormatUtil {
      * @date 2021/08/12 上午 10:05
      */
     public static boolean nextLineIsParams(String line) {
+        //如果当前行，只有一个换行符，判断为结束.获取为空行
+        if ("\n".equals(line) || StringUtils.isBlank(line)) {
+            return false;
+        }
         //先检查当前行有没有左括号
         int leftIndex = StringUtils.lastIndexOf(line, "(");
         //没有左括号，先占时判定为当前行不是最后一行，下一行可能为参数行
@@ -186,6 +191,15 @@ public class SqlFormatUtil {
             } catch (Exception e) {
                 log.error(e.getMessage());
                 //对错误解析的数据 进行补偿处理，先将参数行和SQL行加入列表
+                final DefaultTableModel tableModel = ERROR_LIST_TABLE_MODEL.get(project);
+                final StackTraceElement[] stackTrace = e.getStackTrace();
+                StringBuilder errorMsg = new StringBuilder();
+                for (StackTraceElement stackTraceElement : stackTrace) {
+                    errorMsg.append(stackTraceElement.toString()).append("\n");
+                }
+                tableModel.addRow(new BslErrorMod(sql, params, DateFormatUtils.format(System.currentTimeMillis(), "yy/MM/dd HH:mm:ss"),
+                        errorMsg.toString()).toArray());
+                e.printStackTrace();
             }
         }
     }
