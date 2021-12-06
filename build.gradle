@@ -44,6 +44,7 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = '2020.3.4'
+    type = 'IU'
 }
 patchPluginXml {
     sinceBuild = '203'

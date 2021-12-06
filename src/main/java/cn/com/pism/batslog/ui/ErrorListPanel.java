@@ -155,6 +155,7 @@ public class ErrorListPanel {
             }
             final BslErrorMod bslErrorMod = new BslErrorMod().toMod(row);
             //弹出处理页面
+            new ErrorProcessDialog(project, bslErrorMod);
         }
 
         @Override
