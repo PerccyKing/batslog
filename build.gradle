@@ -45,10 +45,13 @@ dependencies {
 intellij {
     version = '2020.3.4'
     type = 'IU'
+    plugins = [
+            'com.intellij.database'
+    ]
 }
 patchPluginXml {
     sinceBuild = '203'
-//    untilBuild = '212.*'
+    untilBuild = '213.*'
     changeNotes = """
 
 <div color='red'>
