@@ -1,11 +1,11 @@
-package cn.com.pism.batslog.ui;
+package cn.com.pism.batslog.ui.component;
 
+import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.LanguageTextField;
-import com.intellij.ui.components.JBScrollPane;
 import lombok.Data;
 
 import javax.swing.*;
@@ -33,12 +33,7 @@ public class SqlEditorPanel {
         this.project = project;
         this.str = str;
 
-        editorTextField = new LanguageTextField(Language.findLanguageByID("SQL"), project, str, false);
-        editorTextField.ensureWillComputePreferredSize();
-        editorTextField.getPreferredSize();
-        editorTextField.addNotify();
-        editorTextField.setEnabled(true);
-        editorTextField.setText(str);
+        editorTextField = BatsLogUtil.createLanguageTextField(Language.findLanguageByID("SQL"), project, str);
         content.add(editorTextField);
     }
 
