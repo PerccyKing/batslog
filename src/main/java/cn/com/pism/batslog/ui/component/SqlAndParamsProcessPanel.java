@@ -1,11 +1,14 @@
 package cn.com.pism.batslog.ui.component;
 
 import cn.com.pism.batslog.model.BslErrorMod;
+import cn.com.pism.batslog.util.SqlFormatUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.GuiUtils;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +47,7 @@ public class SqlAndParamsProcessPanel {
             encodedRowSpecs.add("default");
         }
 
-        FormLayout formLayout = new FormLayout("5dlu, right:default, 5dlu, 80dlu, 40dlu", String.join(",", encodedRowSpecs));
+        FormLayout formLayout = new FormLayout("5dlu, right:default, 5dlu, 80dlu, 60dlu", String.join(",", encodedRowSpecs));
         sqlContentLine.setLayout(formLayout);
 
         for (int i = 0; i < split.length; i++) {
@@ -68,8 +71,20 @@ public class SqlAndParamsProcessPanel {
         sqlContentLine.add(jPanel, c.xy(2, i + 1));
         if (!last || lastShow) {
             sqlContentLine.add(new JTextField(), c.xy(4, i + 1));
-            sqlContentLine.add(new JTextField(), c.xy(5, i + 1));
+            sqlContentLine.add(getSelection(""), c.xy(5, i + 1));
         }
+    }
+
+    private JComboBox<String> getSelection(String type) {
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.addItem("--请选择--");
+        for (String ty : SqlFormatUtil.TYPES) {
+            comboBox.addItem(ty);
+        }
+        if (StringUtils.isNotBlank(type)) {
+            comboBox.setSelectedItem(type);
+        }
+        return comboBox;
     }
 
 }

@@ -82,7 +82,7 @@
         <action id="$ManualProcess" class="cn.com.pism.batslog.action.ManualProcessingErrorAction" text="手动处理"
                 icon="BatsLogIcons.BATS_LOG"
         >
-            <add-to-group group-id="ConsoleEditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ConsoleEditorPopupMenu" anchor="after" relative-to-action="$FormatSql"/>
         </action>
     </actions>
 
