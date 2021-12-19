@@ -56,12 +56,20 @@ public class SqlFormatUtil {
         format(str, project, Boolean.TRUE);
     }
 
+    public static void manualFormat(String str, Project project, CallBack callBack) {
+        format(str, project, Boolean.FALSE, null, callBack);
+    }
+
     public static void format(String str, Project project, Boolean printToConsole) {
-        format(str, project, printToConsole, null);
+        format(str, project, printToConsole, null, null);
     }
 
 
-    public static void format(String str, Project project, Boolean printToConsole, ConsoleViewImpl console) {
+    public static void format(String str,
+                              Project project,
+                              Boolean printToConsole,
+                              ConsoleViewImpl console,
+                              CallBack callBack) {
 
         List<String> sqlList = new ArrayList<>();
         List<String> paramsList = new ArrayList<>();
@@ -115,8 +123,11 @@ public class SqlFormatUtil {
             }
         }
 
-
-        print(project, printToConsole, console, sqlList, paramsList, nameList, service);
+        if (callBack != null) {
+            callBack.callback(sqlList.size() > 0 ? sqlList.get(0) : "", paramsList.size() > 0 ? paramsList.get(0) : "");
+        } else {
+            print(project, printToConsole, console, sqlList, paramsList, nameList, service);
+        }
     }
 
     /**
@@ -407,5 +418,10 @@ public class SqlFormatUtil {
             name = StringUtils.substring(line, 0, StringUtils.indexOf(line, sqlPrefix));
         }
         return name;
+    }
+
+
+    public interface CallBack {
+        void callback(String sql, String params);
     }
 }

@@ -7,6 +7,9 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.ui.JBColor;
@@ -95,5 +98,12 @@ public class BatsLogUtil {
         languageTextField.setEnabled(true);
         languageTextField.setText(str);
         return languageTextField;
+    }
+
+
+    public static String getSelectText(AnActionEvent e) {
+        Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
+        SelectionModel selectionModel = editor.getSelectionModel();
+        return selectionModel.getSelectedText();
     }
 }

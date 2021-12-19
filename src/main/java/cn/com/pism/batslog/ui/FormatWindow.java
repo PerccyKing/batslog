@@ -98,7 +98,7 @@ public class FormatWindow extends DialogWrapper {
 
     private void format(@Nullable Project project, String text, boolean b, ConsoleViewImpl consoleView) {
         if (StringUtils.isNotBlank(text)) {
-            SqlFormatUtil.format(text, project, b, consoleView);
+            SqlFormatUtil.format(text, project, b, consoleView, null);
         }
     }
 

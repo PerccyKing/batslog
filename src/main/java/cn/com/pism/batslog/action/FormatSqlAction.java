@@ -1,11 +1,9 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.SqlFormatUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
 import lombok.extern.log4j.Log4j;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -42,9 +40,7 @@ public class FormatSqlAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
-        SelectionModel selectionModel = editor.getSelectionModel();
-        String selectedText = selectionModel.getSelectedText();
+        String selectedText = BatsLogUtil.getSelectText(e);
         SqlFormatUtil.format(selectedText, e.getProject());
     }
 }
