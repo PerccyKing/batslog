@@ -1,15 +1,10 @@
 package cn.com.pism.batslog.ui.component;
 
 import cn.com.pism.batslog.model.BslErrorMod;
-import cn.com.pism.batslog.ui.SqlEditorPanel;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.GuiUtils;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 import lombok.Data;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author PerccyKing
@@ -20,8 +15,23 @@ import java.awt.*;
 @Data
 public class SqlErrorProcessPanel {
     private JPanel root;
-    private JPanel sqlContent;
-    private JPanel paramsContent;
+    private JPanel first;
+    private JPanel second;
+
+    private SqlAndParamsPanel sqlAndParamsPanel;
+
+    public SqlErrorProcessPanel(Project project, BslErrorMod bslErrorMod) {
+        final SqlAndParamsPanel sqlAndParamsPanel = new SqlAndParamsPanel(project, bslErrorMod);
+        this.sqlAndParamsPanel = sqlAndParamsPanel;
+        first.add(sqlAndParamsPanel.getRoot());
+        final SqlAndParamsProcessPanel sqlAndParamsProcessPanel = new SqlAndParamsProcessPanel(project, bslErrorMod);
+        second.add(sqlAndParamsProcessPanel.getRoot());
+    }
+
+    public void reformatCode() {
+        sqlAndParamsPanel.reformatCode();
+    }
+    /*private JPanel sqlContent;
     private JPanel sqlContentLine;
 
     private Project project;
@@ -67,6 +77,6 @@ public class SqlErrorProcessPanel {
                         0
                 );
         sqlContentLine.add(jPanel, gridConstraints);
-    }
+    }*/
 
 }

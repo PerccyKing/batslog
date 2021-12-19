@@ -4,16 +4,17 @@ import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.ui.FormatConsole;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.ui.JBColor;
+import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.OnOffButton;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -72,5 +73,27 @@ public class BatsLogUtil {
     public static Color toColor(RgbColor rgbColor) {
         return new JBColor(new Color(rgbColor.getR(), rgbColor.getG(), rgbColor.getB()),
                 new Color(rgbColor.getR(), rgbColor.getG(), rgbColor.getB()));
+    }
+
+    /**
+     * <p>
+     * 创建一个默认的LanguageTextField
+     * </p>
+     *
+     * @param language :语言
+     * @param project  :项目
+     * @param str      :内容
+     * @return {@link LanguageTextField}
+     * @author PerccyKing
+     * @date 2021/12/11 下午 06:06
+     */
+    public static LanguageTextField createLanguageTextField(Language language, Project project, String str) {
+        LanguageTextField languageTextField = new LanguageTextField(language, project, str, false);
+        languageTextField.ensureWillComputePreferredSize();
+        languageTextField.getPreferredSize();
+        languageTextField.addNotify();
+        languageTextField.setEnabled(true);
+        languageTextField.setText(str);
+        return languageTextField;
     }
 }

@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.model.BslErrorMod;
+import cn.com.pism.batslog.ui.component.SqlEditorPanel;
 import cn.com.pism.batslog.ui.component.SqlErrorProcessPanel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -25,6 +26,8 @@ public class ErrorProcessDialog extends DialogWrapper {
 
     private Project project;
 
+    SqlErrorProcessPanel processPanel;
+
     private static final String ERROR_PROCESS_DIALOG_SIZE_KEY = "#cn.com.pism.batslog.ui.ErrorProcessDialog";
 
 
@@ -42,6 +45,7 @@ public class ErrorProcessDialog extends DialogWrapper {
     public ErrorProcessDialog(Project project, BslErrorMod bslErrorMod) {
         this(project);
         final SqlErrorProcessPanel processPanel = new SqlErrorProcessPanel(project, bslErrorMod);
+        this.processPanel = processPanel;
         final SqlEditorPanel sqlEditorPanel = new SqlEditorPanel(project, bslErrorMod.getSql());
         final JBSplitter jbSplitter = new JBSplitter(false, 0.7f);
         jbSplitter.setFirstComponent(processPanel.getRoot());
@@ -77,6 +81,7 @@ public class ErrorProcessDialog extends DialogWrapper {
     @Override
     public boolean isShowing() {
         sqlEditorPanel.reformatCode();
+        processPanel.reformatCode();
         return super.isShowing();
     }
 
