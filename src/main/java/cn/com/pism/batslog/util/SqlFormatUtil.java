@@ -177,8 +177,8 @@ public class SqlFormatUtil {
             String params = paramsList.get(i);
             try {
                 //提取参数
-                String[] paramArr = params.split(",");
-                List<Object> paramList = parseParamToList(paramArr);
+
+                List<Object> paramList = parseParamToList(params);
                 String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
                 if (!formatSql.endsWith(";")) {
                     formatSql = formatSql + ";";
@@ -342,13 +342,17 @@ public class SqlFormatUtil {
      * 将参数数组转换为list，同时进行类型判断
      * </p>
      *
-     * @param paramArr : 待解析的参数数组
+     * @param params : 待解析的参数
      * @return {@link List<Object>}
      * @author PerccyKing
      * @date 2021/05/19 下午 09:23
      */
     @NotNull
-    private static List<Object> parseParamToList(String[] paramArr) {
+    public static List<Object> parseParamToList(String params) {
+        if (StringUtils.isBlank(params)) {
+            return new ArrayList<>();
+        }
+        String[] paramArr = params.split(",");
         List<Object> paramList = new ArrayList<>();
         //fix https://github.com/PerccyKing/batslog/issues/12 参数为空的时候会造成这种情况
         for (String s : paramArr) {

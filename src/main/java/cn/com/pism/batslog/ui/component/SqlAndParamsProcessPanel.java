@@ -39,39 +39,60 @@ public class SqlAndParamsProcessPanel {
         boolean lastNeedShow = errorModSql.endsWith("?");
 
         //生成SQL行
-        final String[] split = errorModSql.split("\\?");
+        final String[] sqlLines = errorModSql.split("\\?");
         List<String> encodedRowSpecs = new ArrayList<>();
 
 
-        for (int i = 0; i < split.length; i++) {
+        for (int i = 0; i < sqlLines.length; i++) {
             encodedRowSpecs.add("default");
         }
 
         FormLayout formLayout = new FormLayout("5dlu, right:default, 5dlu, 80dlu, 60dlu", String.join(",", encodedRowSpecs));
         sqlContentLine.setLayout(formLayout);
 
-        for (int i = 0; i < split.length; i++) {
-            final String line = split[i];
-            boolean last = i == split.length - 1;
-            if (line.length() > 50) {
-                addLineToRow(i, "……" + line.substring(line.length() - 50), last, lastNeedShow);
-            } else {
-                addLineToRow(i, line, last, lastNeedShow);
-            }
-        }
+        String params = bslErrorMod.getParams();
+        createProcessPanel(sqlLines, SqlFormatUtil.parseParamToList(params), lastNeedShow);
+
         GuiUtils.replaceJSplitPaneWithIDEASplitter(root);
     }
 
+    private void createProcessPanel(String[] sqlLines, List<Object> paramsList, boolean lastNeedShow) {
+        if (sqlLines.length >= paramsList.size()) {
+            for (int i = 0; i < sqlLines.length; i++) {
+                String line = sqlLines[i];
+                boolean last = i == sqlLines.length - 1;
+                if (line.length() > 50) {
+                    line = "……" + line.substring(line.length() - 50);
+                }
+                String type = "";
+                String paramsVal = "";
+                if (i < paramsList.size()) {
+                    Object param = paramsList.get(i);
+                    type = param.getClass().getTypeName();
+                    type = type.substring(type.lastIndexOf(".") + 1);
+                    paramsVal = param.toString();
+                }
+                addLineToRow(i, line, type, paramsVal);
+            }
+        } else {
+            for (int i = 0; i < paramsList.size(); i++) {
+                Object param = paramsList.get(i);
+            }
+        }
+    }
 
-    private void addLineToRow(int i, String line, boolean last, boolean lastShow) {
+
+    private void addLineToRow(int i, String line, String type, String paramsVal) {
         final JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         jPanel.setSize(new Dimension(-1, Integer.MAX_VALUE));
         jPanel.add(new JLabel(line, SwingConstants.RIGHT));
         CellConstraints c = new CellConstraints();
-        sqlContentLine.add(jPanel, c.xy(2, i + 1));
-        if (!last || lastShow) {
-            sqlContentLine.add(new JTextField(), c.xy(4, i + 1));
-            sqlContentLine.add(getSelection(""), c.xy(5, i + 1));
+        if (StringUtils.isNotBlank(line)) {
+            sqlContentLine.add(jPanel, c.xy(2, i + 1));
+        }
+        if (StringUtils.isNotBlank(paramsVal)) {
+            sqlContentLine.add(new JTextField(paramsVal), c.xy(4, i + 1));
+            sqlContentLine.add(getSelection(type), c.xy(5, i + 1));
         }
     }
 
