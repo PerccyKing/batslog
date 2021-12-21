@@ -30,15 +30,15 @@ repositories {
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
-    implementation 'com.alibaba:fastjson:1.2.67'
-    implementation 'com.alibaba:druid:1.1.9'
-    implementation 'cn.hutool:hutool-http:5.7.14'
-    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'com.alibaba:fastjson:1.2.78'
+    implementation 'com.alibaba:druid:1.2.8'
+    implementation 'cn.hutool:hutool-http:5.7.17'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-collections:commons-collections:3.2.2'
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/

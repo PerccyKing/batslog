@@ -163,7 +163,7 @@ public class SqlFormatUtil {
 
     private static void print(Project project, Boolean printToConsole, ConsoleViewImpl console, List<String> sqlList,
                               List<String> paramsList, List<String> nameList, BatsLogSettingState service) {
-        String dbTypeStr = JdbcConstants.MYSQL;
+        String dbTypeStr = JdbcConstants.MYSQL.name();
         DbType dbType = service.getDbType();
         if (!DbType.NONE.equals(dbType)) {
             dbTypeStr = dbType.getType();
@@ -179,7 +179,7 @@ public class SqlFormatUtil {
                 //提取参数
 
                 List<Object> paramList = parseParamToList(params);
-                String formatSql = SQLUtils.format(sql, dbTypeStr, paramList, formatOption);
+                String formatSql = SQLUtils.format(sql, com.alibaba.druid.DbType.of(dbTypeStr.toLowerCase(Locale.ROOT)), paramList, formatOption);
                 if (!formatSql.endsWith(";")) {
                     formatSql = formatSql + ";";
                 }
@@ -368,7 +368,7 @@ public class SqlFormatUtil {
                 }
 
                 try {
-                    pack(paramList, par.trim(), type);
+                    paramList.add(pack(par.trim(), type));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -381,36 +381,36 @@ public class SqlFormatUtil {
     }
 
 
-    private static void pack(List<Object> paramList, String par, String type) throws ClassNotFoundException {
+    public static Object pack(String par, String type) throws ClassNotFoundException {
+        Object typeParam = null;
         if (StringUtils.isBlank(type)) {
-            if ("null".equals(par)) {
-                paramList.add(null);
-            } else {
-                paramList.add(par);
+            String nullStr = "null";
+            if (!nullStr.equals(par)) {
+                typeParam = par;
             }
         } else if (Arrays.stream(TYPES).anyMatch(type::equalsIgnoreCase)) {
             Class<?> aClass = Class.forName("java.lang." + type);
             if (aClass == Integer.class) {
-                paramList.add(Integer.valueOf(par));
+                typeParam = Integer.valueOf(par);
             } else if (aClass == Long.class) {
-                paramList.add(Long.valueOf(par));
+                typeParam = Long.valueOf(par);
             } else if (aClass == Double.class) {
-                paramList.add(Double.valueOf(par));
+                typeParam = Double.valueOf(par);
             } else if (aClass == Boolean.class) {
-                paramList.add(Boolean.valueOf(par));
+                typeParam = Boolean.valueOf(par);
             } else if (aClass == Byte.class) {
-                paramList.add(Byte.valueOf(par));
+                typeParam = Byte.valueOf(par);
             } else if (aClass == Short.class) {
-                paramList.add(Short.valueOf(par));
+                typeParam = Short.valueOf(par);
             } else if (aClass == Float.class) {
-                paramList.add(Float.valueOf(par));
+                typeParam = Float.valueOf(par);
             } else {
-                paramList.add(String.valueOf(par));
+                typeParam = String.valueOf(par);
             }
         } else {
-            paramList.add(par);
+            typeParam = par;
         }
-
+        return typeParam;
     }
 
 

@@ -17,19 +17,19 @@ public enum DbType {
     /**
      * mysql
      */
-    MYSQL("mysql", JdbcConstants.MYSQL, AllIcons.Providers.Mysql),
-    HSQL("hsql", JdbcConstants.HSQL, AllIcons.Providers.Hsqldb),
-    DB2("db2", JdbcConstants.DB2, AllIcons.Providers.DB2),
-    POSTGRESQL("postgresql", JdbcConstants.POSTGRESQL, AllIcons.Providers.Postgresql),
-    SYBASE("sybase", JdbcConstants.SYBASE, AllIcons.Providers.Sybase),
-    SQL_SERVER("SqlServer", JdbcConstants.SQL_SERVER, AllIcons.Providers.SqlServer),
-    ORACLE("oracle", JdbcConstants.ORACLE, AllIcons.Providers.Oracle),
-    ALI_ORACLE("AliOracle", JdbcConstants.ALI_ORACLE, null),
+    MYSQL("mysql", JdbcConstants.MYSQL.name(), AllIcons.Providers.Mysql),
+    HSQL("hsql", JdbcConstants.HSQL.name(), AllIcons.Providers.Hsqldb),
+    DB2("db2", JdbcConstants.DB2.name(), AllIcons.Providers.DB2),
+    POSTGRESQL("postgresql", JdbcConstants.POSTGRESQL.name(), AllIcons.Providers.Postgresql),
+    SYBASE("sybase", JdbcConstants.SYBASE.name(), AllIcons.Providers.Sybase),
+    SQL_SERVER("SqlServer", JdbcConstants.SQL_SERVER.name(), AllIcons.Providers.SqlServer),
+    ORACLE("oracle", JdbcConstants.ORACLE.name(), AllIcons.Providers.Oracle),
+    ALI_ORACLE("AliOracle", JdbcConstants.ALI_ORACLE.name(), null),
     MARIADB("mariadb", JdbcConstants.MARIADB, AllIcons.Providers.Mariadb),
-    DERBY("derby", JdbcConstants.DERBY, AllIcons.Providers.ApacheDerby),
+    DERBY("derby", JdbcConstants.DERBY.name(), AllIcons.Providers.ApacheDerby),
     HBASE("hbase", JdbcConstants.HBASE, null),
-    HIVE("hive", JdbcConstants.HIVE, AllIcons.Providers.Hive),
-    H2("h2", JdbcConstants.H2, AllIcons.Providers.H2),
+    HIVE("hive", JdbcConstants.HIVE.name(), AllIcons.Providers.Hive),
+    H2("h2", JdbcConstants.H2.name(), AllIcons.Providers.H2),
     SQLITE("sqlite", JdbcConstants.SQLITE, AllIcons.Providers.Sqlite),
     NONE("none", "none", null);
 
