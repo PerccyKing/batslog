@@ -51,16 +51,43 @@ public class SqlAndParamsProcessPanel {
         sqlContentLine.setLayout(formLayout);
 
         String params = bslErrorMod.getParams();
-        createProcessPanel(sqlLines, SqlFormatUtil.parseParamToList(params), lastNeedShow);
+        List<Object> paramList = null;
+        try {
+            paramList = SqlFormatUtil.parseParamToList(params);
+        } catch (Exception e) {
+            //异常解析
+            paramList = new ArrayList<>();
+            String[] paramArr = params.split(",");
+            for (String maybeParam : paramArr) {
+                //如果分割出来的参数没有()，判断没有type
+                if (maybeParam.indexOf("(") > 0 && maybeParam.indexOf(")") > 0 && maybeParam.indexOf("(") < maybeParam.indexOf(")")) {
+                    //解析type
+                    String paramVal = maybeParam.substring(maybeParam.lastIndexOf("(") + 1);
+                    String type = maybeParam.substring(maybeParam.lastIndexOf("(") + 2, maybeParam.lastIndexOf(")") + 1);
+                    try {
+                        paramList.add(SqlFormatUtil.pack(paramVal, type));
+                    } catch (ClassNotFoundException ex) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        paramList.add(SqlFormatUtil.pack(maybeParam, null));
+                    } catch (ClassNotFoundException ex) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        createProcessPanel(sqlLines, paramList, lastNeedShow);
 
         GuiUtils.replaceJSplitPaneWithIDEASplitter(root);
     }
 
     private void createProcessPanel(String[] sqlLines, List<Object> paramsList, boolean lastNeedShow) {
         if (sqlLines.length >= paramsList.size()) {
+            boolean notHaveParams = paramsList.size() == 0;
             for (int i = 0; i < sqlLines.length; i++) {
                 String line = sqlLines[i];
-                boolean last = i == sqlLines.length - 1;
                 if (line.length() > 50) {
                     line = "……" + line.substring(line.length() - 50);
                 }
@@ -72,25 +99,39 @@ public class SqlAndParamsProcessPanel {
                     type = type.substring(type.lastIndexOf(".") + 1);
                     paramsVal = param.toString();
                 }
+                if (notHaveParams) {
+                    type = SqlFormatUtil.TYPES[0];
+                    paramsVal = "";
+                }
                 addLineToRow(i, line, type, paramsVal);
             }
         } else {
             for (int i = 0; i < paramsList.size(); i++) {
                 Object param = paramsList.get(i);
+                String sqlLine = "";
+                if (i < sqlLines.length) {
+                    sqlLine = sqlLines[i];
+                    if (sqlLine.length() > 50) {
+                        sqlLine = "……" + sqlLine.substring(sqlLine.length() - 50);
+                    }
+                }
+                String type = param.getClass().getTypeName();
+                type = type.substring(type.lastIndexOf(".") + 1);
+                addLineToRow(i, sqlLine, type, param.toString());
             }
         }
     }
 
 
     private void addLineToRow(int i, String line, String type, String paramsVal) {
-        final JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        jPanel.setSize(new Dimension(-1, Integer.MAX_VALUE));
-        jPanel.add(new JLabel(line, SwingConstants.RIGHT));
         CellConstraints c = new CellConstraints();
-        if (StringUtils.isNotBlank(line)) {
+        if (line != null) {
+            final JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            jPanel.setSize(new Dimension(-1, Integer.MAX_VALUE));
+            jPanel.add(new JLabel(line, SwingConstants.RIGHT));
             sqlContentLine.add(jPanel, c.xy(2, i + 1));
         }
-        if (StringUtils.isNotBlank(paramsVal)) {
+        if (paramsVal != null) {
             sqlContentLine.add(new JTextField(paramsVal), c.xy(4, i + 1));
             sqlContentLine.add(getSelection(type), c.xy(5, i + 1));
         }
