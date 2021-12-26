@@ -31,6 +31,7 @@ public enum DbType {
     HIVE("hive", JdbcConstants.HIVE.name(), AllIcons.Providers.Hive),
     H2("h2", JdbcConstants.H2.name(), AllIcons.Providers.H2),
     SQLITE("sqlite", JdbcConstants.SQLITE, AllIcons.Providers.Sqlite),
+    POLARDB("polardb", JdbcConstants.POLARDB.name(), null),
     NONE("none", "none", null);
 
 
