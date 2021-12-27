@@ -76,7 +76,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
             }
         });
         contentManager.addContent(formatConsoleContent);
-        contentManager.addContent(errorListContent);
+//        contentManager.addContent(errorListContent);
         contentManager.addContent(settingFormContent);
         ActionManager instance = ActionManager.getInstance();
         instance.replaceAction("$FormatSql", new FormatSqlAction(BatsLogBundle.message("batslog.action.formatSql"), "", BatsLogIcons.BATS_LOG));

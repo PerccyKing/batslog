@@ -79,11 +79,11 @@
                 description="直接选中SQL和参数进行复制操作">
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="before" relative-to-action="$FormatSql"/>
         </action>
-        <action id="$ManualProcess" class="cn.com.pism.batslog.action.ManualProcessingErrorAction" text="手动处理"
+        <!--<action id="$ManualProcess" class="cn.com.pism.batslog.action.ManualProcessingErrorAction" text="手动处理"
                 icon="BatsLogIcons.BATS_LOG"
         >
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="after" relative-to-action="$FormatSql"/>
-        </action>
+        </action>-->
     </actions>
 
 </idea-plugin>
