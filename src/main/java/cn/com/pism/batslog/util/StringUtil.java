@@ -1,6 +1,6 @@
 package cn.com.pism.batslog.util;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import sun.nio.cs.GBK;
 
 /**
  * @author PerccyKing
@@ -10,6 +10,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class StringUtil {
     public static String encoding(String str) {
-        return new String(str.getBytes(), UTF_8);
+        return new String(str.getBytes(), GBK.defaultCharset());
     }
 }
