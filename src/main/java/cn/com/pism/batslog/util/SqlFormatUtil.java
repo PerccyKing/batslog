@@ -111,14 +111,14 @@ public class SqlFormatUtil {
             } else if (paramsStart > 0) {
                 paramsList.add(line.substring(paramsStart + paramsPrefix.getBytes().length));
                 //最后一个字符不是 )
-                nextLineIsParams = nextLineIsParams(line);
+                nextLineIsParams = nextLineIsParams(line, paramsPrefix);
             } else if (nextLineIsParams) {
                 int index = paramsList.size() - 1;
                 paramsList.set(index, paramsList.get(index) + "\r\n" + line);
                 //下一行可能还是参数，只是参数被换行符换到下一行了，先判断是否为 ) 结尾
                 if (line.endsWith(")")) {
                     //校验末尾是否为参数
-                    nextLineIsParams = nextLineIsParams(line);
+                    nextLineIsParams = nextLineIsParams(line, paramsPrefix);
                 }
             }
         }
@@ -140,9 +140,9 @@ public class SqlFormatUtil {
      * @author PerccyKing
      * @date 2021/08/12 上午 10:05
      */
-    public static boolean nextLineIsParams(String line) {
-        //如果当前行，只有一个换行符，判断为结束.获取为空行
-        if ("\n".equals(line) || StringUtils.isBlank(line)) {
+    public static boolean nextLineIsParams(String line, String paramsPrefix) {
+        //如果当前行，是参数行的开始，并且参数后没有任何东西，判定下一行不为参数行
+        if (line.contains(paramsPrefix) && StringUtils.isBlank(line.substring(line.indexOf(paramsPrefix) + paramsPrefix.length()))) {
             return false;
         }
         //先检查当前行有没有左括号

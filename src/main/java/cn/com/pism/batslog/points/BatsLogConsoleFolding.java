@@ -4,7 +4,6 @@ import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.SqlFormatUtil;
 import com.intellij.execution.ConsoleFolding;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -81,9 +80,11 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
             } else {
                 //缓存不为空，判断缓存中 最后一行日志是否以 `)`结束
                 String lastLine = sourceSqlList.get(sourceSqlList.size() - 1);
-                boolean maybeEndLine = lastLine.replace("\n", "").endsWith(")");
+                String currCache = String.join("\n", sourceSqlList);
+                //最后一行可能是结束行判断，如果最后一行包含参数前缀，判断为可能是最后一行
+                boolean maybeEndLine = currCache.contains(sqlPrefix) && currCache.contains(paramsPrefix);
                 if (maybeEndLine) {
-                    maybeEndLine = !SqlFormatUtil.nextLineIsParams(lastLine);
+                    maybeEndLine = !SqlFormatUtil.nextLineIsParams(lastLine, paramsPrefix);
                 }
                 if (maybeEndLine) {
                     //缓存末行正常结束，判断日志中 参数和SQL存在数量，数量一致，进行格式化
