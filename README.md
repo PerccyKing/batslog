@@ -31,3 +31,7 @@
 ## github
 [开源代码](https://github.com/PerccyKing/batslog)
 [下载插件](https://plugins.jetbrains.com/plugin/15301-batslog)
+
+
+## 交流群
+![群号：32782636](./screenshot/chat_group.jpg)
