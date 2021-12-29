@@ -30,7 +30,7 @@ repositories {
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
-    implementation 'com.alibaba:fastjson:1.2.78'
+    implementation 'com.alibaba:fastjson:1.2.79'
     implementation 'com.alibaba:druid:1.2.8'
     implementation 'cn.hutool:hutool-http:5.7.17'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -58,6 +58,28 @@ patchPluginXml {
 <h1>$version</h1>
 
 <ul>
+<li>ADD #20 Add item to start automatic listening function</li>
+<li>ADD #16 Add SQL execution time (resolved time) function</li>
+<li>ADD Add version check prompt function</li>
+<li>OPT Optimize line feed parameters</li>
+<li>OPT Chinese support optimization</li>
+<li>OPT Configuration page UI optimization, partition configuration items</li>
+<li>MOD The version supports modification from 192 to 203</li>
+
+<li>ADD #20 添加项目启动自动监听功能</li>
+<li>ADD #16 添加执行SQL时间（解析到的时间）功能</li>
+<li>ADD 添加版本检查提示功能</li>
+<li>OPT 针对换行参数进行优化</li>
+<li>OPT 中文支持优化</li>
+<li>OPT 配置页UI优化，对配置项分区</li>
+<li>MOD 版本支持从192修改到203</li>
+
+</ul>
+</div>
+
+<h1>21.08.17.1659-RE</h1>
+
+<ul>
 <li>ADD Toolbar dynamic correction according to position</li>
 <li>ADD Add dynamic color configuration, and color schemes can be shared quickly</li>
 <li>OPT Change the default non enabled color configuration to the default enabled color configuration</li>
@@ -77,7 +99,6 @@ patchPluginXml {
 <li>OPT 优化颜色配置UI</li>
 
 </ul>
-</div>
 
 
 <h1>21.08.08.2003-TE</h1>
