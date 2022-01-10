@@ -58,6 +58,14 @@ patchPluginXml {
 <h1>$version</h1>
 
 <ul>
+<li>FIX #25</li>
+
+</ul>
+</div>
+
+<h1>22.01.01.0000-RE-HNY</h1>
+
+<ul>
 <li>ADD #20 Add item to start automatic listening function</li>
 <li>ADD #16 Add SQL execution time (resolved time) function</li>
 <li>ADD Add version check prompt function</li>
@@ -75,7 +83,6 @@ patchPluginXml {
 <li>MOD 版本支持从192修改到203</li>
 
 </ul>
-</div>
 
 <h1>21.08.17.1659-RE</h1>
 
