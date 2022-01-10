@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.util;
 
-import sun.nio.cs.GBK;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author PerccyKing
@@ -9,7 +10,15 @@ import sun.nio.cs.GBK;
  * @since 0.0.1
  */
 public class StringUtil {
+
+    private StringUtil() {
+    }
+
+    public static final String GBK_STR = "GBK";
     public static String encoding(String str) {
-        return new String(str.getBytes(), GBK.defaultCharset());
+        if (Charset.isSupported(GBK_STR)){
+            return new String(str.getBytes(), Charset.forName("GBK"));
+        }
+        return new String(str.getBytes(), StandardCharsets.UTF_8);
     }
 }
