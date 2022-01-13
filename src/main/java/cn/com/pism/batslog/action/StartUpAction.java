@@ -6,6 +6,7 @@ import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.Notifier;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -52,14 +53,14 @@ public class StartUpAction implements StartupActivity {
             }
         }
         try {
-            versionCheck(project);
+            ThreadUtil.execAsync(() -> versionCheck(project));
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
     private void versionCheck(Project project) {
-        String res = HttpUtil.get("https://plugins.jetbrains.com/api/plugins/15301/updates?channel=&size=1");
+        String res = HttpUtil.get("https://plugins.jetbrains.com/api/plugins/15301/updates?channel=&size=1", 1000 * 60);
         log.info("version:{}", res);
         JSONArray jsonArray = JSON.parseArray(res);
         if (jsonArray != null && !jsonArray.isEmpty()) {
@@ -76,8 +77,8 @@ public class StartUpAction implements StartupActivity {
             String pluginVersion = lp.getVersion();
             String[] versionNum = version.split("-");
             String[] pluginVersionNum = pluginVersion.split("-");
-            int publishVersionInt = Integer.parseInt(versionNum[0].replace(".", ""));
-            int pluginVersionInt = Integer.parseInt(pluginVersionNum[0].replace(".", ""));
+            long publishVersionInt = Long.parseLong(versionNum[0].replace(".", ""));
+            long pluginVersionInt = Long.parseLong(pluginVersionNum[0].replace(".", ""));
             if (publishVersionInt > pluginVersionInt) {
                 //弹出更新提示
                 final Notification notifyInfo = Notifier.getInstance(NotificationType.INFORMATION);
