@@ -34,4 +34,4 @@
 
 
 ## 交流群
-![群号：32782636](./screenshot/chat_group.jpg)
+<div align=center><img width="30%" src="./screenshot/chat_group.jpg" alt="群号：32782636"/></div>
