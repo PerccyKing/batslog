@@ -35,3 +35,5 @@
 
 ## 交流群
 <div align=center><img width="30%" src="./screenshot/chat_group.jpg" alt="群号：32782636"/></div>
+
+[![Stargazers over time](https://starchart.cc/PerccyKing/batslog.svg)](https://starchart.cc/PerccyKing/batslog)
