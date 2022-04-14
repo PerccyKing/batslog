@@ -64,17 +64,17 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         Content errorListContent = contentFactory.createContent(new ErrorListPanel(project).getRoot(), BatsLogBundle.message("batslog.error"), false);
         Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("batslog.config"), false);
         ContentManager contentManager = toolWindow.getContentManager();
-        ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                BrowserUtil.browse("https://github.com/PerccyKing/batslog/issues");
-            }
-        }, new AnAction(AllIcons.Toolwindows.Documentation) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                BrowserUtil.browse("https://blog.csdn.net/qq_29602577/article/details/110390650");
-            }
-        });
+//        ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
+//            @Override
+//            public void actionPerformed(@NotNull AnActionEvent e) {
+//                BrowserUtil.browse("https://github.com/PerccyKing/batslog/issues");
+//            }
+//        }, new AnAction(AllIcons.Toolwindows.Documentation) {
+//            @Override
+//            public void actionPerformed(@NotNull AnActionEvent e) {
+//                BrowserUtil.browse("https://blog.csdn.net/qq_29602577/article/details/110390650");
+//            }
+//        });
         contentManager.addContent(formatConsoleContent);
 //        contentManager.addContent(errorListContent);
         contentManager.addContent(settingFormContent);
