@@ -144,13 +144,12 @@ public class FormatWindow extends DialogWrapper {
         sqlConsole.add(component);
         final Dimension size = DimensionService.getInstance().getSize(SIZE_KEY);
         if (size != null) {
-            setSize(size.getSize().width, size.getSize().height);
+            root.setPreferredSize(size);
         }else {
             setSize(1000, 800);
         }
 
         setTitle(StringUtil.encoding("BatsLog", project));
-        setAutoAdjustable(true);
     }
 
     /**
@@ -178,11 +177,15 @@ public class FormatWindow extends DialogWrapper {
         if (StringUtils.isNotBlank(text)) {
             format(project, text, Boolean.TRUE, BatsLogUtil.CONSOLE_VIEW_MAP.get(this.project));
         }
+        storeWindowSize();
+        super.doOKAction();
+    }
+
+    private void storeWindowSize() {
         Dimension size = getSize();
         if (size != null) {
             DimensionService.getInstance().setSize(SIZE_KEY, size);
         }
-        super.doOKAction();
     }
 
 
@@ -247,4 +250,12 @@ public class FormatWindow extends DialogWrapper {
                 document.replaceString(0, length, "")
         );
     }
+
+    @Override
+    public void doCancelAction() {
+        storeWindowSize();
+        super.doCancelAction();
+    }
+
+
 }
