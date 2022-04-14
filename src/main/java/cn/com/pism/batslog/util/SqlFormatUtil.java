@@ -267,7 +267,12 @@ public class SqlFormatUtil {
     public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord, ConsoleViewContentType contentType) {
         ConsoleViewContentType keyWordContentType = ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project);
         keyWordContentType.getAttributes().setBackgroundColor(contentType.getAttributes().getBackgroundColor());
-        consoleView.print(StringUtil.encoding(keyWord, project), keyWordContentType);
+        if (BatsLogSettingState.getInstance(project).isEnabledKeyWordDefCol()) {
+            consoleView.print(StringUtil.encoding(keyWord, project), keyWordContentType);
+        } else {
+            consoleView.print(StringUtil.encoding(keyWord, project), contentType);
+
+        }
     }
 
     public static boolean isKeyword(String name) {
