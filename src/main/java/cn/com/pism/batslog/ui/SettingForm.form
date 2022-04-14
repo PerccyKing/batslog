@@ -614,9 +614,9 @@
                                 <margin top="0" left="0" bottom="0" right="0"/>
                                 <constraints>
                                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                    <minimum-size width="150" height="-1"/>
-                                    <preferred-size width="150" height="-1"/>
-                                    <maximum-size width="150" height="-1"/>
+                                    <minimum-size width="150" height="18"/>
+                                    <preferred-size width="150" height="18"/>
+                                    <maximum-size width="150" height="18"/>
                                   </grid>
                                 </constraints>
                                 <properties/>
@@ -624,10 +624,10 @@
                                 <children>
                                   <component id="b5916" class="cn.com.pism.batslog.ui.ColorButton" binding="keyWord">
                                     <constraints>
-                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                                        <minimum-size width="16" height="16"/>
-                                        <preferred-size width="16" height="16"/>
-                                        <maximum-size width="16" height="16"/>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                                        <minimum-size width="60" height="20"/>
+                                        <preferred-size width="60" height="20"/>
+                                        <maximum-size width="60" height="20"/>
                                       </grid>
                                     </constraints>
                                     <properties>
@@ -635,7 +635,7 @@
                                       <text value="Button"/>
                                     </properties>
                                   </component>
-                                  <hspacer id="5508e">
+                                  <hspacer id="92d12">
                                     <constraints>
                                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                                     </constraints>
