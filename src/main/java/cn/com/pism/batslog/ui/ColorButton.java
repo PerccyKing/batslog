@@ -29,7 +29,7 @@ public class ColorButton extends JButton {
         super.init(text, icon);
     }
 
-    public ColorButton(Project project, Color color, int width, int height, Callback callback) {
+    public ColorButton(Project project, Color color, int width, int height, Callback<Color> callback) {
         this.width = width;
         this.height = height;
         if (color != null) {
@@ -52,7 +52,7 @@ public class ColorButton extends JButton {
         buttonInit(null, null, color -> this.selectColor = color);
     }
 
-    private void buttonInit(Project project, Color color, Callback callback) {
+    private void buttonInit(Project project, Color color, Callback<Color> callback) {
         setMargin(JBUI.emptyInsets());
         setFocusable(false);
         setDefaultCapable(false);
@@ -64,7 +64,7 @@ public class ColorButton extends JButton {
             Color color1 = ColorChooser.chooseColor(new JPanel(), "选择颜色", selectColor);
             if (color1 != null) {
                 selectColor = color1;
-                callback.callback(selectColor);
+                callback.call(selectColor);
             }
         });
     }
@@ -95,14 +95,5 @@ public class ColorButton extends JButton {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(this.width, this.height);
-    }
-
-    public interface Callback {
-        /**
-         * 回调
-         *
-         * @param choseColor 选中的颜色
-         */
-        void callback(Color choseColor);
     }
 }
