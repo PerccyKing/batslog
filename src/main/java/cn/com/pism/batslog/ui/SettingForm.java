@@ -12,7 +12,6 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.OnOffButton;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -28,10 +27,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
-import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
+import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
 /**
  * @author wangyihuai
@@ -58,10 +57,12 @@ public class SettingForm {
     private OnOffButton addTimestamp;
     private JTextField timestampFormat;
     private OnOffButton startWithProject;
+    private JComboBox<String> consoleEncoding;
 
     private BatsLogSettingState service;
 
-    public SettingForm(){}
+    public SettingForm() {
+    }
 
 
     public SettingForm(Project project) {
@@ -70,6 +71,8 @@ public class SettingForm {
 
         //初始化数据库选择
         initDbTypeBox();
+        //初始化编码列表
+        initEncodingBox();
         //初始化关键字颜色选择按钮
         initKeyWordColorButton(project);
 
@@ -99,6 +102,29 @@ public class SettingForm {
         initFormatConfig();
 
         configButton.addActionListener(e -> ConsoleColorConfigDialog.show(project));
+    }
+
+    /**
+     * <p>
+     * 初始化编码列表
+     * </p>
+     *
+     * @author PerccyKing
+     * @date 2022/04/13 下午 10:44
+     */
+    private void initEncodingBox() {
+        String encoding = service.getEncoding();
+        consoleEncoding.addItem(DEFAULT_ENCODING);
+        consoleEncoding.addItem(StandardCharsets.UTF_8.displayName());
+        consoleEncoding.addItem("GBK");
+        consoleEncoding.addItem(StandardCharsets.ISO_8859_1.displayName());
+        consoleEncoding.addItem(StandardCharsets.US_ASCII.displayName());
+        consoleEncoding.addItem(StandardCharsets.UTF_16BE.displayName());
+        consoleEncoding.addItem(StandardCharsets.UTF_16LE.displayName());
+        consoleEncoding.addItem(StandardCharsets.UTF_16.displayName());
+
+        consoleEncoding.setSelectedItem(encoding);
+        consoleEncoding.addItemListener(e -> service.setEncoding((String) e.getItem()));
     }
 
     private void initFormatConfig() {

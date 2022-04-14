@@ -42,7 +42,7 @@ public class FormatConsole {
         initConsoleAction(project);
 
         MyConsoleViewImpl consoleView = new MyConsoleViewImpl(project, true);
-        consoleView.print(StringUtil.encoding(BATS_LOG), ConsoleViewContentType.ERROR_OUTPUT);
+        consoleView.print(StringUtil.encoding(BATS_LOG, project), ConsoleViewContentType.ERROR_OUTPUT);
         BatsLogUtil.CONSOLE_VIEW_MAP.put(project, consoleView);
     }
 

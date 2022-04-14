@@ -252,7 +252,7 @@ public class SqlFormatUtil {
             if (keyword) {
                 printKeyWord(consoleView, project, word, defaultContentType);
             } else {
-                consoleView.print(StringUtil.encoding(word), defaultContentType);
+                consoleView.print(StringUtil.encoding(word, project), defaultContentType);
             }
             if (charLength < chars.length) {
                 supplement = chars[charLength];
@@ -267,7 +267,7 @@ public class SqlFormatUtil {
     public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord, ConsoleViewContentType contentType) {
         ConsoleViewContentType keyWordContentType = ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project);
         keyWordContentType.getAttributes().setBackgroundColor(contentType.getAttributes().getBackgroundColor());
-        consoleView.print(StringUtil.encoding(keyWord), keyWordContentType);
+        consoleView.print(StringUtil.encoding(keyWord, project), keyWordContentType);
     }
 
     public static boolean isKeyword(String name) {
@@ -301,7 +301,7 @@ public class SqlFormatUtil {
      * @date 2021/04/26 下午 08:42
      */
     private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name, BatsLogSettingState service) {
-        console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR), ConsoleViewContentType.ERROR_OUTPUT);
+        console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR, project), ConsoleViewContentType.ERROR_OUTPUT);
         int num = BatsLogUtil.NUM;
         num++;
         BatsLogUtil.NUM = num;
@@ -311,7 +311,7 @@ public class SqlFormatUtil {
             String timeFormat = service.getTimeFormat();
             timestamp = " " + (StringUtils.isBlank(timeFormat) ? timeMillis : DateFormatUtils.format(timeMillis, timeFormat)) + " ";
         }
-        console.print(StringUtil.encoding("# " + String.format("%04d", num)), ColoringUtil.getNoteColor(project));
+        console.print(StringUtil.encoding("# " + String.format("%04d", num), project), ColoringUtil.getNoteColor(project));
         console.print(timestamp, ConsoleViewContentType.ERROR_OUTPUT);
         console.print(name + "\n", ColoringUtil.getNoteColor(project));
     }

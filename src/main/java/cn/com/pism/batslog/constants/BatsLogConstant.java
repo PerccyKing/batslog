@@ -26,12 +26,14 @@ public class BatsLogConstant {
     public static final Color KEY_WORD_DEF_COL = new JBColor(new Color(204, 120, 50), new Color(204, 120, 50));
 
 
-    public static String SQL_PREFIX = "Preparing:";
-    public static String PARAMS_PREFIX = "Parameters:";
+    public static final String SQL_PREFIX = "Preparing:";
+    public static final String PARAMS_PREFIX = "Parameters:";
 
-    public static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    public static String BATS_LOG_ID = "cn.com.pism.batslog";
+    public static final String BATS_LOG_ID = "cn.com.pism.batslog";
 
-    public static String BATS_LOG_NAME = "BatsLog";
+    public static final String BATS_LOG_NAME = "BatsLog";
+
+    public static final String DEFAULT_ENCODING = "AUTO";
 }
