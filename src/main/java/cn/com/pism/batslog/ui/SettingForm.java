@@ -59,6 +59,8 @@ public class SettingForm {
     private JTextField timestampFormat;
     private OnOffButton startWithProject;
     private JComboBox<String> consoleEncoding;
+    private OnOffButton enableMixedPrefix;
+    private JLabel sqlPrefixTips;
 
     private BatsLogSettingState service;
 
@@ -147,6 +149,8 @@ public class SettingForm {
         setOnOffText(addTimestamp);
         startWithProject.setSelected(service.getStartWithProject());
         setOnOffText(startWithProject);
+        enableMixedPrefix.setSelected(service.getEnableMixedPrefix());
+        setOnOffText(enableMixedPrefix);
     }
 
     private void setOnOffText(OnOffButton offButton) {
@@ -165,6 +169,7 @@ public class SettingForm {
      */
     private void initKeyWordColorButton(Project project) {
         EnabledColorButton colorButton = new EnabledColorButton(project, BatsLogUtil.toColor(service.getKeyWordDefCol()), 16, 16,
+                BatsLogBundle.message("config.form.console.enabledKeyWordColor.tips"),
                 choseColor -> service.setKeyWordDefCol(new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue())),
                 enabled -> service.setEnabledKeyWordDefCol(enabled));
         colorButton.setEnableCheckBox(service.isEnabledKeyWordDefCol());
@@ -262,6 +267,11 @@ public class SettingForm {
         toUpperCase.addActionListener(ac -> service.setToUpperCase(toUpperCase.isSelected()));
         addTimestamp.addActionListener(ac -> service.setAddTimestamp(addTimestamp.isSelected()));
         startWithProject.addActionListener(ac -> service.setStartWithProject(startWithProject.isSelected()));
+        enableMixedPrefix.addActionListener(as -> {
+            boolean selected = enableMixedPrefix.isSelected();
+            service.setStartWithProject(selected);
+            sqlPrefixTips.setVisible(selected);
+        });
     }
 
     private void updateParamsPrefix(DocumentEvent e, Project project) {

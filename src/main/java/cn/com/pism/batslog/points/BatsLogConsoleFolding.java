@@ -60,47 +60,96 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
     @Override
     public boolean shouldFoldLine(@NotNull Project project, @NotNull String line) {
         //先判断有没有开启SQL监听
-        if (BatsLogUtil.getTailStatus(project)) {
+        if (Boolean.TRUE.equals(BatsLogUtil.getTailStatus(project))) {
 
             BatsLogSettingState service = BatsLogSettingState.getInstance(project);
 
             String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
             String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
 
-            //从缓存中获取一次日志
-            List<String> sourceSqlList = SOURCE_SQL_LIST_MAP.get(project);
-            if ((CollectionUtils.isEmpty(sourceSqlList))) {
-                //缓存中部存在新增一个列表
-                sourceSqlList = new ArrayList<>();
-                //缓存为空，当前行如果匹配SQL行直接放入缓存
-                if (line.contains(sqlPrefix)) {
-                    sourceSqlList.add(line);
-                    SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
-                }
-            } else {
-                //缓存不为空，判断缓存中 最后一行日志是否以 `)`结束
-                String lastLine = sourceSqlList.get(sourceSqlList.size() - 1);
-                String currCache = String.join("\n", sourceSqlList);
-                //最后一行可能是结束行判断，如果最后一行包含参数前缀，判断为可能是最后一行
-                boolean maybeEndLine = currCache.contains(sqlPrefix) && currCache.contains(paramsPrefix);
-                if (maybeEndLine) {
-                    maybeEndLine = !SqlFormatUtil.nextLineIsParams(lastLine, paramsPrefix);
-                }
-                if (maybeEndLine) {
-                    //缓存末行正常结束，判断日志中 参数和SQL存在数量，数量一致，进行格式化
-                    String logs = String.join("\n", sourceSqlList);
-                    if (StringUtils.countMatches(logs, sqlPrefix) != 0 &&
-                            StringUtils.countMatches(logs, paramsPrefix) != 0 &&
-                            (StringUtils.countMatches(logs, sqlPrefix) == StringUtils.countMatches(logs, paramsPrefix))) {
-                        SOURCE_SQL_LIST_MAP.remove(project);
-                        sourceSqlList = new ArrayList<>();
-                        SqlFormatUtil.format(logs, project);
-                    }
-                }
-                sourceSqlList.add(line);
-                SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+            if (Boolean.TRUE.equals(service.getEnableMixedPrefix())){
+                enabledMultiSqlPrefix(project, line, sqlPrefix, paramsPrefix);
+            }else {
+                notEnabledMultiSqlPrefix(project, line, sqlPrefix, paramsPrefix);
             }
         }
         return super.shouldFoldLine(project, line);
+    }
+
+    private void notEnabledMultiSqlPrefix(@NotNull Project project, @NotNull String line, String sqlPrefix, String paramsPrefix) {
+        //从缓存中获取一次日志
+        List<String> sourceSqlList = SOURCE_SQL_LIST_MAP.get(project);
+        if ((CollectionUtils.isEmpty(sourceSqlList))) {
+            //缓存中部存在新增一个列表
+            sourceSqlList = new ArrayList<>();
+            //缓存为空，当前行如果匹配SQL行直接放入缓存
+            if (line.contains(sqlPrefix)) {
+                sourceSqlList.add(line);
+                SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+            }
+        } else {
+            //缓存不为空，判断缓存中 最后一行日志是否以 `)`结束
+            String lastLine = sourceSqlList.get(sourceSqlList.size() - 1);
+            String currCache = String.join("\n", sourceSqlList);
+            //最后一行可能是结束行判断，如果最后一行包含参数前缀，判断为可能是最后一行
+            boolean maybeEndLine = currCache.contains(sqlPrefix) && currCache.contains(paramsPrefix);
+            if (maybeEndLine) {
+                maybeEndLine = !SqlFormatUtil.nextLineIsParams(lastLine, paramsPrefix);
+            }
+            if (maybeEndLine) {
+                //缓存末行正常结束，判断日志中 参数和SQL存在数量，数量一致，进行格式化
+                String logs = String.join("\n", sourceSqlList);
+                if (StringUtils.countMatches(logs, sqlPrefix) != 0 &&
+                        StringUtils.countMatches(logs, paramsPrefix) != 0 &&
+                        (StringUtils.countMatches(logs, sqlPrefix) == StringUtils.countMatches(logs, paramsPrefix))) {
+                    SOURCE_SQL_LIST_MAP.remove(project);
+                    sourceSqlList = new ArrayList<>();
+                    SqlFormatUtil.format(logs, project);
+                }
+            }
+            sourceSqlList.add(line);
+            SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+        }
+    }
+
+    private void enabledMultiSqlPrefix(@NotNull Project project, @NotNull String line, String sqlPrefix, String paramsPrefix) {
+        //从缓存中获取一次日志
+        List<String> sourceSqlList = SOURCE_SQL_LIST_MAP.get(project);
+        if ((CollectionUtils.isEmpty(sourceSqlList))) {
+            //缓存中部存在新增一个列表
+            sourceSqlList = new ArrayList<>();
+            //缓存为空，当前行如果匹配SQL行直接放入缓存
+            if (StringUtils.containsAny(line, sqlPrefix.split(","))) {
+                sourceSqlList.add(line);
+                SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+            }
+        } else {
+            //缓存不为空，判断缓存中 最后一行日志是否以 `)`结束
+            String lastLine = sourceSqlList.get(sourceSqlList.size() - 1);
+            String currCache = String.join("\n", sourceSqlList);
+            //最后一行可能是结束行判断，如果最后一行包含参数前缀，判断为可能是最后一行
+            boolean maybeEndLine = StringUtils.containsAny(currCache, sqlPrefix.split(",")) && currCache.contains(paramsPrefix);
+            if (maybeEndLine) {
+                maybeEndLine = !SqlFormatUtil.nextLineIsParams(lastLine, paramsPrefix);
+            }
+            if (maybeEndLine) {
+                //缓存末行正常结束，判断日志中 参数和SQL存在数量，数量一致，进行格式化
+                String logs = String.join("\n", sourceSqlList);
+                String[] split = sqlPrefix.split(",");
+                int countMatches = 0;
+                for (String s : split) {
+                    countMatches = countMatches + StringUtils.countMatches(logs, s);
+                }
+                if (countMatches != 0 &&
+                        StringUtils.countMatches(logs, paramsPrefix) != 0 &&
+                        (countMatches == StringUtils.countMatches(logs, paramsPrefix))) {
+                    SOURCE_SQL_LIST_MAP.remove(project);
+                    sourceSqlList = new ArrayList<>();
+                    SqlFormatUtil.format(logs, project);
+                }
+            }
+            sourceSqlList.add(line);
+            SOURCE_SQL_LIST_MAP.put(project, sourceSqlList);
+        }
     }
 }

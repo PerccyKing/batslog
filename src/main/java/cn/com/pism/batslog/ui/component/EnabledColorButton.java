@@ -33,18 +33,22 @@ public class EnabledColorButton {
 
     Callback<Boolean> enabled;
 
-    public EnabledColorButton(Project project, Color color, int width, int height, Callback<Color> colorCallback, Callback<Boolean> enabled) {
+    private String enabledTips;
+
+    public EnabledColorButton(Project project, Color color, int width, int height, String tips, Callback<Color> colorCallback, Callback<Boolean> enabled) {
         this.project = project;
         this.color = color;
         this.width = width;
         this.height = height;
         this.colorCallback = colorCallback;
         this.enabled = enabled;
+        this.enabledTips = tips;
         enableCheckBox.addActionListener(e -> {
             if (enabled != null) {
                 enabled.call(enableCheckBox.isSelected());
             }
         });
+        enableCheckBox.setToolTipText(tips);
     }
 
     public Color getColor() {

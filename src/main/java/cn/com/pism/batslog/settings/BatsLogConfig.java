@@ -65,6 +65,8 @@ public class BatsLogConfig {
 
     private Boolean startWithProject = Boolean.FALSE;
 
+    private Boolean enableMixedPrefix = Boolean.FALSE;
+
     private String encoding = BatsLogConstant.DEFAULT_ENCODING;
 
     /**
