@@ -67,7 +67,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
             String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
             String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
 
-            if (Boolean.TRUE.equals(service.getEnableMixedPrefix())){
+            if (Boolean.TRUE.equals(service.getEnableMixedPrefix()) && sqlPrefix.split(",").length > 1) {
                 enabledMultiSqlPrefix(project, line, sqlPrefix, paramsPrefix);
             }else {
                 notEnabledMultiSqlPrefix(project, line, sqlPrefix, paramsPrefix);

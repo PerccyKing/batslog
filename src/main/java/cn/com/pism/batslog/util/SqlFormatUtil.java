@@ -12,6 +12,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -80,7 +81,92 @@ public class SqlFormatUtil {
         String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
         String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
 
+        //如果开启了多前缀模式，并且只有一个前缀的时候，也执行默认单前缀逻辑
+        if (Boolean.TRUE.equals(service.getEnableMixedPrefix()) && sqlPrefix.split(",").length > 1) {
+            enabledMultiSqlPrefix(str, sqlList, paramsList, nameList, sqlPrefix, paramsPrefix);
+        } else {
+            notEnabledMultiSqlPrefix(str, sqlList, paramsList, nameList, sqlPrefix, paramsPrefix);
+        }
 
+        if (callBack != null) {
+            callBack.callback(!sqlList.isEmpty() ? sqlList.get(0) : "", !paramsList.isEmpty() ? paramsList.get(0) : "");
+        } else {
+            print(project, printToConsole, console, sqlList, paramsList, nameList, service);
+        }
+    }
+
+    private static void enabledMultiSqlPrefix(String str, List<String> sqlList, List<String> paramsList, List<String> nameList, String sqlPrefix, String paramsPrefix) {
+        String[] split = sqlPrefix.split(",");
+        //提取全部的sql和params
+        String[] lines = new String[0];
+        if (StringUtils.isNotBlank(str)) {
+            Integer startSqlPrefixIndex = null;
+            if (split.length > 0) {
+                for (String s : split) {
+                    int i = str.indexOf(s);
+                    if (startSqlPrefixIndex == null && i >= 0) {
+                        startSqlPrefixIndex = i;
+                    } else if (i >= 0) {
+                        startSqlPrefixIndex = NumberUtils.min(startSqlPrefixIndex, i);
+                    }
+                }
+            }
+            //先截断一次，从SQL_PREFIX 行开始解析
+            String includeFirstLine = str.substring(0, startSqlPrefixIndex);
+            boolean lineFeed = includeFirstLine.contains("\n");
+            String firstName = " ";
+            if (lineFeed) {
+                String[] includeFirstLineArr = includeFirstLine.split("\n");
+                firstName = includeFirstLineArr[includeFirstLineArr.length - 1];
+            } else {
+                firstName = includeFirstLine;
+            }
+            str = str.substring(startSqlPrefixIndex);
+            str = firstName + str;
+            lines = str.split("\n");
+        }
+
+        //下一行是否是参数
+        boolean nextLineIsParams = false;
+
+        String currSqlPrefix = "";
+        for (String line : lines) {
+            String[] sqlPrefixArr = sqlPrefix.split(",");
+            if (sqlPrefixArr.length > 1) {
+                for (String s : sqlPrefixArr) {
+                    int i = StringUtils.indexOf(line, s);
+                    if (i >= 0) {
+                        currSqlPrefix = s;
+                    }
+                }
+            }
+            nextLineIsParams = processLine(sqlList, paramsList, nameList, paramsPrefix, nextLineIsParams, currSqlPrefix, line);
+        }
+    }
+
+    private static boolean processLine(List<String> sqlList, List<String> paramsList, List<String> nameList, String paramsPrefix, boolean nextLineIsParams, String currSqlPrefix, String line) {
+        int sqlStart = StringUtils.indexOf(line, currSqlPrefix);
+        int paramsStart = StringUtils.indexOf(line, paramsPrefix);
+        if (sqlStart >= 0) {
+            sqlList.add(line.substring(sqlStart + currSqlPrefix.getBytes().length));
+            nameList.add(getName(line, currSqlPrefix, sqlStart));
+        } else if (paramsStart > 0) {
+            paramsList.add(line.substring(paramsStart + paramsPrefix.getBytes().length));
+            //最后一个字符不是 )
+            nextLineIsParams = nextLineIsParams(line, paramsPrefix);
+        } else if (nextLineIsParams) {
+            int index = paramsList.size() - 1;
+            paramsList.set(index, paramsList.get(index) + "\r\n" + line);
+            //下一行可能还是参数，只是参数被换行符换到下一行了，先判断是否为 ) 结尾
+            if (line.endsWith(")")) {
+                //校验末尾是否为参数
+                nextLineIsParams = nextLineIsParams(line, paramsPrefix);
+            }
+        }
+        return nextLineIsParams;
+    }
+
+    private static void notEnabledMultiSqlPrefix(String str, List<String> sqlList, List<String> paramsList, List<String> nameList, String sqlPrefix, String paramsPrefix) {
         //提取全部的sql和params
         String[] lines = new String[0];
         if (StringUtils.isNotBlank(str)) {
@@ -103,30 +189,7 @@ public class SqlFormatUtil {
         boolean nextLineIsParams = false;
 
         for (String line : lines) {
-            int sqlStart = StringUtils.indexOf(line, sqlPrefix);
-            int paramsStart = StringUtils.indexOf(line, paramsPrefix);
-            if (sqlStart >= 0) {
-                sqlList.add(line.substring(sqlStart + sqlPrefix.getBytes().length));
-                nameList.add(getName(line, sqlPrefix, sqlStart));
-            } else if (paramsStart > 0) {
-                paramsList.add(line.substring(paramsStart + paramsPrefix.getBytes().length));
-                //最后一个字符不是 )
-                nextLineIsParams = nextLineIsParams(line, paramsPrefix);
-            } else if (nextLineIsParams) {
-                int index = paramsList.size() - 1;
-                paramsList.set(index, paramsList.get(index) + "\r\n" + line);
-                //下一行可能还是参数，只是参数被换行符换到下一行了，先判断是否为 ) 结尾
-                if (line.endsWith(")")) {
-                    //校验末尾是否为参数
-                    nextLineIsParams = nextLineIsParams(line, paramsPrefix);
-                }
-            }
-        }
-
-        if (callBack != null) {
-            callBack.callback(sqlList.size() > 0 ? sqlList.get(0) : "", paramsList.size() > 0 ? paramsList.get(0) : "");
-        } else {
-            print(project, printToConsole, console, sqlList, paramsList, nameList, service);
+            nextLineIsParams = processLine(sqlList, paramsList, nameList, paramsPrefix, nextLineIsParams, sqlPrefix, line);
         }
     }
 
@@ -421,10 +484,14 @@ public class SqlFormatUtil {
 
     private static String getName(String str, String sqlPrefix, int start) {
         String name = "";
-        String[] lines = StringUtils.split(str.substring(0, start + sqlPrefix.getBytes().length), "\n");
-        String line = lines[lines.length - 1];
-        if (StringUtils.isNotBlank(line)) {
-            name = StringUtils.substring(line, 0, StringUtils.indexOf(line, sqlPrefix));
+        try {
+            String[] lines = StringUtils.split(str.substring(0, start + sqlPrefix.getBytes().length), "\n");
+            String line = lines[lines.length - 1];
+            if (StringUtils.isNotBlank(line)) {
+                name = StringUtils.substring(line, 0, StringUtils.indexOf(line, sqlPrefix));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return name;
     }
