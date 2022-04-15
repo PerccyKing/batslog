@@ -269,7 +269,7 @@ public class SettingForm {
         startWithProject.addActionListener(ac -> service.setStartWithProject(startWithProject.isSelected()));
         enableMixedPrefix.addActionListener(as -> {
             boolean selected = enableMixedPrefix.isSelected();
-            service.setStartWithProject(selected);
+            service.setEnableMixedPrefix(selected);
             sqlPrefixTips.setVisible(selected);
         });
     }
