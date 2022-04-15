@@ -18,21 +18,32 @@ public class ConsoleColorConfig {
     private int sort;
     private String keyWord;
     private RgbColor backgroundColor;
+
+    private boolean enableBgColor = true;
+
     private RgbColor foregroundColor;
+
+    private boolean enabledFgColor = true;
     private boolean enabled;
 
     public Object[] toArray() {
-        return new Object[]{id, sort, keyWord, backgroundColor, foregroundColor, enabled};
+        return new Object[]{id, sort, keyWord,
+                new EnabledRgbColor(enableBgColor, backgroundColor),
+                new EnabledRgbColor(enabledFgColor, foregroundColor), enabled};
     }
 
     public ConsoleColorConfig toConfig(Object[] objects) {
-        return new ConsoleColorConfig(
-                (String) objects[0],
-                (int) objects[1],
-                (String) objects[2],
-                (RgbColor) objects[3],
-                (RgbColor) objects[4],
-                (Boolean) objects[5]
-        );
+        ConsoleColorConfig consoleColorConfig = new ConsoleColorConfig();
+        consoleColorConfig.setId((String) objects[0]);
+        consoleColorConfig.setSort((int) objects[1]);
+        consoleColorConfig.setKeyWord((String) objects[2]);
+        EnabledRgbColor bgColor = (EnabledRgbColor) objects[3];
+        consoleColorConfig.setBackgroundColor(bgColor.getRgbColor());
+        consoleColorConfig.setEnableBgColor(bgColor.isEnabledColor());
+        EnabledRgbColor fgColor = (EnabledRgbColor) objects[4];
+        consoleColorConfig.setForegroundColor(fgColor.getRgbColor());
+        consoleColorConfig.setEnabledFgColor(fgColor.isEnabledColor());
+        consoleColorConfig.setEnabled((Boolean) objects[5]);
+        return consoleColorConfig;
     }
 }

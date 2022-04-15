@@ -35,6 +35,8 @@ public class EnabledColorButton {
 
     private String enabledTips;
 
+    private boolean enabledColor;
+
     public EnabledColorButton(Project project, Color color, int width, int height, String tips, Callback<Color> colorCallback, Callback<Boolean> enabled) {
         this.project = project;
         this.color = color;
@@ -45,6 +47,7 @@ public class EnabledColorButton {
         this.enabledTips = tips;
         enableCheckBox.addActionListener(e -> {
             if (enabled != null) {
+                this.enabledColor = enableCheckBox.isSelected();
                 enabled.call(enableCheckBox.isSelected());
             }
         });
@@ -60,6 +63,11 @@ public class EnabledColorButton {
 
     private void createUIComponents() {
         this.colorButton = new ColorButton(project, color, width, height, colorCallback);
+    }
+
+    public void setEnabledColor(boolean enabledColor) {
+        this.enabledColor = enabledColor;
+        this.enableCheckBox.setSelected(enabledColor);
     }
 
     public void setEnableCheckBox(boolean selected) {

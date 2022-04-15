@@ -5,7 +5,6 @@ import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.model.ShowColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
@@ -27,15 +26,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 0.0.1
  */
 public class ColoringUtil {
-    public static final String ANSI_PRE = "\u001B[";
-    /**
-     * 前景色
-     */
-    public static final Integer FG = 38;
-    /**
-     * 背景色
-     */
-    public static final Integer BG = 48;
+
+    private ColoringUtil() {
+    }
 
 
     public static ConsoleViewContentType getKeyWordConsoleViewContentTypeFromConfig(Project project) {
@@ -72,7 +65,9 @@ public class ColoringUtil {
                     c.getKeyWord(),
                     c.isEnabled(),
                     ColorUtil.toHtmlColor(bgColor),
-                    ColorUtil.toHtmlColor(fgColor));
+                    c.isEnableBgColor(),
+                    ColorUtil.toHtmlColor(fgColor),
+                    c.isEnabledFgColor());
             configs.add(showColorConfig);
         });
         return configs;
@@ -89,7 +84,9 @@ public class ColoringUtil {
                     sort.get(),
                     c.getKeyword(),
                     new RgbColor(bg.getRed(), bg.getGreen(), bg.getBlue()),
+                    c.isBgEnabled(),
                     new RgbColor(fg.getRed(), fg.getGreen(), fg.getBlue()),
+                    c.isFgEnabled(),
                     c.isEnabled()
             );
             configs.add(colorConfig);

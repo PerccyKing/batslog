@@ -1,7 +1,8 @@
 package cn.com.pism.batslog.ui.tablehelp;
 
-import cn.com.pism.batslog.model.RgbColor;
-import cn.com.pism.batslog.ui.ColorButton;
+import cn.com.pism.batslog.BatsLogBundle;
+import cn.com.pism.batslog.model.EnabledRgbColor;
+import cn.com.pism.batslog.ui.component.EnabledColorButton;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.project.Project;
 
@@ -19,7 +20,7 @@ public class MyColorButtonRender implements TableCellRenderer {
 
     private JPanel panel;
 
-    private ColorButton button;
+    private EnabledColorButton button;
     private Project project;
 
     public MyColorButtonRender(Project project) {
@@ -37,13 +38,16 @@ public class MyColorButtonRender implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        RgbColor color = (RgbColor) value;
-        this.button = new ColorButton(project, BatsLogUtil.toColor(color), 18, 18, choseColor -> {
+        EnabledRgbColor color = (EnabledRgbColor) value;
+        this.button = new EnabledColorButton(project, BatsLogUtil.toColor(color.getRgbColor()), 18, 18,
+                BatsLogBundle.message("config.form.console.enabledKeyWordColor.tips")+"render",
+                choseColor -> {
+                }, e -> {
         });
-        this.button.setBounds(new Rectangle(18, 18));
-
+        this.button.getColorButton().setBounds(new Rectangle(18, 18));
+        this.button.setEnabledColor(color.isEnabledColor());
         initPanel();
-        this.panel.add(this.button);
+        this.panel.add(this.button.getRoot());
 
         return this.panel;
     }

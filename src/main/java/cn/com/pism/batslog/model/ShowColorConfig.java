@@ -25,5 +25,11 @@ public class ShowColorConfig {
     private String bg;
 
     @JSONField(ordinal = 3)
+    private boolean bgEnabled;
+
+    @JSONField(ordinal = 4)
     private String fg;
+
+    @JSONField(ordinal = 5)
+    private boolean fgEnabled;
 }
