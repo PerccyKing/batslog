@@ -27,4 +27,9 @@ public interface BatsLogIcons {
      */
     Icon BEAUTY = IconLoader.getIcon("/icons/beauty.svg", BatsLogIcons.class);
 
+    /**
+     * beta
+     */
+    Icon BETA = IconLoader.getIcon("/icons/beta.svg", BatsLogIcons.class);
+
 }

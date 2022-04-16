@@ -65,6 +65,10 @@ public class BatsLogConfig {
 
     private Boolean startWithProject = Boolean.FALSE;
 
+    private Boolean enableMixedPrefix = Boolean.FALSE;
+
+    private String encoding = BatsLogConstant.DEFAULT_ENCODING;
+
     /**
      * 数据库类型
      */
@@ -73,6 +77,11 @@ public class BatsLogConfig {
 
     @OptionTag(converter = ColorConverter.class)
     private RgbColor keyWordDefCol = new RgbColor(204, 120, 50);
+
+    /**
+     * 是否启用关键字颜色
+     */
+    private boolean enabledKeyWordDefCol = true;
 
     @OptionTag(converter = ConsoleColorConfigConverter.class)
     private List<ConsoleColorConfig> colorConfigs = new ArrayList<>();

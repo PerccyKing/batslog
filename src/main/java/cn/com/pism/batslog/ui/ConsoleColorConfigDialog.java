@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSONValidator;
 import com.intellij.json.JsonFileType;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
@@ -106,7 +105,9 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 sort,
                 BatsLogBundle.message("modifyTheKeyword"),
                 new RgbColor(JBColor.BLUE.getRed(), JBColor.BLUE.getGreen(), JBColor.BLUE.getBlue()),
+                true,
                 new RgbColor(JBColor.YELLOW.getRed(), JBColor.YELLOW.getGreen(), JBColor.YELLOW.getBlue()),
+                true,
                 true).toArray();
     }
 
@@ -177,11 +178,29 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         column4.setCellEditor(new MyColorButtonEditor(project, color -> {
             getTableModel().fireTableDataChanged();
             reloadConfig();
+        }, row -> {
+            getTableModel().fireTableDataChanged();
+            List<ConsoleColorConfig> configs = getColorConfigs();
+            configs.forEach(c -> {
+                if (row.getId().equals(c.getId())) {
+                    c.setEnabledFgColor(row.isEnabled());
+                }
+            });
+            reloadConfig(configs);
         }));
         column4.setCellRenderer(new MyColorButtonRender(project));
         column3.setCellEditor(new MyColorButtonEditor(project, color -> {
             getTableModel().fireTableDataChanged();
             reloadConfig();
+        }, row -> {
+            getTableModel().fireTableDataChanged();
+            List<ConsoleColorConfig> configs = getColorConfigs();
+            configs.forEach(c -> {
+                if (row.getId().equals(c.getId())) {
+                    c.setEnableBgColor(row.isEnabled());
+                }
+            });
+            reloadConfig(configs);
         }));
         column3.setCellRenderer(new MyColorButtonRender(project));
 
@@ -247,15 +266,6 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     }
 
 
-    private List<ConsoleColorConfig> mock(int size) {
-        List<ConsoleColorConfig> configs = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            configs.add(new ConsoleColorConfig(String.valueOf(i), i, "INSERT", new RgbColor(150, 150, 150),
-                    new RgbColor(130, 130, 130), i % 2 > 0));
-        }
-        return configs;
-    }
-
     private void reloadTable(String text) {
         if (StringUtils.isBlank(text)) {
             ApplicationManager.getApplication().invokeLater(() -> textField.setText("[]"));
@@ -296,6 +306,10 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     private void reloadConfig() {
         List<ConsoleColorConfig> colorConfigs = getColorConfigs();
+        reloadConfig(colorConfigs);
+    }
+
+    private void reloadConfig(List<ConsoleColorConfig> colorConfigs) {
         List<ShowColorConfig> showConfig = ColoringUtil.toShowConfig(colorConfigs);
         if (this.textField != null) {
             ApplicationManager.getApplication().invokeLater(() ->

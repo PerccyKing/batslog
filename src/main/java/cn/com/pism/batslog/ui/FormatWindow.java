@@ -12,6 +12,7 @@ import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.util.DimensionService;
 import icons.BatsLogIcons;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,8 @@ public class FormatWindow extends DialogWrapper {
     private Editor myEditor;
 
     private Project project;
+
+    private static final String SIZE_KEY = "#cn.com.pism.batslog.ui.FormatWindow";
 
     /**
      * Creates modal {@code DialogWrapper} that can be parent for other windows.
@@ -118,8 +122,7 @@ public class FormatWindow extends DialogWrapper {
 
 
         //右边console
-        MyConsoleViewImpl consoleView = new MyConsoleViewImpl(defaultProject, true);
-        this.consoleView = consoleView;
+        this.consoleView = new MyConsoleViewImpl(defaultProject, true);
 
         //添加操作栏,调用一次getComponent ，editor才会创建
         JComponent component = consoleView.getComponent();
@@ -139,10 +142,14 @@ public class FormatWindow extends DialogWrapper {
         consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());
         consoleBar.add(sqlConsoleToolBar.getComponent());
         sqlConsole.add(component);
+        final Dimension size = DimensionService.getInstance().getSize(SIZE_KEY);
+        if (size != null) {
+            root.setPreferredSize(size);
+        }else {
+            setSize(1000, 800);
+        }
 
-        setSize(1000, 800);
-        setTitle(StringUtil.encoding("BatsLog"));
-        setAutoAdjustable(true);
+        setTitle(StringUtil.encoding("BatsLog", project));
     }
 
     /**
@@ -170,7 +177,15 @@ public class FormatWindow extends DialogWrapper {
         if (StringUtils.isNotBlank(text)) {
             format(project, text, Boolean.TRUE, BatsLogUtil.CONSOLE_VIEW_MAP.get(this.project));
         }
+        storeWindowSize();
         super.doOKAction();
+    }
+
+    private void storeWindowSize() {
+        Dimension size = getSize();
+        if (size != null) {
+            DimensionService.getInstance().setSize(SIZE_KEY, size);
+        }
     }
 
 
@@ -235,4 +250,12 @@ public class FormatWindow extends DialogWrapper {
                 document.replaceString(0, length, "")
         );
     }
+
+    @Override
+    public void doCancelAction() {
+        storeWindowSize();
+        super.doCancelAction();
+    }
+
+
 }

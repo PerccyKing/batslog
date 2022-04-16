@@ -12,11 +12,7 @@ import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
@@ -64,17 +60,17 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         Content errorListContent = contentFactory.createContent(new ErrorListPanel(project).getRoot(), BatsLogBundle.message("batslog.error"), false);
         Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("batslog.config"), false);
         ContentManager contentManager = toolWindow.getContentManager();
-        ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                BrowserUtil.browse("https://github.com/PerccyKing/batslog/issues");
-            }
-        }, new AnAction(AllIcons.Toolwindows.Documentation) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                BrowserUtil.browse("https://blog.csdn.net/qq_29602577/article/details/110390650");
-            }
-        });
+//        ((ToolWindowEx) toolWindow).setTabActions(new AnAction(AllIcons.Vcs.Vendors.Github) {
+//            @Override
+//            public void actionPerformed(@NotNull AnActionEvent e) {
+//                BrowserUtil.browse("https://github.com/PerccyKing/batslog/issues");
+//            }
+//        }, new AnAction(AllIcons.Toolwindows.Documentation) {
+//            @Override
+//            public void actionPerformed(@NotNull AnActionEvent e) {
+//                BrowserUtil.browse("https://blog.csdn.net/qq_29602577/article/details/110390650");
+//            }
+//        });
         contentManager.addContent(formatConsoleContent);
         contentManager.addContent(errorListContent);
         contentManager.addContent(settingFormContent);
@@ -85,9 +81,9 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
         if (colorConfigs == null || colorConfigs.isEmpty()) {
             colorConfigs = new ArrayList<>();
-            colorConfigs.add(new ConsoleColorConfig("1", 1, "INSERT", new RgbColor(41, 204, 152), new RgbColor(255, 255, 255), true));
-            colorConfigs.add(new ConsoleColorConfig("2", 2, "UPDATE", new RgbColor(118, 147, 255), new RgbColor(255, 255, 255), true));
-            colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 137, 151), new RgbColor(255, 255, 255), true));
+            colorConfigs.add(new ConsoleColorConfig("1", 1, "INSERT", new RgbColor(41, 204, 152), true, new RgbColor(255, 255, 255), true, true));
+            colorConfigs.add(new ConsoleColorConfig("2", 2, "UPDATE", new RgbColor(118, 147, 255), true, new RgbColor(255, 255, 255), true, true));
+            colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 137, 151), true, new RgbColor(255, 255, 255), true, true));
             service.setColorConfigs(colorConfigs);
         }
         BatsLogUtil.KEY_COLOR_MAP = ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs);

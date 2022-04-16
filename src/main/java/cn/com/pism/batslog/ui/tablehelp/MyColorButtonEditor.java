@@ -1,9 +1,15 @@
 package cn.com.pism.batslog.ui.tablehelp;
 
+import cn.com.pism.batslog.BatsLogBundle;
+import cn.com.pism.batslog.model.EnabledRgbColor;
 import cn.com.pism.batslog.model.RgbColor;
-import cn.com.pism.batslog.ui.ColorButton;
+import cn.com.pism.batslog.ui.Callback;
+import cn.com.pism.batslog.ui.component.EnabledColorButton;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.project.Project;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -19,17 +25,22 @@ import java.util.function.Consumer;
 public class MyColorButtonEditor extends DefaultCellEditor {
     private JPanel panel;
 
-    private ColorButton button;
+    private EnabledColorButton button;
 
     private Project project;
 
     private Consumer<RgbColor> consumer;
 
-    public MyColorButtonEditor(Project project, Consumer<RgbColor> consumer) {
+    private Callback<Row> enabled;
+
+    private boolean colorEnabled;
+
+    public MyColorButtonEditor(Project project, Consumer<RgbColor> consumer, Callback<Row> enabled) {
         super(new JTextField());
         this.setClickCountToStart(1);
         this.project = project;
         this.consumer = consumer;
+        this.enabled = enabled;
         fireEditingCanceled();
     }
 
@@ -44,24 +55,40 @@ public class MyColorButtonEditor extends DefaultCellEditor {
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        this.button = new ColorButton(project, BatsLogUtil.toColor((RgbColor) value), 18, 18, choseColor -> {
-            TableModel model = table.getModel();
-            RgbColor rgbColor = new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue());
-            model.setValueAt(rgbColor, row, column);
-            consumer.accept(rgbColor);
-        });
-        this.button.setBounds(new Rectangle(18, 18));
-
+        EnabledRgbColor enabledRgbColor = (EnabledRgbColor) value;
+        this.colorEnabled = enabledRgbColor.isEnabledColor();
+        this.button = new EnabledColorButton(project, BatsLogUtil.toColor(enabledRgbColor.getRgbColor()), 18, 18,
+                BatsLogBundle.message("config.form.console.enabledKeyWordColor.tips"),
+                choseColor -> {
+                    TableModel model = table.getModel();
+                    RgbColor rgbColor = new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue());
+                    model.setValueAt(new EnabledRgbColor(this.colorEnabled, rgbColor), row, column);
+                    consumer.accept(rgbColor);
+                },
+                colorIsEnabled -> {
+                    this.colorEnabled = colorIsEnabled;
+                    enabled.call(new Row((String) table.getModel().getValueAt(row, 0), colorIsEnabled));
+                });
+        this.button.getColorButton().setBounds(new Rectangle(18, 18));
+        this.button.setEnabledColor(enabledRgbColor.isEnabledColor());
         initPanel();
-        this.panel.add(this.button);
+        this.panel.add(this.button.getRoot());
 
         return this.panel;
     }
 
     @Override
     public Object getCellEditorValue() {
-        Color selectColor = this.button.getSelectColor();
+        Color selectColor = this.button.getColorButton().getSelectColor();
+        RgbColor rgbColor = new RgbColor(selectColor.getRed(), selectColor.getGreen(), selectColor.getBlue());
+        return new EnabledRgbColor(this.colorEnabled, rgbColor);
+    }
 
-        return new RgbColor(selectColor.getRed(), selectColor.getGreen(), selectColor.getBlue());
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Row {
+        private String id;
+        private boolean enabled;
     }
 }

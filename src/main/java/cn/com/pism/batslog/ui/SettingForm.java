@@ -6,13 +6,13 @@ import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
+import cn.com.pism.batslog.ui.component.EnabledColorButton;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.OnOffButton;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -28,10 +28,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
-import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
+import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
 /**
  * @author wangyihuai
@@ -58,10 +58,14 @@ public class SettingForm {
     private OnOffButton addTimestamp;
     private JTextField timestampFormat;
     private OnOffButton startWithProject;
+    private JComboBox<String> consoleEncoding;
+    private OnOffButton enableMixedPrefix;
+    private JLabel sqlPrefixTips;
 
     private BatsLogSettingState service;
 
-    public SettingForm(){}
+    public SettingForm() {
+    }
 
 
     public SettingForm(Project project) {
@@ -70,6 +74,8 @@ public class SettingForm {
 
         //初始化数据库选择
         initDbTypeBox();
+        //初始化编码列表
+        initEncodingBox();
         //初始化关键字颜色选择按钮
         initKeyWordColorButton(project);
 
@@ -101,6 +107,29 @@ public class SettingForm {
         configButton.addActionListener(e -> ConsoleColorConfigDialog.show(project));
     }
 
+    /**
+     * <p>
+     * 初始化编码列表
+     * </p>
+     *
+     * @author PerccyKing
+     * @date 2022/04/13 下午 10:44
+     */
+    private void initEncodingBox() {
+        String encoding = service.getEncoding();
+        consoleEncoding.addItem(DEFAULT_ENCODING);
+        consoleEncoding.addItem(StandardCharsets.UTF_8.displayName());
+        consoleEncoding.addItem("GBK");
+        consoleEncoding.addItem(StandardCharsets.ISO_8859_1.displayName());
+        consoleEncoding.addItem(StandardCharsets.US_ASCII.displayName());
+        consoleEncoding.addItem(StandardCharsets.UTF_16BE.displayName());
+        consoleEncoding.addItem(StandardCharsets.UTF_16LE.displayName());
+        consoleEncoding.addItem(StandardCharsets.UTF_16.displayName());
+
+        consoleEncoding.setSelectedItem(encoding);
+        consoleEncoding.addItemListener(e -> service.setEncoding((String) e.getItem()));
+    }
+
     private void initFormatConfig() {
         desensitize.setSelected(service.getDesensitize());
         setOnOffText(desensitize);
@@ -120,6 +149,8 @@ public class SettingForm {
         setOnOffText(addTimestamp);
         startWithProject.setSelected(service.getStartWithProject());
         setOnOffText(startWithProject);
+        enableMixedPrefix.setSelected(service.getEnableMixedPrefix());
+        setOnOffText(enableMixedPrefix);
     }
 
     private void setOnOffText(OnOffButton offButton) {
@@ -137,14 +168,16 @@ public class SettingForm {
      * @date 2021/06/26 下午 03:40
      */
     private void initKeyWordColorButton(Project project) {
-        ColorButton colorButton = new ColorButton(project, BatsLogUtil.toColor(service.getKeyWordDefCol()), 16, 16, choseColor -> {
-            service.setKeyWordDefCol(new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue()));
-        });
+        EnabledColorButton colorButton = new EnabledColorButton(project, BatsLogUtil.toColor(service.getKeyWordDefCol()), 16, 16,
+                BatsLogBundle.message("config.form.console.enabledKeyWordColor.tips"),
+                choseColor -> service.setKeyWordDefCol(new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue())),
+                enabled -> service.setEnabledKeyWordDefCol(enabled));
+        colorButton.setEnableCheckBox(service.isEnabledKeyWordDefCol());
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
         layout.removeLayoutComponent(keyWord);
-        layout.addLayoutComponent(colorButton, constraintsForComponent);
-        keyWordsPanel.add(colorButton, constraintsForComponent);
+        layout.addLayoutComponent(colorButton.getRoot(), constraintsForComponent);
+        keyWordsPanel.add(colorButton.getRoot(), constraintsForComponent);
         keyWordsPanel.revalidate();
     }
 
@@ -234,6 +267,11 @@ public class SettingForm {
         toUpperCase.addActionListener(ac -> service.setToUpperCase(toUpperCase.isSelected()));
         addTimestamp.addActionListener(ac -> service.setAddTimestamp(addTimestamp.isSelected()));
         startWithProject.addActionListener(ac -> service.setStartWithProject(startWithProject.isSelected()));
+        enableMixedPrefix.addActionListener(as -> {
+            boolean selected = enableMixedPrefix.isSelected();
+            service.setEnableMixedPrefix(selected);
+            sqlPrefixTips.setVisible(selected);
+        });
     }
 
     private void updateParamsPrefix(DocumentEvent e, Project project) {
