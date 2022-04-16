@@ -5,6 +5,7 @@
 
     <description><![CDATA[
 <h1>batslog</h1>
+<h3>为什么有英文：idea官方要求提供英文说明，并且必须要放在最前面</h3>
 
 <blockquote><p>Mybatis SQL format plug-in mybatis log format plug-in</p></blockquote>
 
@@ -30,6 +31,30 @@
 <li>支持多种数据库（MySQL、Oracle、SqlServer……）</li>
 <li>支持外部日志格式化</li>
 </ol>
+
+<div color='red'>
+<blockquote><p>最近更新</p></blockquote>
+
+<ul>
+<li>OPT Further optimize the problem of Chinese garbled code</li>
+<li>OPT Plug in adapter idea2022.1</li>
+<li>OPT Optimize the manually formatted window and record the adjusted size of the window</li>
+<li>OPT Hide GitHub links and document links in the toolbar</li>
+<li>ADD Add keyword color disable function</li>
+<li>ADD There are mixed prefixes in the adaptation log-beta</li>
+<li>ADD #27 Add background color and foreground color disable function</li>
+
+
+<li>OPT 进一步优化中文乱码问题</li>
+<li>OPT 插件适配idea2022.1</li>
+<li>OPT 优化手动格式化窗口，记录窗口调整后的大小</li>
+<li>OPT 隐藏工具栏中的github链接及文档链接</li>
+<li>ADD 添加关键字颜色禁用功能</li>
+<li>ADD 适配日志中有混合前缀的情况-beta</li>
+<li>ADD #27 添加背景色和前景色禁用功能</li>
+
+</ul>
+</div>
     ]]></description>
 
     <change-notes>
@@ -38,10 +63,32 @@
 <h1>Latest</h1>
 
 <ul>
-<li>FIX <a href="https://github.com/PerccyKing/batslog/issues/26">#26</a></li>
+<li>OPT Further optimize the problem of Chinese garbled code</li>
+<li>OPT Plug in adapter idea2022.1</li>
+<li>OPT Optimize the manually formatted window and record the adjusted size of the window</li>
+<li>OPT Hide GitHub links and document links in the toolbar</li>
+<li>ADD Add keyword color disable function</li>
+<li>ADD There are mixed prefixes in the adaptation log-beta</li>
+<li>ADD #27 Add background color and foreground color disable function</li>
+
+
+<li>OPT 进一步优化中文乱码问题</li>
+<li>OPT 插件适配idea2022.1</li>
+<li>OPT 优化手动格式化窗口，记录窗口调整后的大小</li>
+<li>OPT 隐藏工具栏中的github链接及文档链接</li>
+<li>ADD 添加关键字颜色禁用功能</li>
+<li>ADD 适配日志中有混合前缀的情况-beta</li>
+<li>ADD #27 添加背景色和前景色禁用功能</li>
 
 </ul>
 </div>
+
+<h1>22.01.13.2146-RE</h1>
+
+<ul>
+<li>FIX <a href="https://github.com/PerccyKing/batslog/issues/26">#26</a></li>
+
+</ul>
 
 <h1>22.01.10.2051-RE</h1>
 
