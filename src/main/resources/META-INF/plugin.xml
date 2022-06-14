@@ -63,6 +63,18 @@
 <h1>Latest</h1>
 
 <ul>
+<li>ADD Format output window, add right-click copy function</li>
+<li>OPT Plug in adapter idea2022.2</li>
+
+<li>ADD 格式化输出窗口，添加右键复制功能</li>
+<li>OPT 插件适配idea2022.2</li>
+
+</ul>
+</div>
+
+<h1>22.04.16.2346-RE</h1>
+
+<ul>
 <li>OPT Further optimize the problem of Chinese garbled code</li>
 <li>OPT Plug in adapter idea2022.1</li>
 <li>OPT Optimize the manually formatted window and record the adjusted size of the window</li>
@@ -81,7 +93,6 @@
 <li>ADD #27 添加背景色和前景色禁用功能</li>
 
 </ul>
-</div>
 
 <h1>22.01.13.2146-RE</h1>
 
