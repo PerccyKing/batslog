@@ -43,14 +43,14 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2020.3.4'
+    version = '2019.2'
     type = 'IU'
     plugins = [
             'com.intellij.database'
     ]
 }
 patchPluginXml {
-    sinceBuild = '203'
+    sinceBuild = '192'
     untilBuild = '222.*'
 }
 
