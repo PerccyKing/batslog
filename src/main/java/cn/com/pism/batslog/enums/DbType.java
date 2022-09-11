@@ -32,6 +32,7 @@ public enum DbType {
     H2("h2", JdbcConstants.H2.name(), AllIcons.Providers.H2),
     SQLITE("sqlite", JdbcConstants.SQLITE, AllIcons.Providers.Sqlite),
     POLARDB("polardb", JdbcConstants.POLARDB.name(), null),
+    CLICKHOUSE("clickhouse", JdbcConstants.CLICKHOUSE.name(), AllIcons.Providers.ClickHouse),
     NONE("none", "none", null);
 
 
@@ -60,23 +61,14 @@ public enum DbType {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public Icon getIcon() {
         return icon;
     }
 
-    public void setIcon(Icon icon) {
-        this.icon = icon;
-    }
 }

@@ -6,7 +6,6 @@ import cn.com.pism.batslog.util.BslActionToolBarUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NlsActions;
 import com.intellij.ui.table.JBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -100,7 +99,7 @@ public class ErrorListPanel {
 
         public MyDeleteRowAction(@Nullable Project project,
                                  @Nullable JBTable table,
-                                 @Nullable @NlsActions.ActionText String text,
+                                 @Nullable String text,
                                  @Nullable Icon icon) {
             super(text, "", icon);
             this.project = project;
@@ -136,7 +135,7 @@ public class ErrorListPanel {
 
         public MyProcessAction(@Nullable Project project,
                                @Nullable JBTable table,
-                               @Nullable @NlsActions.ActionText String text,
+                               @Nullable String text,
                                @Nullable Icon icon) {
             super(text, "", icon);
             this.project = project;
@@ -176,7 +175,7 @@ public class ErrorListPanel {
 
         public MyClearAllAction(@Nullable Project project,
                                 @Nullable JBTable table,
-                                @Nullable @NlsActions.ActionText String text,
+                                @Nullable String text,
                                 @Nullable Icon icon) {
             super(text, "", icon);
             this.project = project;

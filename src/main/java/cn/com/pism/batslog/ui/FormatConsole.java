@@ -2,6 +2,7 @@ package cn.com.pism.batslog.ui;
 
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.action.BeautyAction;
+import cn.com.pism.batslog.action.CopyAction;
 import cn.com.pism.batslog.action.OpenFormatWindowAction;
 import cn.com.pism.batslog.action.TailAction;
 import cn.com.pism.batslog.util.BatsLogUtil;
@@ -13,7 +14,6 @@ import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.ui.JBSplitter;
 import icons.BatsLogIcons;
 import lombok.Data;
 
@@ -49,9 +49,6 @@ public class FormatConsole {
     public void initConsoleToComponent(Project project, MyConsoleViewImpl consoleView, boolean inBottom) {
         JComponent component = consoleView.getComponent();
         load(project, consoleView, inBottom);
-//        final JBSplitter jbSplitter = new JBSplitter(!inBottom, 0.7f, 0.1f, 0.85f);
-//        jbSplitter.setFirstComponent(component);
-//        jbSplitter.setSecondComponent(new ErrorListPanel(project).getRoot());
         sqlPanel.add(component);
         sqlPanel.setBorder(null);
     }
@@ -87,6 +84,7 @@ public class FormatConsole {
         anActions.add(tailAction);
         anActions.add(openFormatWindowAction);
         anActions.add(beautyAction);
+        anActions.add(new CopyAction("Copy", "Copy selected text to clipboard", AllIcons.Actions.Copy));
 
         BatsLogUtil.TAIL_ACTION.put(project, anActions.toArray(new AnAction[0]));
     }

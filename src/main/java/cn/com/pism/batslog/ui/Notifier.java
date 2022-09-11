@@ -2,7 +2,6 @@ package cn.com.pism.batslog.ui;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroup;
-import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nullable;
@@ -15,12 +14,15 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Notifier {
 
+    private Notifier() {
+    }
+
     public static Notification getInstance(NotificationType type) {
         return getNotificationGroup().createNotification("", type);
     }
 
     private static NotificationGroup getNotificationGroup() {
-        return NotificationGroupManager.getInstance().getNotificationGroup("cn.com.pism.batslog.notification");
+        return NotificationGroup.findRegisteredGroup("cn.com.pism.batslog.notification");
     }
 
     public static void notifyError(@Nullable Project project, String content) {
