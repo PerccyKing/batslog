@@ -60,11 +60,6 @@ public class ErrorListPanel {
             ERROR_LIST_TABLE_MODEL.put(project, tableModel);
         }
         errorList.setModel(tableModel);
-//        int count = 10;
-//        for (int i = 0; i < count; i++) {
-//            tableModel.addRow(new BslErrorMod("Select * from table where a = ? and b = ?",
-//                    "123(String),456,643(String)", "f" + i, "ec").toArray());
-//        }
     }
 
     @NotNull

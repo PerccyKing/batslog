@@ -1,7 +1,7 @@
 package cn.com.pism.batslog.converter;
 
 import cn.com.pism.batslog.model.RgbColor;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.intellij.util.xmlb.Converter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

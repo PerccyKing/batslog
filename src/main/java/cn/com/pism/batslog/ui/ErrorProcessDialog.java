@@ -39,19 +39,17 @@ public class ErrorProcessDialog extends DialogWrapper {
         if (size != null) {
             root.setPreferredSize(size);
         }
-        setTitle("错误详情");
+        setTitle("错误详情-开发中");
     }
 
     public ErrorProcessDialog(Project project, BslErrorMod bslErrorMod) {
         this(project);
-        final SqlErrorProcessPanel processPanel = new SqlErrorProcessPanel(project, bslErrorMod);
-        this.processPanel = processPanel;
-        final SqlEditorPanel sqlEditorPanel = new SqlEditorPanel(project, bslErrorMod.getSql());
+        this.processPanel = new SqlErrorProcessPanel(project, bslErrorMod);
+        this.sqlEditorPanel = new SqlEditorPanel(project, bslErrorMod.getSql());
         final JBSplitter jbSplitter = new JBSplitter(false, 0.7f);
-        jbSplitter.setFirstComponent(processPanel.getRoot());
-        jbSplitter.setSecondComponent(sqlEditorPanel.getRoot());
+        jbSplitter.setFirstComponent(this.processPanel.getRoot());
+        jbSplitter.setSecondComponent(this.sqlEditorPanel.getRoot());
         root.add(jbSplitter);
-        this.sqlEditorPanel = sqlEditorPanel;
         show();
     }
 

@@ -9,8 +9,9 @@ import cn.com.pism.batslog.ui.tablehelp.*;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ColoringUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONValidator;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONValidator;
+import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.json.JsonFileType;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
@@ -128,7 +129,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
         Document document = PsiDocumentManager.getInstance(project).getDocument(psiFile);
 
-        EditorTextField textField = new EditorTextField(document, project, JsonFileType.INSTANCE, false, false);
+        this.textField = new EditorTextField(document, project, JsonFileType.INSTANCE, false, false);
         textField.setOneLineMode(false);
         textField.setEnabled(true);
         textField.addDocumentListener(new DocumentListener() {
@@ -140,9 +141,8 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 DocumentListener.super.documentChanged(event);
             }
         });
-        textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, true) : "[]");
+        textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, JSONWriter.Feature.PrettyFormat) : "[]");
 
-        this.textField = textField;
         configEditor.add(textField);
     }
 
@@ -313,7 +313,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         List<ShowColorConfig> showConfig = ColoringUtil.toShowConfig(colorConfigs);
         if (this.textField != null) {
             ApplicationManager.getApplication().invokeLater(() ->
-                    this.textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, true) : "[]"));
+                    this.textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, JSONWriter.Feature.PrettyFormat) : "[]"));
         }
     }
 }
