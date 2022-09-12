@@ -63,6 +63,18 @@
 <h1>Latest</h1>
 
 <ul>
+<li>ADD add support for clickhouse</li>
+<li>OPT Plug in adapter idea2019.2+</li>
+
+<li>ADD 添加对clickhouse的支持</li>
+<li>OPT 插件适配idea2019.2+</li>
+
+</ul>
+</div>
+
+<h1>22.06.14.2329-RE</h1>
+
+<ul>
 <li>ADD Format output window, add right-click copy function</li>
 <li>OPT Plug in adapter idea2022.2</li>
 
@@ -70,7 +82,6 @@
 <li>OPT 插件适配idea2022.2</li>
 
 </ul>
-</div>
 
 <h1>22.04.16.2346-RE</h1>
 
