@@ -36,22 +36,9 @@
 <blockquote><p>最近更新</p></blockquote>
 
 <ul>
-<li>OPT Further optimize the problem of Chinese garbled code</li>
-<li>OPT Plug in adapter idea2022.1</li>
-<li>OPT Optimize the manually formatted window and record the adjusted size of the window</li>
-<li>OPT Hide GitHub links and document links in the toolbar</li>
-<li>ADD Add keyword color disable function</li>
-<li>ADD There are mixed prefixes in the adaptation log-beta</li>
-<li>ADD #27 Add background color and foreground color disable function</li>
+<li>OPT Plug in adapter 2022.3</li>
 
-
-<li>OPT 进一步优化中文乱码问题</li>
-<li>OPT 插件适配idea2022.1</li>
-<li>OPT 优化手动格式化窗口，记录窗口调整后的大小</li>
-<li>OPT 隐藏工具栏中的github链接及文档链接</li>
-<li>ADD 添加关键字颜色禁用功能</li>
-<li>ADD 适配日志中有混合前缀的情况-beta</li>
-<li>ADD #27 添加背景色和前景色禁用功能</li>
+<li>OPT 插件适配2022.3</li>
 
 </ul>
 </div>
@@ -63,6 +50,17 @@
 <h1>Latest</h1>
 
 <ul>
+<li>OPT Plug in adapter 2022.3</li>
+
+<li>OPT 插件适配2022.3</li>
+
+</ul>
+</div>
+
+<h1>22.09.12.1922-RE</h1>
+
+<ul>
+
 <li>ADD add support for clickhouse</li>
 <li>OPT Plug in adapter idea2019.2+</li>
 
@@ -70,7 +68,6 @@
 <li>OPT 插件适配idea2019.2+</li>
 
 </ul>
-</div>
 
 <h1>22.06.14.2329-RE</h1>
 
