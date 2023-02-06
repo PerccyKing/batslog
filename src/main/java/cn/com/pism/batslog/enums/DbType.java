@@ -10,7 +10,7 @@ import java.util.Optional;
 
 /**
  * @author wangyihuai
- * @date 2020/10/28 上午 09:19
+ * @since 2020/10/28 上午 09:19
  */
 public enum DbType {
 
@@ -36,9 +36,9 @@ public enum DbType {
     NONE("none", "none", null);
 
 
-    private String name;
-    private String type;
-    private Icon icon;
+    private final String name;
+    private final String type;
+    private final Icon icon;
 
     DbType(String name, String type, Icon icon) {
         this.name = name;

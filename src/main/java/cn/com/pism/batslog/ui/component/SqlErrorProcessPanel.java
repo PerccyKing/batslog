@@ -9,8 +9,7 @@ import javax.swing.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/11/24 下午 08:59
- * @since 0.0.1
+ * @since 2021/11/24 下午 08:59
  */
 @Data
 public class SqlErrorProcessPanel {

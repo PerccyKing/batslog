@@ -1,6 +1,6 @@
 package cn.com.pism.batslog.ui;
 
-import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
@@ -25,29 +25,17 @@ import java.util.List;
 
 /**
  * @author wangyihuai
- * @date 2020/12/24 10:08
+ * @since 2020/12/24 10:08
  */
 public class MyConsoleViewImpl extends ConsoleViewImpl {
 
-    ActionToolbar actionToolbar;
+    transient ActionToolbar actionToolbar;
 
     public MyConsoleViewImpl(@NotNull Project project, boolean viewer) {
         super(project, viewer);
         setBorder(null);
     }
 
-    /**
-     * <p>
-     * 更新邮件菜单
-     * </p>
-     *
-     * @param anActions : 新的事件列表
-     * @author wangyihuai
-     * @date 2020/12/28 10:44
-     */
-    public void installPopupHandler(AnAction[] anActions) {
-        installPopupHandler(Arrays.asList(anActions));
-    }
 
     /**
      * <p>
@@ -56,7 +44,7 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
      *
      * @param anActions : 新的事件列表
      * @author wangyihuai
-     * @date 2020/12/28 10:44
+     * @since 2020/12/28 10:44
      */
     public void installPopupHandler(List<AnAction> anActions) {
         installPopupHandler(new ContextMenuPopupHandler() {
@@ -84,12 +72,12 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
         //只保留console自身的事件
         anActions.addAll(Arrays.asList(consoleActions));
         DefaultActionGroup actions = new DefaultActionGroup();
-        ActionToolbar actionToolbar = actionManager.createActionToolbar(places, actions, horizontal);
+        ActionToolbar newActionToolbar = actionManager.createActionToolbar(places, actions, horizontal);
         for (AnAction action : anActions) {
             actions.add(action);
         }
-        setActionToolbar(actionToolbar);
-        return actionToolbar;
+        setActionToolbar(newActionToolbar);
+        return newActionToolbar;
     }
 
     /**
@@ -102,7 +90,7 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
      * @param anActions  :
      * @return {@link ActionToolbar} ActionToolBar
      * @author PerccyKing
-     * @date 2020/12/12 下午 08:36
+     * @since 2020/12/12 下午 08:36
      */
     public ActionToolbar createActionToolBar(String places, boolean horizontal, AnAction[] anActions) {
         return createActionToolBar(places, horizontal, new ArrayList<>(Arrays.asList(anActions)));
@@ -160,7 +148,7 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
 
         @Override
         public void actionPerformed(@NotNull final AnActionEvent e) {
-            BatsLogUtil.NUM = 0;
+            GlobalVar.setSqlNumber(0);
             myConsoleView.clear();
         }
     }

@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/26 下午 04:58
- * @since 0.0.1
+ * @since 2021/06/26 下午 04:58
  */
 @Data
 @NoArgsConstructor

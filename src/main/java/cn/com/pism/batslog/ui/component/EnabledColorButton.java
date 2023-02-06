@@ -13,8 +13,7 @@ import java.awt.*;
  *
  * @author PerccyKing
  * @version 0.0.1
- * @date 2022/04/14 下午 03:04
- * @since 0.0.1
+ * @since 2022/04/14 下午 03:04
  */
 @Data
 public class EnabledColorButton {
@@ -61,8 +60,9 @@ public class EnabledColorButton {
         return color;
     }
 
+    @SuppressWarnings({"all"})
     private void createUIComponents() {
-        this.colorButton = new ColorButton(project, color, width, height, colorCallback);
+        this.colorButton = new ColorButton(color, width, height, colorCallback);
     }
 
     public void setEnabledColor(boolean enabledColor) {

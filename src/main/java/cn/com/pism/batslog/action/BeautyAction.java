@@ -1,15 +1,11 @@
 package cn.com.pism.batslog.action;
 
-import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
-import cn.com.pism.batslog.util.BatsLogUtil;
-import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.execution.ui.ConsoleViewContentType;
+import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,16 +15,17 @@ import java.util.Objects;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/04/25 下午 09:47
- * @since 0.0.1
+ * @since 2021/04/25 下午 09:47
  */
 public class BeautyAction extends ToggleAction {
 
     private Project project;
 
+    @SuppressWarnings("unused")
     public BeautyAction() {
     }
 
+    @SuppressWarnings("unused")
     public BeautyAction(@Nullable String text) {
         super(text);
     }
@@ -50,7 +47,11 @@ public class BeautyAction extends ToggleAction {
     }
 
     private BatsLogSettingState getService(@NotNull AnActionEvent e) {
-        return ServiceManager.getService(Objects.requireNonNull(getProject()), BatsLogSettingState.class);
+        Project project1 = getProject();
+        if (project1 == null) {
+            project1 = e.getProject();
+        }
+        return ServiceManager.getService(Objects.requireNonNull(project1), BatsLogSettingState.class);
     }
 
     /**
@@ -65,35 +66,14 @@ public class BeautyAction extends ToggleAction {
     }
 
     private void reFormat(AnActionEvent e) {
-        Project project = e.getProject();
-        assert project != null;
+        Project project1 = e.getProject();
+        assert project1 != null;
         Boolean prettyFormat = getService(e).getPrettyFormat();
-
-        ConsoleViewImpl consoleView = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
-        String text = consoleView.getText();
-        //清空console
-//        consoleView.clear();
-
-        //分析出 sql，分隔符，name，other（LOGO）
-//        parseText(text, consoleView);
 
         //取消UI选中/反选
         getService(e).setPrettyFormat(!prettyFormat);
 
-        BatsLogUtil.PRETTY_FORMAT.setSelected(!prettyFormat);
-    }
-
-    private void parseText(String text, ConsoleViewImpl consoleView) {
-        //先判断text是否为空 不为空才会进行分析操作
-        if (StringUtils.isNotBlank(text)) {
-            String[] split = text.split("\n");
-            for (String s : split) {
-                if (BatsLogConstant.SEPARATOR.equals(s)) {
-                    consoleView.print(s, ConsoleViewContentType.ERROR_OUTPUT);
-                }
-            }
-        }
-
+        GlobalVar.getPrettyFormat().setSelected(!prettyFormat);
     }
 
     public Project getProject() {

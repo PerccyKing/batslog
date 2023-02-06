@@ -13,8 +13,7 @@ import java.io.Serializable;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/01/06 下午 08:47
- * @since 0.0.1
+ * @since 2021/01/06 下午 08:47
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

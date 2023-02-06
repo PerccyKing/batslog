@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/01/06 下午 10:17
- * @since 0.0.1
+ * @since 2021/01/06 下午 10:17
  */
 public class ColorConverter extends Converter<RgbColor> {
     @Nullable

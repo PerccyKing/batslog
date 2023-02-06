@@ -16,8 +16,7 @@ import java.util.List;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/10/07 下午 06:39
- * @since 0.0.1
+ * @since 2021/10/07 下午 06:39
  */
 @Data
 public class BatsLogConfig {

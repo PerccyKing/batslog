@@ -28,8 +28,7 @@ import java.util.List;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2020/12/07 下午 10:29
- * @since 0.0.1
+ * @since 2020/12/07 下午 10:29
  */
 @Getter
 @Setter
@@ -114,8 +113,8 @@ public class FormatWindow extends DialogWrapper {
 
         //添加一个工具栏
         List<AnAction> logActions = new ArrayList<>(getLogActions(logEditor));
-        ActionToolbar logToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, logActions.toArray(new AnAction[0]));
-        this.logToolBar.add(logToolBar.getComponent());
+        ActionToolbar newLogToolBar = getActionToolBar(ActionPlaces.UNKNOWN, true, logActions.toArray(new AnAction[0]));
+        this.logToolBar.add(newLogToolBar.getComponent());
 
         //将编辑器加入panel
         logPanel.add(logEditor.getComponent());
@@ -145,7 +144,7 @@ public class FormatWindow extends DialogWrapper {
         final Dimension size = DimensionService.getInstance().getSize(SIZE_KEY);
         if (size != null) {
             root.setPreferredSize(size);
-        }else {
+        } else {
             setSize(1000, 800);
         }
 
@@ -175,7 +174,7 @@ public class FormatWindow extends DialogWrapper {
     protected void doOKAction() {
         String text = this.myEditor.getDocument().getText();
         if (StringUtils.isNotBlank(text)) {
-            format(project, text, Boolean.TRUE, BatsLogUtil.CONSOLE_VIEW_MAP.get(this.project));
+            format(project, text, Boolean.TRUE, (ConsoleViewImpl) GlobalVar.getConsoleView(this.project));
         }
         storeWindowSize();
         super.doOKAction();
@@ -199,7 +198,7 @@ public class FormatWindow extends DialogWrapper {
      * @param anActions  :
      * @return {@link ActionToolbar} ActionToolBar
      * @author PerccyKing
-     * @date 2020/12/12 下午 08:36
+     * @since 2020/12/12 下午 08:36
      */
     public ActionToolbar getActionToolBar(String places, boolean horizontal, AnAction[] anActions) {
         DefaultActionGroup actions = new DefaultActionGroup();
@@ -219,7 +218,7 @@ public class FormatWindow extends DialogWrapper {
      * @param editor : 编辑器
      * @return {@link List<AnAction>} 事件列表
      * @author PerccyKing
-     * @date 2020/12/12 下午 08:38
+     * @since 2020/12/12 下午 08:38
      */
     public List<AnAction> getLogActions(Editor editor) {
         List<AnAction> logActions = new ArrayList<>();

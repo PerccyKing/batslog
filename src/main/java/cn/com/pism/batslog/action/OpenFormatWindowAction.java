@@ -12,7 +12,7 @@ import javax.swing.*;
  * 打开格式化窗口
  *
  * @author PerccyKing
- * @date 2020/12/07 上午 09:18
+ * @since 2020/12/07 上午 09:18
  */
 public class OpenFormatWindowAction extends AnAction {
     /**

@@ -5,7 +5,7 @@ import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.Notifier;
-import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.GlobalVar;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
@@ -27,13 +27,11 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.BATS_LOG_ID;
-import static cn.com.pism.batslog.util.BatsLogUtil.FORMAT_CONSOLE_MAP;
 
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/10/10 下午 06:28
- * @since 0.0.1
+ * @since 2021/10/10 下午 06:28
  */
 public class StartUpAction implements StartupActivity {
     private static final Logger log = LoggerFactory.getLogger(StartUpAction.class);
@@ -45,11 +43,11 @@ public class StartUpAction implements StartupActivity {
         BatsLogSettingState service = BatsLogSettingState.getInstance(project);
         //当监听状态默认开启时，需要修改启动按钮状态，并将sql console实例化
         if (Boolean.TRUE.equals(service.getStartWithProject())) {
-            BatsLogUtil.TAIL_STATUS.put(project, Boolean.TRUE);
-            FormatConsole formatConsole = FORMAT_CONSOLE_MAP.get(project);
+            GlobalVar.putTailStatus(project, Boolean.TRUE);
+            FormatConsole formatConsole = GlobalVar.getFormatConsole(project);
             //如果console没有实例化需要做一次实例化
             if (formatConsole == null) {
-                FORMAT_CONSOLE_MAP.put(project, new FormatConsole(project));
+                GlobalVar.putFormatConsole(project, new FormatConsole(project));
             }
         }
         try {

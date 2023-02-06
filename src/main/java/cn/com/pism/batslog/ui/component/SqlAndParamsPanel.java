@@ -13,8 +13,7 @@ import javax.swing.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/12/11 下午 05:32
- * @since 0.0.1
+ * @since 2021/12/11 下午 05:32
  */
 @Data
 public class SqlAndParamsPanel {
@@ -32,9 +31,9 @@ public class SqlAndParamsPanel {
 
     public SqlAndParamsPanel(Project project, BslErrorMod bslErrorMod) {
         this.project = project;
-        final SqlEditorPanel sqlEditorPanel = new SqlEditorPanel(project, bslErrorMod.getSql());
-        this.sqlEditorPanel = sqlEditorPanel;
-        sqlContent.add(sqlEditorPanel.getRoot());
+        final SqlEditorPanel newSqlEditorPanel = new SqlEditorPanel(project, bslErrorMod.getSql());
+        this.sqlEditorPanel = newSqlEditorPanel;
+        sqlContent.add(newSqlEditorPanel.getRoot());
 
         this.textField = BatsLogUtil.createLanguageTextField(Language.findLanguageByID("TEXT"), project, bslErrorMod.getParams());
         paramsEditorPanel.add(textField);

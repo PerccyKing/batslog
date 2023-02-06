@@ -1,6 +1,5 @@
 package cn.com.pism.batslog.ui.tablehelp;
 
-import cn.com.pism.batslog.BatsLogBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.table.JBTable;
 
@@ -13,15 +12,14 @@ import java.awt.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/27 下午 02:46
- * @since 0.0.1
+ * @since 2021/06/27 下午 02:46
  */
 public class MyDeleteButtonRender implements TableCellRenderer {
     private JPanel panel;
 
     private JButton button;
 
-    private JBTable jbTable;
+    private final JBTable jbTable;
 
 
     public MyDeleteButtonRender(JBTable jbTable) {

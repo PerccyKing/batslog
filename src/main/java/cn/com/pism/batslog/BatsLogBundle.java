@@ -6,7 +6,7 @@ import org.jetbrains.annotations.PropertyKey;
 
 /**
  * @author wangyihuai
- * @date 2020/12/21 下午 02:43
+ * @since 2020/12/21 下午 02:43
  */
 public class BatsLogBundle extends AbstractBundle {
 

@@ -11,20 +11,14 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/07/04 下午 04:16
- * @since 0.0.1
+ * @since 2021/07/04 下午 04:16
  */
 public class ConsoleColorConfigUtil {
     private ConsoleColorConfigUtil() {
-    }
-
-    public static Map<String, ConsoleColorConfig> toMap(List<ConsoleColorConfig> colorConfigs) {
-        return colorConfigs.stream().collect(Collectors.toMap(ConsoleColorConfig::getKeyWord, v -> v));
     }
 
     public static Map<String, ConsoleViewContentType> toConsoleViewContentTypeMap(Project project, List<ConsoleColorConfig> colorConfigs) {

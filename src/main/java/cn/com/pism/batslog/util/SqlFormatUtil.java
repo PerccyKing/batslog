@@ -15,57 +15,86 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
-import static cn.com.pism.batslog.constants.BatsLogConstant.PARAMS_PREFIX;
-import static cn.com.pism.batslog.constants.BatsLogConstant.SQL_PREFIX;
-import static cn.com.pism.batslog.util.BatsLogUtil.ERROR_LIST_TABLE_MODEL;
+import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/07/05 下午 03:33
- * @since 0.0.1
+ * @since 2021/07/05 下午 03:33
  */
 public class SqlFormatUtil {
 
     private static final Logger log = LoggerFactory.getLogger(SqlFormatUtil.class);
 
 
-    public static final String[] TYPES = new String[]{"Integer", "Long", "Double", "String",
-            "Boolean", "Byte", "Short", "Float"};
-
-    public static final String[] CLOUD_BE_TYPES = new String[]{
-            "boolean", "byte", "short", "int",
-            "long", "float", "double", "BigDecimal",
-            "String", "Date", "Time", "Timestamp",
-            "InputStream", "Object", "Reader", "Ref",
-            "Blob", "Clob", "Array", "URL", "RowId",
-            "NClob", "SQLXML"
-    };
-
-    private static final int CACHE_LENGTH = 100;
-
     private static Set<String> keywords;
 
 
+    /**
+     * <p>
+     * 格式化SQL
+     * </p>
+     *
+     * @param str     : 日志字符串
+     * @param project : 项目对象
+     * @author PerccyKing
+     * @since 2023/1/23 14:13
+     */
     public static void format(String str, Project project) {
         format(str, project, Boolean.TRUE);
     }
 
+    /**
+     * <p>
+     * 手动格式化SQL
+     * </p>
+     *
+     * @param str      : 日志字符串
+     * @param project  : 项目对象
+     * @param callBack : 事件回调
+     * @author PerccyKing
+     * @since 2023/1/23 14:14
+     */
     public static void manualFormat(String str, Project project, CallBack callBack) {
         format(str, project, Boolean.FALSE, null, callBack);
     }
 
+    /**
+     * <p>
+     * 格式SQL
+     * </p>
+     *
+     * @param str            : 日志字符串
+     * @param project        : 项目对象
+     * @param printToConsole : 是否输出到console
+     * @author PerccyKing
+     * @since 2023/1/23 14:15
+     */
     public static void format(String str, Project project, Boolean printToConsole) {
         format(str, project, printToConsole, null, null);
     }
 
 
+    /**
+     * <p>
+     * 格式化SQL
+     * </p>
+     *
+     * @param str            : 日志字符串
+     * @param project        : 项目对象
+     * @param printToConsole : 是否输出到console
+     * @param console        : console实例
+     * @param callBack       : 回调方法
+     * @author PerccyKing
+     * @since 2023/1/23 14:16
+     */
     public static void format(String str,
                               Project project,
                               Boolean printToConsole,
@@ -95,32 +124,32 @@ public class SqlFormatUtil {
         }
     }
 
+    /**
+     * <p>
+     * 开启了混合SQL前缀
+     * </p>
+     *
+     * @param str          : 日志字符串
+     * @param sqlList      : sql列表
+     * @param paramsList   :参数列表
+     * @param nameList     : 行名称列表
+     * @param sqlPrefix    : sql前缀
+     * @param paramsPrefix : 参数前缀
+     * @author PerccyKing
+     * @since 2023/1/23 14:18
+     */
     private static void enabledMultiSqlPrefix(String str, List<String> sqlList, List<String> paramsList, List<String> nameList, String sqlPrefix, String paramsPrefix) {
-        String[] split = sqlPrefix.split(",");
+
         //提取全部的sql和params
         String[] lines = new String[0];
         if (StringUtils.isNotBlank(str)) {
-            Integer startSqlPrefixIndex = null;
-            if (split.length > 0) {
-                for (String s : split) {
-                    int i = str.indexOf(s);
-                    if (startSqlPrefixIndex == null && i >= 0) {
-                        startSqlPrefixIndex = i;
-                    } else if (i >= 0) {
-                        startSqlPrefixIndex = NumberUtils.min(startSqlPrefixIndex, i);
-                    }
-                }
+            Integer startSqlPrefixIndex = getSqlPrefixIndex(str, sqlPrefix);
+            if (startSqlPrefixIndex == null) {
+                return;
             }
             //先截断一次，从SQL_PREFIX 行开始解析
             String includeFirstLine = str.substring(0, startSqlPrefixIndex);
-            boolean lineFeed = includeFirstLine.contains("\n");
-            String firstName = " ";
-            if (lineFeed) {
-                String[] includeFirstLineArr = includeFirstLine.split("\n");
-                firstName = includeFirstLineArr[includeFirstLineArr.length - 1];
-            } else {
-                firstName = includeFirstLine;
-            }
+            String firstName = getLineName(includeFirstLine);
             str = str.substring(startSqlPrefixIndex);
             str = firstName + str;
             lines = str.split("\n");
@@ -142,6 +171,61 @@ public class SqlFormatUtil {
             }
             nextLineIsParams = processLine(sqlList, paramsList, nameList, paramsPrefix, nextLineIsParams, currSqlPrefix, line);
         }
+    }
+
+    /**
+     * <p>
+     * 获取前缀位置
+     * </p>
+     *
+     * @param str       : 日志行
+     * @param sqlPrefix : 多个sql前缀
+     * @return {@link Integer}
+     * @author PerccyKing
+     * @since 2023/1/23 16:41
+     */
+
+    @Nullable
+    private static Integer getSqlPrefixIndex(String str, String sqlPrefix) {
+        String[] split = sqlPrefix.split(",");
+        Integer startSqlPrefixIndex = null;
+        for (String s : split) {
+            //找到SQL前缀位置
+            int i = str.indexOf(s);
+            if (startSqlPrefixIndex == null && i >= 0) {
+                //初始位置为空，并且在日志行中找到了前缀位置，将新位置赋值
+                startSqlPrefixIndex = i;
+            } else if (i >= 0) {
+                //如果找到了多个位置，取最小的前缀位置
+                startSqlPrefixIndex = NumberUtils.min(startSqlPrefixIndex, i);
+            } else {
+                //未找到前缀
+                return null;
+            }
+        }
+        return startSqlPrefixIndex;
+    }
+
+    /**
+     * <p>
+     * 获取当前行的名称：截取日志首行作为名称
+     * </p>
+     *
+     * @param includeFirstLine : 首行日志
+     * @return {@link String} 当前行名称
+     * @author PerccyKing
+     * @since 2023/1/23 16:32
+     */
+    private static String getLineName(String includeFirstLine) {
+        boolean lineFeed = includeFirstLine.contains("\n");
+        String firstName;
+        if (lineFeed) {
+            String[] includeFirstLineArr = includeFirstLine.split("\n");
+            firstName = includeFirstLineArr[includeFirstLineArr.length - 1];
+        } else {
+            firstName = includeFirstLine;
+        }
+        return firstName;
     }
 
     private static boolean processLine(List<String> sqlList, List<String> paramsList, List<String> nameList, String paramsPrefix, boolean nextLineIsParams, String currSqlPrefix, String line) {
@@ -166,20 +250,27 @@ public class SqlFormatUtil {
         return nextLineIsParams;
     }
 
+    /**
+     * <p>
+     * 未开启混合SQL前缀
+     * </p>
+     *
+     * @param str          : 日志字符串
+     * @param sqlList      : SQL列表
+     * @param paramsList   : 参数列表
+     * @param nameList     : 名称列表
+     * @param sqlPrefix    : SQL前缀
+     * @param paramsPrefix : 参数前缀
+     * @author PerccyKing
+     * @since 2023/1/23 14:27
+     */
     private static void notEnabledMultiSqlPrefix(String str, List<String> sqlList, List<String> paramsList, List<String> nameList, String sqlPrefix, String paramsPrefix) {
         //提取全部的sql和params
         String[] lines = new String[0];
         if (StringUtils.isNotBlank(str)) {
             //先截断一次，从SQL_PREFIX 行开始解析
             String includeFirstLine = str.substring(0, str.indexOf(sqlPrefix));
-            boolean lineFeed = includeFirstLine.contains("\n");
-            String firstName = " ";
-            if (lineFeed) {
-                String[] includeFirstLineArr = includeFirstLine.split("\n");
-                firstName = includeFirstLineArr[includeFirstLineArr.length - 1];
-            } else {
-                firstName = includeFirstLine;
-            }
+            String firstName = getLineName(includeFirstLine);
             str = str.substring(str.indexOf(sqlPrefix));
             str = firstName + str;
             lines = str.split("\n");
@@ -201,7 +292,7 @@ public class SqlFormatUtil {
      * @param line : 当前行
      * @return {@link boolean}
      * @author PerccyKing
-     * @date 2021/08/12 上午 10:05
+     * @since 2021/08/12 上午 10:05
      */
     public static boolean nextLineIsParams(String line, String paramsPrefix) {
         //如果当前行，是参数行的开始，并且参数后没有任何东西，判定下一行不为参数行
@@ -216,8 +307,8 @@ public class SqlFormatUtil {
             String assertType = StringUtils.substring(line, leftIndex);
             assertType = assertType.substring(assertType.indexOf("(") + 1, assertType.lastIndexOf(")"));
             //如果能匹配上预置参数类型，说明当前行就是最后一行，下一行不为参数行
-            return !(Arrays.stream(TYPES).anyMatch(assertType::equalsIgnoreCase)
-                    || Arrays.stream(CLOUD_BE_TYPES).anyMatch(assertType::equalsIgnoreCase));
+            return !(TYPES.stream().anyMatch(assertType::equalsIgnoreCase)
+                    || CLOUD_BE_TYPES.stream().anyMatch(assertType::equalsIgnoreCase));
         } else {
             return true;
         }
@@ -246,36 +337,53 @@ public class SqlFormatUtil {
                 if (!formatSql.endsWith(";")) {
                     formatSql = formatSql + ";";
                 }
-                if (printToConsole) {
+                if (Boolean.TRUE.equals(printToConsole)) {
                     if (console == null) {
-                        console = BatsLogUtil.CONSOLE_VIEW_MAP.get(project);
+                        console = (ConsoleViewImpl) GlobalVar.getConsoleView(project);
                     }
 
                     printSeparatorAndName(project, console, name, service);
+                    console.print(console.getContentSize() + "", ConsoleViewContentType.ERROR_OUTPUT);
                     printSql(formatSql, project, console);
                 } else {
                     //放入缓存
-                    List<String> sqlCache = BatsLogUtil.SQL_CACHE.get(project);
+                    List<String> sqlCache = GlobalVar.getSqlCacheList(project);
                     if (!CollectionUtils.isNotEmpty(sqlCache)) {
                         sqlCache = new ArrayList<>();
                     }
                     sqlCache.add(formatSql);
-                    BatsLogUtil.SQL_CACHE.put(project, sqlCache);
+                    GlobalVar.putSqlCache(project, sqlCache);
                 }
             } catch (Exception e) {
-                log.error(e.getMessage());
-                //对错误解析的数据 进行补偿处理，先将参数行和SQL行加入列表
-                final DefaultTableModel tableModel = ERROR_LIST_TABLE_MODEL.get(project);
-                final StackTraceElement[] stackTrace = e.getStackTrace();
-                StringBuilder errorMsg = new StringBuilder();
-                for (StackTraceElement stackTraceElement : stackTrace) {
-                    errorMsg.append(stackTraceElement.toString()).append("\n");
-                }
-                tableModel.addRow(new BslErrorMod(sql, params, DateFormatUtils.format(System.currentTimeMillis(), "yy/MM/dd HH:mm:ss"),
-                        errorMsg.toString()).toArray());
-                e.printStackTrace();
+                exceptionHandle(project, sql, params, e);
             }
         }
+    }
+
+    /**
+     * <p>
+     * 异常处理
+     * </p>
+     *
+     * @param project : 项目对象
+     * @param sql     : 解析异常的sql
+     * @param params  : 解析异常的参数
+     * @param e       : 异常详细信息
+     * @author PerccyKing
+     * @since 2023/1/23 14:25
+     */
+    private static void exceptionHandle(Project project, String sql, String params, Exception e) {
+        log.error(e.getMessage());
+        //对错误解析的数据 进行补偿处理，先将参数行和SQL行加入列表
+        final DefaultTableModel tableModel = GlobalVar.getErrorListTableModel(project);
+        final StackTraceElement[] stackTrace = e.getStackTrace();
+        StringBuilder errorMsg = new StringBuilder();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            errorMsg.append(stackTraceElement.toString()).append("\n");
+        }
+        tableModel.addRow(new BslErrorMod(sql, params, DateFormatUtils.format(System.currentTimeMillis(), "yy/MM/dd HH:mm:ss"),
+                errorMsg.toString()).toArray());
+        e.printStackTrace();
     }
 
 
@@ -288,11 +396,11 @@ public class SqlFormatUtil {
      * @param project     : 项目
      * @param consoleView : console
      * @author PerccyKing
-     * @date 2021/04/26 下午 08:44
+     * @since 2021/04/26 下午 08:44
      */
     public static void printSql(String sql, Project project, ConsoleViewImpl consoleView) {
 
-        Map<String, ConsoleViewContentType> keyColorMap = BatsLogUtil.KEY_COLOR_MAP;
+        Map<String, ConsoleViewContentType> keyColorMap = GlobalVar.getKeyColorMap();
 
         ConsoleViewContentType defaultContentType = ConsoleViewContentType.NORMAL_OUTPUT;
 
@@ -309,8 +417,8 @@ public class SqlFormatUtil {
         int charLength = 0;
         for (String word : words) {
             boolean keyword = isKeyword(word);
-            charLength = charLength + word.length();
-            String supplement = "";
+            charLength = charLength + (StringUtils.isNotEmpty(word) ? word.length() : 0);
+            String supplement;
 
             if (keyword) {
                 printKeyWord(consoleView, project, word, defaultContentType);
@@ -338,16 +446,25 @@ public class SqlFormatUtil {
         }
     }
 
-    public static boolean isKeyword(String name) {
-        if (name == null) {
+    /**
+     * <p>
+     * 校验SQL是否是关键字
+     * </p>
+     *
+     * @param str : 待校验字符串
+     * @return {@link boolean}
+     * @author PerccyKing
+     * @since 2023/1/23 14:21
+     */
+    public static boolean isKeyword(String str) {
+        if (str == null) {
             return false;
         }
 
-        String nameLower = name.toLowerCase();
+        String nameLower = str.toLowerCase();
 
         Set<String> words = keywords;
-
-        if (words == null || words.size() == 0) {
+        if (CollectionUtils.isEmpty(words)) {
             words = KeyWordsConstant.MYSQL;
             keywords = words;
         }
@@ -364,15 +481,15 @@ public class SqlFormatUtil {
      * @param project : 项目
      * @param console : console
      * @param name    : 行名称
-     * @param service
+     * @param service : service
      * @author PerccyKing
-     * @date 2021/04/26 下午 08:42
+     * @since 2021/04/26 下午 08:42
      */
     private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name, BatsLogSettingState service) {
         console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR, project), ConsoleViewContentType.ERROR_OUTPUT);
-        int num = BatsLogUtil.NUM;
+        int num = GlobalVar.getSqlNumber();
         num++;
-        BatsLogUtil.NUM = num;
+        GlobalVar.setSqlNumber(num);
         String timestamp = " ";
         long timeMillis = System.currentTimeMillis();
         if (Boolean.TRUE.equals(service.getAddTimestamp())) {
@@ -392,7 +509,7 @@ public class SqlFormatUtil {
      * @param service : 配置
      * @return {@link SQLUtils.FormatOption}
      * @author PerccyKing
-     * @date 2021/05/19 下午 09:29
+     * @since 2021/05/19 下午 09:29
      */
     @NotNull
     private static SQLUtils.FormatOption getFormatOption(BatsLogSettingState service) {
@@ -413,7 +530,7 @@ public class SqlFormatUtil {
      * @param params : 待解析的参数
      * @return {@link List<Object>}
      * @author PerccyKing
-     * @date 2021/05/19 下午 09:23
+     * @since 2021/05/19 下午 09:23
      */
     @NotNull
     public static List<Object> parseParamToList(String params) {
@@ -456,7 +573,7 @@ public class SqlFormatUtil {
             if (!nullStr.equals(par)) {
                 typeParam = par;
             }
-        } else if (Arrays.stream(TYPES).anyMatch(type::equalsIgnoreCase)) {
+        } else if (TYPES.stream().anyMatch(type::equalsIgnoreCase)) {
             Class<?> aClass = Class.forName("java.lang." + type);
             if (aClass == Integer.class) {
                 typeParam = Integer.valueOf(par);

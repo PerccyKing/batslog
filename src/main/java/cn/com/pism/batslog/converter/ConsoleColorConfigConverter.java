@@ -11,8 +11,7 @@ import java.util.List;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/07/03 下午 10:59
- * @since 0.0.1
+ * @since 2021/07/03 下午 10:59
  */
 public class ConsoleColorConfigConverter extends Converter<List<ConsoleColorConfig>> {
     @Nullable

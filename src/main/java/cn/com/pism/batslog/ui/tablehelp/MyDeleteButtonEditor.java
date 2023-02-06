@@ -13,8 +13,7 @@ import java.util.function.Consumer;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/27 下午 02:34
- * @since 0.0.1
+ * @since 2021/06/27 下午 02:34
  */
 public class MyDeleteButtonEditor extends DefaultCellEditor {
 
@@ -24,6 +23,7 @@ public class MyDeleteButtonEditor extends DefaultCellEditor {
 
     private JBTable jbTable;
 
+    @SuppressWarnings("unused")
     public MyDeleteButtonEditor() {
         super(new JTextField());
     }

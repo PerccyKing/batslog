@@ -19,19 +19,18 @@ import java.util.function.Consumer;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/27 下午 05:55
- * @since 0.0.1
+ * @since 2021/06/27 下午 05:55
  */
 public class MyColorButtonEditor extends DefaultCellEditor {
     private JPanel panel;
 
-    private EnabledColorButton button;
+    private transient EnabledColorButton button;
 
-    private Project project;
+    private final transient Project project;
 
-    private Consumer<RgbColor> consumer;
+    private final transient Consumer<RgbColor> consumer;
 
-    private Callback<Row> enabled;
+    private final transient Callback<Row> enabled;
 
     private boolean colorEnabled;
 
@@ -42,10 +41,6 @@ public class MyColorButtonEditor extends DefaultCellEditor {
         this.consumer = consumer;
         this.enabled = enabled;
         fireEditingCanceled();
-    }
-
-    private void initButton() {
-
     }
 
     private void initPanel() {

@@ -9,8 +9,7 @@ import java.awt.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/27 下午 05:22
- * @since 0.0.1
+ * @since 2021/06/27 下午 05:22
  */
 public class MyOnOffButtonRender implements TableCellRenderer {
 

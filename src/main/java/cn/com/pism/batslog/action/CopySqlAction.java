@@ -4,6 +4,7 @@ import cn.com.pism.batslog.util.BatsLogUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class CopySqlAction extends AnAction {
     /**
      * Creates a new action with its text, description and icon set to {@code null}.
      */
+    @SuppressWarnings("unused")
     public CopySqlAction() {
     }
 
@@ -35,7 +37,7 @@ public class CopySqlAction extends AnAction {
     }
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         String selectedText = BatsLogUtil.getSelectText(e);
         copySqlToClipboard(e, selectedText);
     }

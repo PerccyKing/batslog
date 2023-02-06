@@ -6,9 +6,9 @@ import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.model.ShowColorConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.tablehelp.*;
-import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ColoringUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
+import cn.com.pism.batslog.util.GlobalVar;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONValidator;
 import com.alibaba.fastjson2.JSONWriter;
@@ -41,8 +41,7 @@ import java.util.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/27 下午 04:27
- * @since 0.0.1
+ * @since 2021/06/27 下午 04:27
  */
 public class ConsoleColorConfigDialog extends DialogWrapper {
     private JPanel root;
@@ -53,12 +52,12 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     private HyperlinkLabel oac;
 
 
-    private Project project;
+    private final Project project;
 
     private EditorTextField textField;
 
 
-    private BatsLogSettingState service;
+    private final BatsLogSettingState service;
 
     protected ConsoleColorConfigDialog(@Nullable Project project) {
         super(project);
@@ -245,7 +244,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         service.setColorConfigs(configData);
 
         List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
-        BatsLogUtil.KEY_COLOR_MAP = ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs);
+        GlobalVar.setKeyColorMap(ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs));
         super.doOKAction();
     }
 

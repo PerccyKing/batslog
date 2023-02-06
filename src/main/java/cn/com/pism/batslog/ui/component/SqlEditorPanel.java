@@ -13,8 +13,7 @@ import javax.swing.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/11/15 下午 06:33
- * @since 0.0.1
+ * @since 2021/11/15 下午 06:33
  */
 @Data
 public class SqlEditorPanel {
@@ -48,7 +47,7 @@ public class SqlEditorPanel {
      * </p>
      *
      * @author PerccyKing
-     * @date 2021/11/23 下午 10:17
+     * @since 2021/11/23 下午 10:17
      */
     public void reformatCode() {
         final AnAction reformatCodeAction = getReformatCodeAction();
@@ -64,7 +63,8 @@ public class SqlEditorPanel {
         ApplicationManager.getApplication().invokeLater(() -> reformatCodeAction.actionPerformed(fromAnAction));
     }
 
+    @SuppressWarnings({"all"})
     private void createUIComponents() {
-
+        // do something
     }
 }

@@ -1,6 +1,5 @@
 package cn.com.pism.batslog.ui;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.ui.ColorChooser;
 import com.intellij.util.ui.JBUI;
 import lombok.Data;
@@ -13,7 +12,7 @@ import static cn.com.pism.batslog.constants.BatsLogConstant.KEY_WORD_DEF_COL;
 
 /**
  * @author wangyihuai
- * @date 2021/05/27 17:16
+ * @since 2021/05/27 17:16
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -21,38 +20,35 @@ public class ColorButton extends JButton {
 
     private Color selectColor;
 
-    private int width;
-    private int height;
+    private int cbWidth;
+    private int cbHeight;
 
-    @Override
-    protected void init(String text, Icon icon) {
-        super.init(text, icon);
-    }
-
-    public ColorButton(Project project, Color color, int width, int height, Callback<Color> callback) {
-        this.width = width;
-        this.height = height;
+    public ColorButton(Color color, int cbWidth, int cbHeight, Callback<Color> callback) {
+        this.cbWidth = cbWidth;
+        this.cbHeight = cbHeight;
         if (color != null) {
             this.selectColor = color;
         } else {
             this.selectColor = KEY_WORD_DEF_COL;
         }
-        buttonInit(project, color, callback);
+        buttonInit(color, callback);
     }
 
-    public ColorButton(Project project, Color color) {
-        new ColorButton(project, color, 12, 12);
+    @SuppressWarnings("unused")
+    public ColorButton(Color color) {
+        new ColorButton(color, 12, 12);
     }
 
-    public ColorButton(Project project, Color color, int width, int height) {
-        new ColorButton(project, color, width, height, color1 -> this.selectColor = color);
+    public ColorButton(Color color, int width, int cbHeight) {
+        new ColorButton(color, width, cbHeight, color1 -> this.selectColor = color);
     }
 
+    @SuppressWarnings("unused")
     public ColorButton() {
-        buttonInit(null, null, color -> this.selectColor = color);
+        buttonInit(null, color -> this.selectColor = color);
     }
 
-    private void buttonInit(Project project, Color color, Callback<Color> callback) {
+    private void buttonInit(Color color, Callback<Color> callback) {
         setMargin(JBUI.emptyInsets());
         setFocusable(false);
         setDefaultCapable(false);
@@ -78,7 +74,7 @@ public class ColorButton extends JButton {
         } else {
             g.setColor(selectColor);
         }
-        g.fillRect(0, 0, this.width, this.height);
+        g.fillRect(0, 0, this.cbWidth, this.cbHeight);
         g.setColor(color);
     }
 
@@ -94,6 +90,6 @@ public class ColorButton extends JButton {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(this.width, this.height);
+        return new Dimension(this.cbWidth, this.cbHeight);
     }
 }

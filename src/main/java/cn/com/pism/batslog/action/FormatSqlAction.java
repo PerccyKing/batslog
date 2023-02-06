@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import lombok.extern.log4j.Log4j;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -13,8 +14,7 @@ import javax.swing.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2020/10/18 下午 05:30
- * @since 0.0.1
+ * @since 2020/10/18 下午 05:30
  */
 @Log4j
 public class FormatSqlAction extends AnAction {
@@ -22,6 +22,7 @@ public class FormatSqlAction extends AnAction {
     /**
      * Creates a new action with its text, description and icon set to {@code null}.
      */
+    @SuppressWarnings("unused")
     public FormatSqlAction() {
     }
 
@@ -39,7 +40,7 @@ public class FormatSqlAction extends AnAction {
     }
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         String selectedText = BatsLogUtil.getSelectText(e);
         SqlFormatUtil.format(selectedText, e.getProject());
     }

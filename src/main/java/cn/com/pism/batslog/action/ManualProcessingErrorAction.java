@@ -9,10 +9,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * 手动处理事件
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/12/19 下午 08:16
- * @since 0.0.1
+ * @since 2021/12/19 下午 08:16
  */
 public class ManualProcessingErrorAction extends AnAction {
     @Override

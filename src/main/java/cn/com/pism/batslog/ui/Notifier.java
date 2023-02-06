@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/10/12 上午 09:58
- * @since 0.0.1
+ * @since 2021/10/12 上午 09:58
  */
 public class Notifier {
 
@@ -25,6 +24,7 @@ public class Notifier {
         return NotificationGroup.findRegisteredGroup("cn.com.pism.batslog.notification");
     }
 
+    @SuppressWarnings("unused")
     public static void notifyError(@Nullable Project project, String content) {
         getNotificationGroup().createNotification(content, NotificationType.ERROR)
                 .notify(project);

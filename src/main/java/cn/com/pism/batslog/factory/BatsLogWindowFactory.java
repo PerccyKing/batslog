@@ -10,14 +10,13 @@ import cn.com.pism.batslog.ui.ErrorListPanel;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.ui.SettingForm;
-import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.ConsoleColorConfigUtil;
+import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
@@ -27,33 +26,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.com.pism.batslog.util.BatsLogUtil.FORMAT_CONSOLE_MAP;
-
 
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2020/10/25 下午 12:18
- * @since 0.0.1
+ * @since 2020/10/25 下午 12:18
  */
 public class BatsLogWindowFactory implements ToolWindowFactory {
+
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
 
-        BatsLogUtil.TOOL_WINDOW = (ToolWindowEx) toolWindow;
-        FormatConsole formatConsole = FORMAT_CONSOLE_MAP.get(project);
+        FormatConsole formatConsole = GlobalVar.getFormatConsole(project);
         BatsLogSettingState service = BatsLogSettingState.getInstance(project);
         //当监听状态默认开启时，修改启动按钮状态
-        if (Boolean.TRUE.equals(service.getStartWithProject())) {
-            BatsLogUtil.TAIL_STATUS.put(project, Boolean.TRUE);
-        }
+        GlobalVar.putTailStatus(project, service.getStartWithProject());
         //当sql console没有实例化，将其实例化
         if (formatConsole == null) {
-            formatConsole = new FormatConsole(project);
-            FORMAT_CONSOLE_MAP.put(project, formatConsole);
+            formatConsole = new FormatConsole(project, toolWindow);
+            GlobalVar.putFormatConsole(project, formatConsole);
         }
         boolean inBottom = ToolWindowAnchor.BOTTOM.equals(toolWindow.getAnchor());
-        formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) BatsLogUtil.CONSOLE_VIEW_MAP.get(project), inBottom);
+        formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) GlobalVar.getConsoleView(project), inBottom);
         SettingForm settingForm = new SettingForm(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("batslog.console"), false);
@@ -75,7 +69,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
             colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 137, 151), true, new RgbColor(255, 255, 255), true, true));
             service.setColorConfigs(colorConfigs);
         }
-        BatsLogUtil.KEY_COLOR_MAP = ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs);
+        GlobalVar.setKeyColorMap(ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs));
     }
 
 }

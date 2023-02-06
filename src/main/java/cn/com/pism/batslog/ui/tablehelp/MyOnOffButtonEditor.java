@@ -9,8 +9,7 @@ import java.util.function.Consumer;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/06/27 下午 05:19
- * @since 0.0.1
+ * @since 2021/06/27 下午 05:19
  */
 public class MyOnOffButtonEditor extends DefaultCellEditor {
 
@@ -18,7 +17,7 @@ public class MyOnOffButtonEditor extends DefaultCellEditor {
 
     private OnOffButton button;
 
-    private Consumer<Boolean> consumer;
+    private final transient Consumer<Boolean> consumer;
 
     public MyOnOffButtonEditor(Consumer<Boolean> consumer) {
         super(new JTextField());

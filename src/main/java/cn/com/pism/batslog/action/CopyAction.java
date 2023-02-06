@@ -15,7 +15,7 @@ import static cn.com.pism.batslog.util.BatsLogUtil.copyToClipboard;
  * 复制
  *
  * @author PerccyKing
- * @date 2022/06/11 下午 01:01
+ * @since 2022/06/11 下午 01:01
  */
 public class CopyAction extends AnAction {
 

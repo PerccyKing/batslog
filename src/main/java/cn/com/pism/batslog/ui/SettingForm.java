@@ -8,6 +8,7 @@ import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.component.EnabledColorButton;
 import cn.com.pism.batslog.util.BatsLogUtil;
+import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -35,7 +36,7 @@ import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
 /**
  * @author wangyihuai
- * @date 2021/1/6 11:30
+ * @since 2021/1/6 11:30
  */
 @Data
 public class SettingForm {
@@ -96,7 +97,7 @@ public class SettingForm {
             timeFormat = BatsLogConstant.TIME_FORMAT;
         }
         timestampFormat.setText(timeFormat);
-        addListen(project);
+        addListen();
         RevertAction revertSqlAction = new RevertAction(AllIcons.Actions.Rollback, SQL_PREFIX, sqlPrefix);
         revertSqlPanel.add(new ActionButton(revertSqlAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
         RevertAction revertParamsAction = new RevertAction(AllIcons.Actions.Rollback, PARAMS_PREFIX, paramsPrefix);
@@ -113,7 +114,7 @@ public class SettingForm {
      * </p>
      *
      * @author PerccyKing
-     * @date 2022/04/13 下午 10:44
+     * @since 2022/04/13 下午 10:44
      */
     private void initEncodingBox() {
         String encoding = service.getEncoding();
@@ -137,10 +138,10 @@ public class SettingForm {
         setOnOffText(parameterized);
         prettyFormat.setSelected(service.getPrettyFormat());
         setOnOffText(prettyFormat);
-        BatsLogUtil.PRETTY_FORMAT = prettyFormat;
-        Boolean toUpperCase = service.getToUpperCase();
-        if (toUpperCase != null) {
-            this.toUpperCase.setSelected(toUpperCase);
+        GlobalVar.setPrettyFormat(prettyFormat);
+        Boolean seToUpperCase = service.getToUpperCase();
+        if (seToUpperCase != null) {
+            this.toUpperCase.setSelected(seToUpperCase);
         } else {
             this.toUpperCase.setSelected(false);
         }
@@ -165,7 +166,7 @@ public class SettingForm {
      *
      * @param project : 项目
      * @author PerccyKing
-     * @date 2021/06/26 下午 03:40
+     * @since 2021/06/26 下午 03:40
      */
     private void initKeyWordColorButton(Project project) {
         EnabledColorButton colorButton = new EnabledColorButton(project, BatsLogUtil.toColor(service.getKeyWordDefCol()), 16, 16,
@@ -187,7 +188,7 @@ public class SettingForm {
      * </p>
      *
      * @author PerccyKing
-     * @date 2021/06/26 下午 03:39
+     * @since 2021/06/26 下午 03:39
      */
     private void initDbTypeBox() {
         List<DbType> radioButtons = DbType.getRadioButtons();
@@ -207,58 +208,58 @@ public class SettingForm {
             DbType item = (DbType) e.getItem();
             service.setDbType(item);
         });
-        DbTypeRender<DbType> dbTypeRender = new DbTypeRender<>();
+        DbTypeRender dbTypeRender = new DbTypeRender();
         dbTypeBox.setRenderer(dbTypeRender);
     }
 
-    private void addListen(Project project) {
+    private void addListen() {
         sqlPrefix.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateSqlPrefix(e, project);
+                updateSqlPrefix(e);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateSqlPrefix(e, project);
+                updateSqlPrefix(e);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateSqlPrefix(e, project);
+                updateSqlPrefix(e);
             }
         });
 
         paramsPrefix.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateParamsPrefix(e, project);
+                updateParamsPrefix(e);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateParamsPrefix(e, project);
+                updateParamsPrefix(e);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateParamsPrefix(e, project);
+                updateParamsPrefix(e);
             }
         });
         timestampFormat.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateTimeFormat(e, project);
+                updateTimeFormat(e);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateTimeFormat(e, project);
+                updateTimeFormat(e);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateTimeFormat(e, project);
+                updateTimeFormat(e);
             }
         });
         desensitize.addActionListener(ac -> service.setDesensitize(desensitize.isSelected()));
@@ -274,17 +275,17 @@ public class SettingForm {
         });
     }
 
-    private void updateParamsPrefix(DocumentEvent e, Project project) {
+    private void updateParamsPrefix(DocumentEvent e) {
         String text = getSettingPrefix(e);
         service.setParamsPrefix(text);
     }
 
-    private void updateTimeFormat(DocumentEvent e, Project project) {
+    private void updateTimeFormat(DocumentEvent e) {
         service.setTimeFormat(getSettingPrefix(e));
     }
 
 
-    private void updateSqlPrefix(DocumentEvent e, Project project) {
+    private void updateSqlPrefix(DocumentEvent e) {
         String text = getSettingPrefix(e);
         service.setSqlPrefix(text);
     }
@@ -303,11 +304,11 @@ public class SettingForm {
     }
 
 
-    protected static class DbTypeRender<T extends DbType> extends JLabel implements ListCellRenderer<T> {
+    protected static class DbTypeRender extends JLabel implements ListCellRenderer<DbType> {
 
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends T> list, T value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends DbType> list, DbType value, int index, boolean isSelected, boolean cellHasFocus) {
             if (!value.equals(DbType.NONE)) {
                 this.setIcon(value.getIcon());
                 if (value.getIcon() == null) {

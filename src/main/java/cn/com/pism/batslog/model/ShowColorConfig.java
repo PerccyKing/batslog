@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/08/02 下午 06:42
- * @since 0.0.1
+ * @since 2021/08/02 下午 06:42
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShowColorConfig {
-    @JSONField(ordinal = 0)
+    @JSONField
     private String keyword;
 
     @JSONField(ordinal = 1)

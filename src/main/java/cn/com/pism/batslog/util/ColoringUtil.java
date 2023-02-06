@@ -22,8 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2020/11/01 上午 10:55
- * @since 0.0.1
+ * @since 2020/11/01 上午 10:55
  */
 public class ColoringUtil {
 
@@ -52,7 +51,7 @@ public class ColoringUtil {
      * @param colorConfigs : 配置列表
      * @return {@link List<ShowColorConfig>}
      * @author PerccyKing
-     * @date 2021/08/02 下午 06:45
+     * @since 2021/08/02 下午 06:45
      */
     public static List<ShowColorConfig> toShowConfig(List<ConsoleColorConfig> colorConfigs) {
         List<ShowColorConfig> configs = new ArrayList<>();

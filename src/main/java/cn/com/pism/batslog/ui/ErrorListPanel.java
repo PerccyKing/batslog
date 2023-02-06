@@ -3,6 +3,7 @@ package cn.com.pism.batslog.ui;
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.BslErrorMod;
 import cn.com.pism.batslog.util.BslActionToolBarUtil;
+import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
@@ -15,13 +16,11 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import static cn.com.pism.batslog.util.BatsLogUtil.ERROR_LIST_TABLE_MODEL;
 
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/10/13 下午 04:33
- * @since 0.0.1
+ * @since 2021/10/13 下午 04:33
  */
 @Data
 public class ErrorListPanel {
@@ -51,13 +50,13 @@ public class ErrorListPanel {
      *
      * @param project : 项目实例
      * @author PerccyKing
-     * @date 2021/10/15 上午 09:30
+     * @since 2021/10/15 上午 09:30
      */
     private void initTable(Project project) {
-        DefaultTableModel tableModel = ERROR_LIST_TABLE_MODEL.get(project);
+        DefaultTableModel tableModel = GlobalVar.getErrorListTableModel(project);
         if (tableModel == null) {
             tableModel = createTableModel();
-            ERROR_LIST_TABLE_MODEL.put(project, tableModel);
+            GlobalVar.putErrorListTableModel(project, tableModel);
         }
         errorList.setModel(tableModel);
     }

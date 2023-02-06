@@ -15,8 +15,7 @@ import java.awt.*;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/10/30 下午 06:03
- * @since 0.0.1
+ * @since 2021/10/30 下午 06:03
  */
 public class ErrorProcessDialog extends DialogWrapper {
 
@@ -59,6 +58,7 @@ public class ErrorProcessDialog extends DialogWrapper {
     }
 
 
+    @SuppressWarnings("all")
     @Override
     protected void doOKAction() {
         final Dimension size = getSize();
