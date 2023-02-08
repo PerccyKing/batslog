@@ -42,10 +42,6 @@ public class FormatConsole {
 
     private static final Map<Project, AnAction[]> TAIL_ACTION = new HashMap<>();
 
-    public FormatConsole(Project project) {
-        new FormatConsole(project, null);
-    }
-
     public FormatConsole(Project project, ToolWindow toolWindow) {
 
         //初始化console的action

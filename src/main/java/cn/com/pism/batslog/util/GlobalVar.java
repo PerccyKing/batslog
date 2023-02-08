@@ -1,5 +1,8 @@
 package cn.com.pism.batslog.util;
 
+import cn.com.pism.batslog.model.ConsoleColorConfig;
+import cn.com.pism.batslog.model.RgbColor;
+import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -7,6 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.OnOffButton;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +115,21 @@ public class GlobalVar {
      */
     private static Map<String, ConsoleViewContentType> keyColorMap;
 
-    public static Map<String, ConsoleViewContentType> getKeyColorMap() {
+    public static Map<String, ConsoleViewContentType> getKeyColorMap(Project project) {
+        if (keyColorMap == null) {
+            //重新获取一次颜色配置
+            BatsLogSettingState service = BatsLogSettingState.getInstance(project);
+            List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+            //如果未做配置，添加默认颜色配置
+            if (colorConfigs == null || colorConfigs.isEmpty()) {
+                colorConfigs = new ArrayList<>();
+                colorConfigs.add(new ConsoleColorConfig("1", 1, "INSERT", new RgbColor(41, 204, 152), true, new RgbColor(255, 255, 255), true, true));
+                colorConfigs.add(new ConsoleColorConfig("2", 2, "UPDATE", new RgbColor(118, 147, 255), true, new RgbColor(255, 255, 255), true, true));
+                colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 137, 151), true, new RgbColor(255, 255, 255), true, true));
+                service.setColorConfigs(colorConfigs);
+            }
+            GlobalVar.setKeyColorMap(ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs));
+        }
         return keyColorMap;
     }
 

@@ -47,7 +47,7 @@ public class StartUpAction implements StartupActivity {
             FormatConsole formatConsole = GlobalVar.getFormatConsole(project);
             //如果console没有实例化需要做一次实例化
             if (formatConsole == null) {
-                GlobalVar.putFormatConsole(project, new FormatConsole(project));
+                GlobalVar.putFormatConsole(project, new FormatConsole(project,null));
             }
         }
         try {

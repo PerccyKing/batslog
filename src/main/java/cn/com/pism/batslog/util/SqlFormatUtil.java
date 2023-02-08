@@ -315,6 +315,21 @@ public class SqlFormatUtil {
 
     }
 
+    /**
+     * <p>
+     * 打印SQL
+     * </p>
+     *
+     * @param project        : 项目对象
+     * @param printToConsole : 是否输出到console
+     * @param console        : console对象
+     * @param sqlList        : sql列表
+     * @param paramsList     : 参数列表
+     * @param nameList       : 名称列表
+     * @param service        : batslog配置service
+     * @author PerccyKing
+     * @since 2023/2/8 10:21
+     */
     private static void print(Project project, Boolean printToConsole, ConsoleViewImpl console, List<String> sqlList,
                               List<String> paramsList, List<String> nameList, BatsLogSettingState service) {
         String dbTypeStr = JdbcConstants.MYSQL.name();
@@ -341,9 +356,11 @@ public class SqlFormatUtil {
                     if (console == null) {
                         console = (ConsoleViewImpl) GlobalVar.getConsoleView(project);
                     }
-
+                    //当toolwindow还未实例化的时候，控制console的大小
+                    // 先打印一次分隔符和‘SQL名称’
                     printSeparatorAndName(project, console, name, service);
                     console.print(console.getContentSize() + "", ConsoleViewContentType.ERROR_OUTPUT);
+                    //打印SQL
                     printSql(formatSql, project, console);
                 } else {
                     //放入缓存
@@ -400,7 +417,7 @@ public class SqlFormatUtil {
      */
     public static void printSql(String sql, Project project, ConsoleViewImpl consoleView) {
 
-        Map<String, ConsoleViewContentType> keyColorMap = GlobalVar.getKeyColorMap();
+        Map<String, ConsoleViewContentType> keyColorMap = GlobalVar.getKeyColorMap(project);
 
         ConsoleViewContentType defaultContentType = ConsoleViewContentType.NORMAL_OUTPUT;
 
