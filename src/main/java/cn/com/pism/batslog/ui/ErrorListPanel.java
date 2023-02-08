@@ -54,10 +54,6 @@ public class ErrorListPanel {
      */
     private void initTable(Project project) {
         DefaultTableModel tableModel = GlobalVar.getErrorListTableModel(project);
-        if (tableModel == null) {
-            tableModel = createTableModel();
-            GlobalVar.putErrorListTableModel(project, tableModel);
-        }
         errorList.setModel(tableModel);
     }
 

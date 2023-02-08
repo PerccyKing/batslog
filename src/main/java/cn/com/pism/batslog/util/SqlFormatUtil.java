@@ -537,17 +537,18 @@ public class SqlFormatUtil {
         if (StringUtils.isBlank(params)) {
             return new ArrayList<>();
         }
-        String[] paramArr = params.split(",");
+        String[] paramArr = params.split("\\),");
         List<Object> paramList = new ArrayList<>();
         //fix https://github.com/PerccyKing/batslog/issues/12 参数为空的时候会造成这种情况
         for (String s : paramArr) {
             if (StringUtils.isNotBlank(s)) {
+                s = s.trim();
                 String par;
                 String type = null;
-                if (s.trim().contains("(")) {
-                    int i = s.trim().lastIndexOf("(") + 1;
+                if (s.contains("(")) {
+                    int i = s.lastIndexOf("(");
                     par = s.substring(0, i);
-                    type = s.substring(i + 1, s.trim().lastIndexOf(")") + 1);
+                    type = s.substring(i + 1);
                 } else {
                     par = s;
                 }

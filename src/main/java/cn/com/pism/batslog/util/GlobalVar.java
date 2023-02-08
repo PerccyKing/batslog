@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cn.com.pism.batslog.ui.ErrorListPanel.createTableModel;
+
 /**
  * 全局变量
  *
@@ -138,7 +140,12 @@ public class GlobalVar {
     private static final Map<Project, DefaultTableModel> ERROR_LIST_TABLE_MODEL = new HashMap<>(0);
 
     public static DefaultTableModel getErrorListTableModel(Project project) {
-        return ERROR_LIST_TABLE_MODEL.get(project);
+        DefaultTableModel tableModel = ERROR_LIST_TABLE_MODEL.get(project);
+        if (tableModel == null) {
+            tableModel = createTableModel();
+            GlobalVar.putErrorListTableModel(project, tableModel);
+        }
+        return tableModel;
     }
 
     public static void putErrorListTableModel(Project project, DefaultTableModel tableModel) {
