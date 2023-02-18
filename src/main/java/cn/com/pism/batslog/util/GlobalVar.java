@@ -8,6 +8,7 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.OnOffButton;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
@@ -122,15 +123,21 @@ public class GlobalVar {
             List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
             //如果未做配置，添加默认颜色配置
             if (colorConfigs == null || colorConfigs.isEmpty()) {
-                colorConfigs = new ArrayList<>();
-                colorConfigs.add(new ConsoleColorConfig("1", 1, "INSERT", new RgbColor(41, 204, 152), true, new RgbColor(255, 255, 255), true, true));
-                colorConfigs.add(new ConsoleColorConfig("2", 2, "UPDATE", new RgbColor(118, 147, 255), true, new RgbColor(255, 255, 255), true, true));
-                colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 137, 151), true, new RgbColor(255, 255, 255), true, true));
+                colorConfigs = getDefaultColorConfigs();
                 service.setColorConfigs(colorConfigs);
             }
             GlobalVar.setKeyColorMap(ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs));
         }
         return keyColorMap;
+    }
+
+    @NotNull
+    public static List<ConsoleColorConfig> getDefaultColorConfigs() {
+        List<ConsoleColorConfig> colorConfigs = new ArrayList<>();
+        colorConfigs.add(new ConsoleColorConfig("1", 1, "INSERT", new RgbColor(41, 204, 152), true, new RgbColor(255, 255, 255), true, true));
+        colorConfigs.add(new ConsoleColorConfig("2", 2, "UPDATE", new RgbColor(118, 147, 255), true, new RgbColor(255, 255, 255), true, true));
+        colorConfigs.add(new ConsoleColorConfig("3", 3, "DELETE", new RgbColor(255, 137, 151), true, new RgbColor(255, 255, 255), true, true));
+        return colorConfigs;
     }
 
     public static void setKeyColorMap(Map<String, ConsoleViewContentType> keyColorMap) {

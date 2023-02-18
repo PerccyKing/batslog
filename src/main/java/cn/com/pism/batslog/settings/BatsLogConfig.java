@@ -10,10 +10,13 @@ import cn.com.pism.batslog.model.RgbColor;
 import com.alibaba.fastjson2.JSON;
 import com.intellij.util.xmlb.annotations.OptionTag;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static cn.com.pism.batslog.util.GlobalVar.getDefaultColorConfigs;
 
 /**
  * @author PerccyKing
@@ -88,8 +91,8 @@ public class BatsLogConfig {
     private List<ConsoleColorConfig> colorConfigs = new ArrayList<>();
 
 
-    public String hash(){
-        return sqlPrefix+paramsPrefix+timeFormat+encoding
+    public String hash() {
+        return sqlPrefix + paramsPrefix + timeFormat + encoding
                 + BooleanUtils.toStringYesNo(desensitize)
                 + BooleanUtils.toStringYesNo(prettyFormat)
                 + BooleanUtils.toStringYesNo(parameterized)
@@ -100,6 +103,12 @@ public class BatsLogConfig {
                 + BooleanUtils.toStringYesNo(enabledKeyWordDefCol)
                 + dbType.getName()
                 + JSON.toJSONString(keyWordDefCol)
-                + JSON.toJSONString(colorConfigs);
+                + JSON.toJSONString(hashColorConfigs(CollectionUtils.isEmpty(colorConfigs) ? getDefaultColorConfigs() : colorConfigs));
+    }
+
+    private String hashColorConfigs(List<ConsoleColorConfig> consoleColorConfigs) {
+        ArrayList<ConsoleColorConfig> configs = new ArrayList<>(consoleColorConfigs);
+        configs.forEach(item -> item.setId(""));
+        return JSON.toJSONString(configs);
     }
 }

@@ -76,6 +76,9 @@ public class SettingForm {
 
     private BatsLogConfig tmpConfig = new BatsLogConfig();
 
+
+    private ConsoleColorConfigDialog consoleColorConfigDialog;
+
     public SettingForm(Project project) {
         this.project = project;
         this.service = project == null ? BatsLogGlobalConfigState.getInstance() : BatsLogSettingState.getInstance(project);
@@ -112,7 +115,10 @@ public class SettingForm {
 
         initFormatConfig();
 
-        configButton.addActionListener(e -> ConsoleColorConfigDialog.show(project));
+        configButton.addActionListener(e -> {
+            consoleColorConfigDialog = new ConsoleColorConfigDialog(project, tmpConfig);
+            consoleColorConfigDialog.show();
+        });
     }
 
     /**
@@ -406,6 +412,7 @@ public class SettingForm {
         keyWordsColorButton.getColorButton().callCallback();
         keyWordsPanel.revalidate();
         //重置颜色配置
+        consoleColorConfigDialog.rest(globalService.getColorConfigs());
     }
 
 }

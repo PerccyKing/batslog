@@ -4,6 +4,8 @@ import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.model.ShowColorConfig;
+import cn.com.pism.batslog.settings.BatsLogConfig;
+import cn.com.pism.batslog.settings.BatsLogGlobalConfigState;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.tablehelp.*;
 import cn.com.pism.batslog.util.ColoringUtil;
@@ -19,6 +21,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
@@ -56,17 +59,18 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     private EditorTextField textField;
 
+    private final BatsLogConfig service;
 
-    private final BatsLogSettingState service;
+    private final BatsLogConfig tmpConfig;
 
-    protected ConsoleColorConfigDialog(Project project) {
+    protected ConsoleColorConfigDialog(Project project, BatsLogConfig tmpConfig) {
         super(project);
-        this.service = BatsLogSettingState.getInstance(project);
+        this.service = project == null ? BatsLogGlobalConfigState.getInstance() : BatsLogSettingState.getInstance(project);
         this.project = project;
+        this.tmpConfig = tmpConfig;
         init();
         initForm(project);
         addListener();
-        show();
     }
 
     private void addListener() {
@@ -121,8 +125,16 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
     }
 
     private void initConfigPanel(Project project) {
+        if (project == null) {
+            project = ProjectManager.getInstance().getDefaultProject();
+        }
 
-        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
+        List<ConsoleColorConfig> colorConfigs;
+        if (CollectionUtils.isEmpty(tmpConfig.getColorConfigs())) {
+            colorConfigs = service.getColorConfigs();
+        } else {
+            colorConfigs = tmpConfig.getColorConfigs();
+        }
         List<ShowColorConfig> showConfig = ColoringUtil.toShowConfig(colorConfigs);
         PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(JsonLanguage.INSTANCE, "[]");
 
@@ -227,10 +239,6 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         return root;
     }
 
-    public static void show(Project project) {
-        new ConsoleColorConfigDialog(project);
-    }
-
     @Override
     protected void doOKAction() {
         List<ConsoleColorConfig> configData = getColorConfigs();
@@ -241,10 +249,13 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
                 colorConfig.setKeyWord(colorConfig.getKeyWord().toUpperCase(Locale.ROOT));
             }
         }
-        service.setColorConfigs(configData);
+        if (project != null) {
+            service.setColorConfigs(configData);
+            GlobalVar.setKeyColorMap(ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, configData));
+        } else {
+            tmpConfig.setColorConfigs(configData);
+        }
 
-        List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
-        GlobalVar.setKeyColorMap(ConsoleColorConfigUtil.toConsoleViewContentTypeMap(project, colorConfigs));
         super.doOKAction();
     }
 
@@ -314,5 +325,18 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
             ApplicationManager.getApplication().invokeLater(() ->
                     this.textField.setText(CollectionUtils.isNotEmpty(showConfig) ? JSON.toJSONString(showConfig, JSONWriter.Feature.PrettyFormat) : "[]"));
         }
+    }
+
+    /**
+     * <p>
+     * 重置颜色配置
+     * </p>
+     *
+     * @param colorConfigs : 颜色配置列表
+     * @author PerccyKing
+     * @since 2023/2/18 21:48
+     */
+    public void rest(List<ConsoleColorConfig> colorConfigs) {
+        tmpConfig.setColorConfigs(colorConfigs);
     }
 }

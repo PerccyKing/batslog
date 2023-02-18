@@ -30,7 +30,8 @@ public class ConsoleColorConfigUtil {
                     colorConfig.isEnableBgColor() ? BatsLogUtil.toColor(colorConfig.getBackgroundColor()) : normalOutput.getAttributes().getBackgroundColor(),
                     null, EffectType.BOXED, Font.PLAIN);
             if (StringUtils.isNotBlank(colorConfig.getKeyWord()) && colorConfig.isEnabled()) {
-                map.put(colorConfig.getKeyWord(), new ConsoleViewContentType(project.getName() + "ConsoleColor" + colorConfig.getKeyWord(), textAttributes));
+                String baseName = project == null ? "" : project.getName();
+                map.put(colorConfig.getKeyWord(), new ConsoleViewContentType(baseName + "ConsoleColor" + colorConfig.getKeyWord(), textAttributes));
             }
         }
         return map;
