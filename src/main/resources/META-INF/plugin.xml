@@ -324,7 +324,7 @@
         <toolWindow id="BSL" factoryClass="cn.com.pism.batslog.factory.BatsLogWindowFactory" anchor="right"
                     icon="BatsLogIcons.BATS_LOG"/>
 
-        <!--        <applicationConfigurable id="batslog.config" instance="cn.com.pism.batslog.settings.BatsLogConfigurable"/>-->
+        <applicationConfigurable id="batslog.config" instance="cn.com.pism.batslog.settings.BatsLogConfigurable"/>
 
         <postStartupActivity implementation="cn.com.pism.batslog.action.StartUpAction"/>
 
@@ -332,19 +332,6 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
-        <!--<action id="$ShowMe" class="cn.com.pism.batslog.action.ShowMe" text="提取SQL"/>
-
-        <group id="BatsLog" text="格式化">
-            <separator/>
-            <reference ref="$ShowMe"/>
-            <separator/>
-
-            <add-to-group group-id="BasicEditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="Diff.EditorPopupMenu" anchor="first"/>
-        </group>-->
         <action id="$FormatSql" class="cn.com.pism.batslog.action.FormatSqlAction" text="格式化SQL"
                 description="将mybatis打印的SQL进行格式化"
                 icon="BatsLogIcons.BATS_LOG"

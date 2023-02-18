@@ -59,7 +59,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
 
     private final BatsLogSettingState service;
 
-    protected ConsoleColorConfigDialog(@Nullable Project project) {
+    protected ConsoleColorConfigDialog(Project project) {
         super(project);
         this.service = BatsLogSettingState.getInstance(project);
         this.project = project;

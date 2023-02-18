@@ -7,8 +7,10 @@ import cn.com.pism.batslog.converter.DbTypeConverter;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.model.RgbColor;
+import com.alibaba.fastjson2.JSON;
 import com.intellij.util.xmlb.annotations.OptionTag;
 import lombok.Data;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,4 +87,19 @@ public class BatsLogConfig {
     @OptionTag(converter = ConsoleColorConfigConverter.class)
     private List<ConsoleColorConfig> colorConfigs = new ArrayList<>();
 
+
+    public String hash(){
+        return sqlPrefix+paramsPrefix+timeFormat+encoding
+                + BooleanUtils.toStringYesNo(desensitize)
+                + BooleanUtils.toStringYesNo(prettyFormat)
+                + BooleanUtils.toStringYesNo(parameterized)
+                + BooleanUtils.toStringYesNo(toUpperCase)
+                + BooleanUtils.toStringYesNo(addTimestamp)
+                + BooleanUtils.toStringYesNo(startWithProject)
+                + BooleanUtils.toStringYesNo(enableMixedPrefix)
+                + BooleanUtils.toStringYesNo(enabledKeyWordDefCol)
+                + dbType.getName()
+                + JSON.toJSONString(keyWordDefCol)
+                + JSON.toJSONString(colorConfigs);
+    }
 }

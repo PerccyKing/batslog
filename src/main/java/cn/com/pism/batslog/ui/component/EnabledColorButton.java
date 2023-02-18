@@ -44,12 +44,7 @@ public class EnabledColorButton {
         this.colorCallback = colorCallback;
         this.enabled = enabled;
         this.enabledTips = tips;
-        enableCheckBox.addActionListener(e -> {
-            if (enabled != null) {
-                this.enabledColor = enableCheckBox.isSelected();
-                enabled.call(enableCheckBox.isSelected());
-            }
-        });
+        enableCheckBox.addActionListener(e -> callEnabled());
         enableCheckBox.setToolTipText(tips);
     }
 
@@ -72,5 +67,12 @@ public class EnabledColorButton {
 
     public void setEnableCheckBox(boolean selected) {
         this.enableCheckBox.setSelected(selected);
+    }
+
+    public void callEnabled() {
+        if (enabled != null) {
+            this.enabledColor = enableCheckBox.isSelected();
+            enabled.call(enableCheckBox.isSelected());
+        }
     }
 }

@@ -5,6 +5,8 @@ import cn.com.pism.batslog.action.RevertAction;
 import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.RgbColor;
+import cn.com.pism.batslog.settings.BatsLogConfig;
+import cn.com.pism.batslog.settings.BatsLogGlobalConfigState;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.component.EnabledColorButton;
 import cn.com.pism.batslog.util.BatsLogUtil;
@@ -35,6 +37,11 @@ import java.util.List;
 import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
 /**
+ * <p>项目配置和全局配置的页面</p>
+ * <pre>
+ *     如果是项目的配置，必须使用构造器创建页面 {@link cn.com.pism.batslog.ui.SettingForm#SettingForm(com.intellij.openapi.project.Project)}
+ * </pre>
+ *
  * @author wangyihuai
  * @since 2021/1/6 11:30
  */
@@ -63,15 +70,15 @@ public class SettingForm {
     private OnOffButton enableMixedPrefix;
     private JLabel sqlPrefixTips;
 
-    private BatsLogSettingState service;
+    private BatsLogConfig service;
 
-    public SettingForm() {
-    }
+    private EnabledColorButton keyWordsColorButton;
 
+    private BatsLogConfig tmpConfig = new BatsLogConfig();
 
     public SettingForm(Project project) {
         this.project = project;
-        this.service = BatsLogSettingState.getInstance(project);
+        this.service = project == null ? BatsLogGlobalConfigState.getInstance() : BatsLogSettingState.getInstance(project);
 
         //初始化数据库选择
         initDbTypeBox();
@@ -128,7 +135,8 @@ public class SettingForm {
         consoleEncoding.addItem(StandardCharsets.UTF_16.displayName());
 
         consoleEncoding.setSelectedItem(encoding);
-        consoleEncoding.addItemListener(e -> service.setEncoding((String) e.getItem()));
+        consoleEncoding.addItemListener(e -> whenProject(() -> tmpConfig.setEncoding((String) e.getItem()),
+                () -> service.setEncoding((String) e.getItem())));
     }
 
     private void initFormatConfig() {
@@ -137,6 +145,7 @@ public class SettingForm {
         parameterized.setSelected(service.getParameterized());
         setOnOffText(parameterized);
         prettyFormat.setSelected(service.getPrettyFormat());
+        tmpConfig.setPrettyFormat(service.getPrettyFormat());
         setOnOffText(prettyFormat);
         GlobalVar.setPrettyFormat(prettyFormat);
         Boolean seToUpperCase = service.getToUpperCase();
@@ -171,8 +180,13 @@ public class SettingForm {
     private void initKeyWordColorButton(Project project) {
         EnabledColorButton colorButton = new EnabledColorButton(project, BatsLogUtil.toColor(service.getKeyWordDefCol()), 16, 16,
                 BatsLogBundle.message("config.form.console.enabledKeyWordColor.tips"),
-                choseColor -> service.setKeyWordDefCol(new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue())),
-                enabled -> service.setEnabledKeyWordDefCol(enabled));
+                choseColor -> {
+                    RgbColor newColor = new RgbColor(choseColor.getRed(), choseColor.getGreen(), choseColor.getBlue());
+                    whenProject(() -> tmpConfig.setKeyWordDefCol(newColor), () -> service.setKeyWordDefCol(newColor));
+                },
+                enabled -> whenProject(() -> tmpConfig.setEnabledKeyWordDefCol(enabled),
+                        () -> service.setEnabledKeyWordDefCol(enabled)));
+        this.keyWordsColorButton = colorButton;
         colorButton.setEnableCheckBox(service.isEnabledKeyWordDefCol());
         GridLayoutManager layout = (GridLayoutManager) keyWordsPanel.getLayout();
         GridConstraints constraintsForComponent = layout.getConstraintsForComponent(keyWord);
@@ -206,7 +220,7 @@ public class SettingForm {
         dbTypeBox.setSelectedItem(dbType);
         dbTypeBox.addItemListener(e -> {
             DbType item = (DbType) e.getItem();
-            service.setDbType(item);
+            whenProject(() -> tmpConfig.setDbType(item), () -> service.setDbType(item));
         });
         DbTypeRender dbTypeRender = new DbTypeRender();
         dbTypeBox.setRenderer(dbTypeRender);
@@ -246,6 +260,7 @@ public class SettingForm {
                 updateParamsPrefix(e);
             }
         });
+
         timestampFormat.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -262,32 +277,66 @@ public class SettingForm {
                 updateTimeFormat(e);
             }
         });
-        desensitize.addActionListener(ac -> service.setDesensitize(desensitize.isSelected()));
-        prettyFormat.addActionListener(ac -> service.setPrettyFormat(prettyFormat.isSelected()));
-        parameterized.addActionListener(ac -> service.setParameterized(parameterized.isSelected()));
-        toUpperCase.addActionListener(ac -> service.setToUpperCase(toUpperCase.isSelected()));
-        addTimestamp.addActionListener(ac -> service.setAddTimestamp(addTimestamp.isSelected()));
-        startWithProject.addActionListener(ac -> service.setStartWithProject(startWithProject.isSelected()));
+
+        desensitize.addActionListener(ac -> {
+            boolean isSelected = desensitize.isSelected();
+            whenProject(() -> tmpConfig.setDesensitize(isSelected),
+                    () -> service.setDesensitize(isSelected));
+        });
+
+        prettyFormat.addActionListener(ac -> {
+                    boolean isSelected = prettyFormat.isSelected();
+                    whenProject(() -> tmpConfig.setPrettyFormat(isSelected),
+                            () -> service.setPrettyFormat(isSelected));
+                }
+        );
+
+        parameterized.addActionListener(ac -> {
+            boolean isSelected = parameterized.isSelected();
+            whenProject(() -> tmpConfig.setParameterized(isSelected),
+                    () -> service.setParameterized(isSelected));
+        });
+
+        toUpperCase.addActionListener(ac -> {
+            boolean isSelected = toUpperCase.isSelected();
+            whenProject(() -> tmpConfig.setToUpperCase(isSelected),
+                    () -> service.setToUpperCase(isSelected));
+        });
+
+        addTimestamp.addActionListener(ac -> {
+            boolean isSelected = addTimestamp.isSelected();
+            whenProject(() -> tmpConfig.setAddTimestamp(isSelected),
+                    () -> service.setAddTimestamp(isSelected));
+        });
+
+        startWithProject.addActionListener(ac -> {
+            boolean isSelected = startWithProject.isSelected();
+            whenProject(() -> tmpConfig.setStartWithProject(isSelected),
+                    () -> service.setStartWithProject(isSelected));
+        });
+
         enableMixedPrefix.addActionListener(as -> {
-            boolean selected = enableMixedPrefix.isSelected();
-            service.setEnableMixedPrefix(selected);
-            sqlPrefixTips.setVisible(selected);
+            boolean isSelected = enableMixedPrefix.isSelected();
+            whenProject(() -> tmpConfig.setEnableMixedPrefix(isSelected),
+                    () -> service.setEnableMixedPrefix(isSelected));
+            sqlPrefixTips.setVisible(isSelected);
         });
     }
 
     private void updateParamsPrefix(DocumentEvent e) {
         String text = getSettingPrefix(e);
-        service.setParamsPrefix(text);
+        whenProject(() -> tmpConfig.setParamsPrefix(text), () -> service.setParamsPrefix(text));
     }
 
     private void updateTimeFormat(DocumentEvent e) {
-        service.setTimeFormat(getSettingPrefix(e));
+        String text = getSettingPrefix(e);
+        whenProject(() -> tmpConfig.setTimeFormat(text), () -> service.setTimeFormat(text));
     }
 
 
     private void updateSqlPrefix(DocumentEvent e) {
         String text = getSettingPrefix(e);
-        service.setSqlPrefix(text);
+        whenProject(() -> tmpConfig.setSqlPrefix(text), () -> service.setSqlPrefix(text));
     }
 
     @Nullable
@@ -308,7 +357,8 @@ public class SettingForm {
 
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends DbType> list, DbType value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends DbType> list, DbType value, int index,
+                                                      boolean isSelected, boolean cellHasFocus) {
             if (!value.equals(DbType.NONE)) {
                 this.setIcon(value.getIcon());
                 if (value.getIcon() == null) {
@@ -318,6 +368,44 @@ public class SettingForm {
             }
             return this;
         }
+    }
+
+    /**
+     * 条件判断
+     *
+     * @param isNull  当项目为null时
+     * @param notNull 当项目不为null时
+     */
+    private void whenProject(Runnable isNull, Runnable notNull) {
+        if (this.project == null) {
+            isNull.run();
+        } else {
+            notNull.run();
+        }
+    }
+
+    public void reset() {
+        BatsLogGlobalConfigState globalService = BatsLogGlobalConfigState.getInstance();
+        //全局配置的时候才能进行此操作
+        dbTypeBox.setSelectedItem(globalService.getDbType());
+        keyWord.setSelected(globalService.isEnabledKeyWordDefCol());
+        sqlPrefix.setText(globalService.getSqlPrefix());
+        paramsPrefix.setText(globalService.getParamsPrefix());
+        desensitize.setSelected(globalService.getDesensitize());
+        prettyFormat.setSelected(globalService.getPrettyFormat());
+        parameterized.setSelected(globalService.getParameterized());
+        toUpperCase.setSelected(globalService.getToUpperCase());
+        addTimestamp.setSelected(globalService.getAddTimestamp());
+        timestampFormat.setText(globalService.getTimeFormat());
+        startWithProject.setSelected(globalService.getStartWithProject());
+        consoleEncoding.setSelectedItem(globalService.getEncoding());
+        enableMixedPrefix.setSelected(globalService.getEnableMixedPrefix());
+        keyWordsColorButton.setEnabledColor(globalService.isEnabledKeyWordDefCol());
+        keyWordsColorButton.callEnabled();
+        keyWordsColorButton.getColorButton().setSelectColor(BatsLogUtil.toColor(globalService.getKeyWordDefCol()));
+        keyWordsColorButton.getColorButton().callCallback();
+        keyWordsPanel.revalidate();
+        //重置颜色配置
     }
 
 }

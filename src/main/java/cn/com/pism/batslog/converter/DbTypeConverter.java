@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author PerccyKing
  * @version 0.0.1
- * @date 2021/01/06 下午 10:12
+ * @since 2021/01/06 下午 10:12
  * @since 0.0.1
  */
 public class DbTypeConverter extends Converter<DbType> {

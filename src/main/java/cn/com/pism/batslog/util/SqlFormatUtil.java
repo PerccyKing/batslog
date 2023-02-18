@@ -356,7 +356,6 @@ public class SqlFormatUtil {
                     if (console == null) {
                         console = (ConsoleViewImpl) GlobalVar.getConsoleView(project);
                     }
-                    //当toolwindow还未实例化的时候，控制console的大小
                     // 先打印一次分隔符和‘SQL名称’
                     printSeparatorAndName(project, console, name, service);
                     console.print(console.getContentSize() + "", ConsoleViewContentType.ERROR_OUTPUT);

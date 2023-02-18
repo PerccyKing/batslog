@@ -23,15 +23,18 @@ public class ColorButton extends JButton {
     private int cbWidth;
     private int cbHeight;
 
+    transient Callback<Color> callback;
+
     public ColorButton(Color color, int cbWidth, int cbHeight, Callback<Color> callback) {
         this.cbWidth = cbWidth;
         this.cbHeight = cbHeight;
+        this.callback = callback;
         if (color != null) {
             this.selectColor = color;
         } else {
             this.selectColor = KEY_WORD_DEF_COL;
         }
-        buttonInit(color, callback);
+        buttonInit(color);
     }
 
     @SuppressWarnings("unused")
@@ -45,10 +48,11 @@ public class ColorButton extends JButton {
 
     @SuppressWarnings("unused")
     public ColorButton() {
-        buttonInit(null, color -> this.selectColor = color);
+        this.callback = color -> this.selectColor = color;
+        buttonInit(null);
     }
 
-    private void buttonInit(Color color, Callback<Color> callback) {
+    private void buttonInit(Color color) {
         setMargin(JBUI.emptyInsets());
         setFocusable(false);
         setDefaultCapable(false);
@@ -59,8 +63,8 @@ public class ColorButton extends JButton {
         addActionListener(e -> {
             Color color1 = ColorChooser.chooseColor(new JPanel(), "选择颜色", selectColor);
             if (color1 != null) {
-                selectColor = color1;
-                callback.call(selectColor);
+                this.selectColor = color1;
+                callCallback();
             }
         });
     }
@@ -91,5 +95,11 @@ public class ColorButton extends JButton {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(this.cbWidth, this.cbHeight);
+    }
+
+    public void callCallback() {
+        if (selectColor != null) {
+            this.callback.call(selectColor);
+        }
     }
 }
