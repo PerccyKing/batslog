@@ -239,6 +239,7 @@ public class ConsoleColorConfigDialog extends DialogWrapper {
         return root;
     }
 
+    @SuppressWarnings("all")
     @Override
     protected void doOKAction() {
         List<ConsoleColorConfig> configData = getColorConfigs();

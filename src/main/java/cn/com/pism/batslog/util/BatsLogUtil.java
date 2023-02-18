@@ -83,4 +83,8 @@ public class BatsLogUtil {
         SelectionModel selectionModel = editor.getSelectionModel();
         return selectionModel.getSelectedText();
     }
+
+    public static RgbColor toRgbColor(Color c) {
+        return new RgbColor(c.getRed(), c.getGreen(), c.getBlue());
+    }
 }

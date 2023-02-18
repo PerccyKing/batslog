@@ -151,7 +151,6 @@ public class SettingForm {
         parameterized.setSelected(service.getParameterized());
         setOnOffText(parameterized);
         prettyFormat.setSelected(service.getPrettyFormat());
-        tmpConfig.setPrettyFormat(service.getPrettyFormat());
         setOnOffText(prettyFormat);
         GlobalVar.setPrettyFormat(prettyFormat);
         Boolean seToUpperCase = service.getToUpperCase();
@@ -412,7 +411,28 @@ public class SettingForm {
         keyWordsColorButton.getColorButton().callCallback();
         keyWordsPanel.revalidate();
         //重置颜色配置
-        consoleColorConfigDialog.rest(globalService.getColorConfigs());
+        if (consoleColorConfigDialog != null) {
+            consoleColorConfigDialog.rest(globalService.getColorConfigs());
+        }
     }
 
+
+    public BatsLogConfig getTmpConfig() {
+        tmpConfig.setDbType(dbTypeBox.getItemAt(dbTypeBox.getSelectedIndex()));
+        tmpConfig.setEnabledKeyWordDefCol(keyWord.isSelected());
+        tmpConfig.setSqlPrefix(sqlPrefix.getText());
+        tmpConfig.setParamsPrefix(paramsPrefix.getText());
+        tmpConfig.setDesensitize(desensitize.isSelected());
+        tmpConfig.setPrettyFormat(prettyFormat.isSelected());
+        tmpConfig.setParameterized(parameterized.isSelected());
+        tmpConfig.setToUpperCase(toUpperCase.isSelected());
+        tmpConfig.setAddTimestamp(addTimestamp.isSelected());
+        tmpConfig.setTimeFormat(timestampFormat.getText());
+        tmpConfig.setStartWithProject(startWithProject.isSelected());
+        tmpConfig.setEncoding(consoleEncoding.getItemAt(consoleEncoding.getSelectedIndex()));
+        tmpConfig.setEnableMixedPrefix(enableMixedPrefix.isSelected());
+        tmpConfig.setEnabledKeyWordDefCol(keyWordsColorButton.getEnableCheckBox().isSelected());
+        tmpConfig.setKeyWordDefCol(BatsLogUtil.toRgbColor(keyWordsColorButton.getColorButton().getSelectColor()));
+        return tmpConfig;
+    }
 }
