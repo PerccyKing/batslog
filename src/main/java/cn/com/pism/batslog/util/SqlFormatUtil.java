@@ -4,6 +4,8 @@ import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.BslErrorMod;
+import cn.com.pism.batslog.settings.BatsLogConfig;
+import cn.com.pism.batslog.settings.BatsLogGlobalConfigState;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
@@ -105,7 +107,9 @@ public class SqlFormatUtil {
         List<String> paramsList = new ArrayList<>();
         List<String> nameList = new ArrayList<>();
 
-        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
+        BatsLogConfig service = Boolean.TRUE.equals(BatsLogSettingState.getInstance(project).getUseGlobalConfig()) ?
+                BatsLogGlobalConfigState.getInstance() :
+                BatsLogSettingState.getInstance(project);
 
         String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
         String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
@@ -331,9 +335,9 @@ public class SqlFormatUtil {
      * @since 2023/2/8 10:21
      */
     private static void print(Project project, Boolean printToConsole, ConsoleViewImpl console, List<String> sqlList,
-                              List<String> paramsList, List<String> nameList, BatsLogSettingState service) {
+                              List<String> paramsList, List<String> nameList, BatsLogConfig service) {
         String dbTypeStr = JdbcConstants.MYSQL.name();
-        DbType dbType = service.getDbType();
+        DbType dbType = BatsLogSettingState.getInstance(project).getDbType();
         if (!DbType.NONE.equals(dbType)) {
             dbTypeStr = dbType.getType();
         }
@@ -454,7 +458,10 @@ public class SqlFormatUtil {
     public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord, ConsoleViewContentType contentType) {
         ConsoleViewContentType keyWordContentType = ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project);
         keyWordContentType.getAttributes().setBackgroundColor(contentType.getAttributes().getBackgroundColor());
-        if (BatsLogSettingState.getInstance(project).isEnabledKeyWordDefCol()) {
+        boolean isEnabledKeyWordDefCol = Boolean.TRUE.equals(BatsLogSettingState.getInstance(project).getUseGlobalConfig()) ?
+                BatsLogGlobalConfigState.getInstance().isEnabledKeyWordDefCol() :
+                BatsLogSettingState.getInstance(project).isEnabledKeyWordDefCol();
+        if (isEnabledKeyWordDefCol) {
             consoleView.print(StringUtil.encoding(keyWord, project), keyWordContentType);
         } else {
             consoleView.print(StringUtil.encoding(keyWord, project), contentType);
@@ -501,7 +508,7 @@ public class SqlFormatUtil {
      * @author PerccyKing
      * @since 2021/04/26 下午 08:42
      */
-    private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name, BatsLogSettingState service) {
+    private static void printSeparatorAndName(Project project, ConsoleViewImpl console, String name, BatsLogConfig service) {
         console.print(StringUtil.encoding(BatsLogConstant.SEPARATOR, project), ConsoleViewContentType.ERROR_OUTPUT);
         int num = GlobalVar.getSqlNumber();
         num++;
@@ -528,7 +535,7 @@ public class SqlFormatUtil {
      * @since 2021/05/19 下午 09:29
      */
     @NotNull
-    private static SQLUtils.FormatOption getFormatOption(BatsLogSettingState service) {
+    private static SQLUtils.FormatOption getFormatOption(BatsLogConfig service) {
         SQLUtils.FormatOption formatOption = new SQLUtils.FormatOption();
         formatOption.setDesensitize(service.getDesensitize());
         formatOption.setPrettyFormat(service.getPrettyFormat());

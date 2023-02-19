@@ -69,6 +69,14 @@ public class SettingForm {
     private JComboBox<String> consoleEncoding;
     private OnOffButton enableMixedPrefix;
     private JLabel sqlPrefixTips;
+    private OnOffButton useGlobalConfig;
+    private JPanel useGlobalConfigPanel;
+    private JPanel sqlConfigPanel;
+    private JPanel consoleConfigPanel;
+    private JPanel sqlPrefixPanel;
+    private JPanel paramsPrefixPanel;
+    private JPanel startWithProjectPanel;
+    private JPanel enableMixedPrefixPanel;
 
     private BatsLogConfig service;
 
@@ -107,7 +115,7 @@ public class SettingForm {
             timeFormat = BatsLogConstant.TIME_FORMAT;
         }
         timestampFormat.setText(timeFormat);
-        addListen();
+        addListener();
         RevertAction revertSqlAction = new RevertAction(AllIcons.Actions.Rollback, SQL_PREFIX, sqlPrefix);
         revertSqlPanel.add(new ActionButton(revertSqlAction, new Presentation(), ActionPlaces.UNKNOWN, ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE));
         RevertAction revertParamsAction = new RevertAction(AllIcons.Actions.Rollback, PARAMS_PREFIX, paramsPrefix);
@@ -119,6 +127,9 @@ public class SettingForm {
             consoleColorConfigDialog = new ConsoleColorConfigDialog(project, tmpConfig);
             consoleColorConfigDialog.show();
         });
+        if (project != null) {
+            useGlobalConfigPanel.setVisible(Boolean.TRUE);
+        }
     }
 
     /**
@@ -148,11 +159,18 @@ public class SettingForm {
     private void initFormatConfig() {
         desensitize.setSelected(service.getDesensitize());
         setOnOffText(desensitize);
+
         parameterized.setSelected(service.getParameterized());
         setOnOffText(parameterized);
+
         prettyFormat.setSelected(service.getPrettyFormat());
         setOnOffText(prettyFormat);
         GlobalVar.setPrettyFormat(prettyFormat);
+
+        useGlobalConfig.setSelected(service.getUseGlobalConfig());
+        setOnOffText(useGlobalConfig);
+        showConfigPanelBy(!service.getUseGlobalConfig());
+
         Boolean seToUpperCase = service.getToUpperCase();
         if (seToUpperCase != null) {
             this.toUpperCase.setSelected(seToUpperCase);
@@ -166,6 +184,16 @@ public class SettingForm {
         setOnOffText(startWithProject);
         enableMixedPrefix.setSelected(service.getEnableMixedPrefix());
         setOnOffText(enableMixedPrefix);
+    }
+
+    private void showConfigPanelBy(Boolean useGlobalConfig) {
+        //显示或隐藏配置
+        sqlConfigPanel.setVisible(useGlobalConfig);
+        consoleConfigPanel.setVisible(useGlobalConfig);
+        sqlPrefixPanel.setVisible(useGlobalConfig);
+        paramsPrefixPanel.setVisible(useGlobalConfig);
+        startWithProjectPanel.setVisible(useGlobalConfig);
+        enableMixedPrefixPanel.setVisible(useGlobalConfig);
     }
 
     private void setOnOffText(OnOffButton offButton) {
@@ -231,7 +259,7 @@ public class SettingForm {
         dbTypeBox.setRenderer(dbTypeRender);
     }
 
-    private void addListen() {
+    private void addListener() {
         sqlPrefix.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -325,6 +353,12 @@ public class SettingForm {
             whenProject(() -> tmpConfig.setEnableMixedPrefix(isSelected),
                     () -> service.setEnableMixedPrefix(isSelected));
             sqlPrefixTips.setVisible(isSelected);
+        });
+
+        useGlobalConfig.addActionListener(ac -> {
+            boolean isSelected = !useGlobalConfig.isSelected();
+            service.setUseGlobalConfig(useGlobalConfig.isSelected());
+            showConfigPanelBy(isSelected);
         });
     }
 

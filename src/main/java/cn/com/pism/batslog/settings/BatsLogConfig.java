@@ -26,6 +26,11 @@ import static cn.com.pism.batslog.util.GlobalVar.getDefaultColorConfigs;
 @Data
 public class BatsLogConfig {
 
+    /**
+     * 如果使用全局配置，除了数据库配置，都会以全局配置优先
+     */
+    private Boolean useGlobalConfig = Boolean.FALSE;
+
 
     /**
      * 日志SQL行截取前缀
