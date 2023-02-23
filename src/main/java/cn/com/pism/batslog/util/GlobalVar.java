@@ -2,6 +2,7 @@ package cn.com.pism.batslog.util;
 
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.model.RgbColor;
+import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
 import com.intellij.execution.ui.ConsoleView;
@@ -119,7 +120,7 @@ public class GlobalVar {
     public static Map<String, ConsoleViewContentType> getKeyColorMap(Project project) {
         if (keyColorMap == null) {
             //重新获取一次颜色配置
-            BatsLogSettingState service = BatsLogSettingState.getInstance(project);
+            BatsLogConfig service = BatsLogSettingState.getInstance(project);
             List<ConsoleColorConfig> colorConfigs = service.getColorConfigs();
             //如果未做配置，添加默认颜色配置
             if (colorConfigs == null || colorConfigs.isEmpty()) {

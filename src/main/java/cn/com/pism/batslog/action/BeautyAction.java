@@ -1,16 +1,15 @@
 package cn.com.pism.batslog.action;
 
+import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Objects;
 
 /**
  * @author PerccyKing
@@ -46,12 +45,13 @@ public class BeautyAction extends ToggleAction {
         return Boolean.TRUE.equals(getService(e).getPrettyFormat());
     }
 
-    private BatsLogSettingState getService(@NotNull AnActionEvent e) {
+    private BatsLogConfig getService(@NotNull AnActionEvent e) {
         Project project1 = getProject();
         if (project1 == null) {
             project1 = e.getProject();
         }
-        return ServiceManager.getService(Objects.requireNonNull(project1), BatsLogSettingState.class);
+        assert project1 != null;
+        return BatsLogSettingState.getInstance(project1);
     }
 
     /**

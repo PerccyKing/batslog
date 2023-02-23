@@ -34,7 +34,7 @@ public class ErrorProcessDialog extends DialogWrapper {
         super(project);
         init();
         this.project = project;
-        final Dimension size = DimensionService.getInstance().getSize(ERROR_PROCESS_DIALOG_SIZE_KEY);
+        final Dimension size = DimensionService.getInstance().getSize(ERROR_PROCESS_DIALOG_SIZE_KEY, project);
         if (size != null) {
             root.setPreferredSize(size);
         }
@@ -63,7 +63,7 @@ public class ErrorProcessDialog extends DialogWrapper {
     protected void doOKAction() {
         final Dimension size = getSize();
         if (size != null) {
-            DimensionService.getInstance().setSize(ERROR_PROCESS_DIALOG_SIZE_KEY, size);
+            DimensionService.getInstance().setSize(ERROR_PROCESS_DIALOG_SIZE_KEY, size, project);
         }
         super.doOKAction();
     }

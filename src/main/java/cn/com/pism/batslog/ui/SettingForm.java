@@ -89,7 +89,7 @@ public class SettingForm {
 
     public SettingForm(Project project) {
         this.project = project;
-        this.service = project == null ? BatsLogGlobalConfigState.getInstance() : BatsLogSettingState.getInstance(project);
+        this.service = project == null ? BatsLogGlobalConfigState.getInstance() : BatsLogSettingState.getDefaultInstance(project);
 
         //初始化数据库选择
         initDbTypeBox();

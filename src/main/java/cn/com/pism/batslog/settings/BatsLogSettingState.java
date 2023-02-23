@@ -1,6 +1,9 @@
 package cn.com.pism.batslog.settings;
 
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.RoamingType;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import lombok.Data;
@@ -33,7 +36,15 @@ public class BatsLogSettingState extends BatsLogConfig implements PersistentStat
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    public static BatsLogSettingState getInstance(Project project) {
-        return ServiceManager.getService(project, BatsLogSettingState.class);
+    public static BatsLogConfig getInstance(Project project) {
+        BatsLogConfig config = project.getComponent(BatsLogSettingState.class);
+        if (Boolean.TRUE.equals(config.getUseGlobalConfig())) {
+            config = BatsLogGlobalConfigState.getInstance();
+        }
+        return config;
+    }
+
+    public static BatsLogSettingState getDefaultInstance(Project project) {
+        return project.getComponent(BatsLogSettingState.class);
     }
 }

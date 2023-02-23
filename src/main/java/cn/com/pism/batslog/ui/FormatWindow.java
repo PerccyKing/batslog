@@ -141,7 +141,7 @@ public class FormatWindow extends DialogWrapper {
         consoleView.installPopupHandler(consoleView.getActionToolbar().getActions());
         consoleBar.add(sqlConsoleToolBar.getComponent());
         sqlConsole.add(component);
-        final Dimension size = DimensionService.getInstance().getSize(SIZE_KEY);
+        final Dimension size = DimensionService.getInstance().getSize(SIZE_KEY, project);
         if (size != null) {
             root.setPreferredSize(size);
         } else {
@@ -183,7 +183,7 @@ public class FormatWindow extends DialogWrapper {
     private void storeWindowSize() {
         Dimension size = getSize();
         if (size != null) {
-            DimensionService.getInstance().setSize(SIZE_KEY, size);
+            DimensionService.getInstance().setSize(SIZE_KEY, size, project);
         }
     }
 

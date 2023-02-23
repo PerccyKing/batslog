@@ -2,7 +2,7 @@ package cn.com.pism.batslog.action;
 
 import cn.com.pism.batslog.BatsLogBundle;
 import cn.com.pism.batslog.constants.BatsLogConstant;
-import cn.com.pism.batslog.settings.BatsLogGlobalConfigState;
+import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.ui.FormatConsole;
 import cn.com.pism.batslog.ui.Notifier;
@@ -41,14 +41,8 @@ public class StartUpAction implements StartupActivity {
     public void runActivity(@NotNull Project project) {
 
         //项目默认监听状态
-        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
-        //当监听状态默认开启时，需要修改启动按钮状态，并将sql console实例化
-        Boolean useGlobalConfig = service.getUseGlobalConfig();
-        Boolean startWithProject = Boolean.FALSE;
-        if (Boolean.TRUE.equals(useGlobalConfig)) {
-            startWithProject = BatsLogGlobalConfigState.getInstance().getStartWithProject();
-        }
-        if (Boolean.TRUE.equals(startWithProject)) {
+        BatsLogConfig service = BatsLogSettingState.getInstance(project);
+        if (Boolean.TRUE.equals(service.getStartWithProject())) {
             GlobalVar.putTailStatus(project, Boolean.TRUE);
             FormatConsole formatConsole = GlobalVar.getFormatConsole(project);
             //如果console没有实例化需要做一次实例化

@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.util;
 
 import cn.com.pism.batslog.constants.BatsLogConstant;
+import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ public class StringUtil {
 
 
     public static String encoding(String str, Project project) {
-        BatsLogSettingState state = BatsLogSettingState.getInstance(project);
+        BatsLogConfig state = BatsLogSettingState.getInstance(project);
         String encoding = state.getEncoding();
         if (StringUtils.isNotBlank(encoding) && !BatsLogConstant.DEFAULT_ENCODING.equals(encoding)
                 && Charset.isSupported(encoding)) {

@@ -1,5 +1,6 @@
 package cn.com.pism.batslog.points;
 
+import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.GlobalVar;
@@ -34,7 +35,7 @@ public class BatsLogConsoleFolding extends ConsoleFolding {
         //先判断有没有开启SQL监听
         if (Boolean.TRUE.equals(BatsLogUtil.getTailStatus(project))) {
 
-            BatsLogSettingState service = BatsLogSettingState.getInstance(project);
+            BatsLogConfig service = BatsLogSettingState.getInstance(project);
 
             String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
             String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();

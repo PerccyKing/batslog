@@ -5,7 +5,6 @@ import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.BslErrorMod;
 import cn.com.pism.batslog.settings.BatsLogConfig;
-import cn.com.pism.batslog.settings.BatsLogGlobalConfigState;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.util.JdbcConstants;
@@ -107,9 +106,7 @@ public class SqlFormatUtil {
         List<String> paramsList = new ArrayList<>();
         List<String> nameList = new ArrayList<>();
 
-        BatsLogConfig service = Boolean.TRUE.equals(BatsLogSettingState.getInstance(project).getUseGlobalConfig()) ?
-                BatsLogGlobalConfigState.getInstance() :
-                BatsLogSettingState.getInstance(project);
+        BatsLogConfig service = BatsLogSettingState.getInstance(project);
 
         String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
         String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
@@ -362,7 +359,6 @@ public class SqlFormatUtil {
                     }
                     // 先打印一次分隔符和‘SQL名称’
                     printSeparatorAndName(project, console, name, service);
-                    console.print(console.getContentSize() + "", ConsoleViewContentType.ERROR_OUTPUT);
                     //打印SQL
                     printSql(formatSql, project, console);
                 } else {
@@ -458,9 +454,7 @@ public class SqlFormatUtil {
     public static void printKeyWord(ConsoleViewImpl consoleView, Project project, String keyWord, ConsoleViewContentType contentType) {
         ConsoleViewContentType keyWordContentType = ColoringUtil.getKeyWordConsoleViewContentTypeFromConfig(project);
         keyWordContentType.getAttributes().setBackgroundColor(contentType.getAttributes().getBackgroundColor());
-        boolean isEnabledKeyWordDefCol = Boolean.TRUE.equals(BatsLogSettingState.getInstance(project).getUseGlobalConfig()) ?
-                BatsLogGlobalConfigState.getInstance().isEnabledKeyWordDefCol() :
-                BatsLogSettingState.getInstance(project).isEnabledKeyWordDefCol();
+        boolean isEnabledKeyWordDefCol = BatsLogSettingState.getInstance(project).isEnabledKeyWordDefCol();
         if (isEnabledKeyWordDefCol) {
             consoleView.print(StringUtil.encoding(keyWord, project), keyWordContentType);
         } else {

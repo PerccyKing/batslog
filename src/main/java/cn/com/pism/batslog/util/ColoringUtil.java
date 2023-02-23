@@ -3,6 +3,7 @@ package cn.com.pism.batslog.util;
 import cn.com.pism.batslog.model.ConsoleColorConfig;
 import cn.com.pism.batslog.model.RgbColor;
 import cn.com.pism.batslog.model.ShowColorConfig;
+import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.markup.EffectType;
@@ -31,7 +32,7 @@ public class ColoringUtil {
 
 
     public static ConsoleViewContentType getKeyWordConsoleViewContentTypeFromConfig(Project project) {
-        BatsLogSettingState service = BatsLogSettingState.getInstance(project);
+        BatsLogConfig service = BatsLogSettingState.getInstance(project);
         Color value = BatsLogUtil.toColor(service.getKeyWordDefCol());
         TextAttributes textAttributes = new TextAttributes(value, null, null, EffectType.BOXED, Font.PLAIN);
         return new ConsoleViewContentType(project.getName() + "BatsLogKeywords", textAttributes);
