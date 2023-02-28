@@ -5,7 +5,6 @@
 
     <description><![CDATA[
 <h1>batslog</h1>
-<h3>为什么有英文：idea官方要求提供英文说明，并且必须要放在最前面</h3>
 
 <blockquote><p>Mybatis SQL format plug-in mybatis log format plug-in</p></blockquote>
 
@@ -36,9 +35,18 @@
 <blockquote><p>最近更新</p></blockquote>
 
 <ul>
-<li>OPT Plug in adapter 2022.3</li>
 
-<li>OPT 插件适配2022.3</li>
+<li>ADD Add Global Configuration</li>
+<li>FIX some bugs</li>
+<li>FIX #39 Parameters with comma (,) are supported</li>
+<li>OPT Plug in adapter 2023.1</li>
+<li>OPT Upgrade dependency and comprehensively optimize code</li>
+
+<li>ADD 添加全局配置</li>
+<li>FIX 一些bug</li>
+<li>FIX #39 支持带有逗号（,）的参数</li>
+<li>OPT 插件适配2023.1</li>
+<li>OPT 升级依赖，全面优化代码</li>
 
 </ul>
 </div>
@@ -47,7 +55,26 @@
     <change-notes>
         <![CDATA[
       <div color='red'>
-<h1>Latest</h1>
+<h1>Latest-BETA</h1>
+
+<ul>
+<li>ADD Add Global Configuration</li>
+<li>FIX some bugs</li>
+<li>FIX #39 Parameters with comma (,) are supported</li>
+<li>OPT Plug in adapter 2023.1</li>
+<li>OPT Upgrade dependency and comprehensively optimize code</li>
+
+<li>ADD 添加全局配置</li>
+<li>FIX 一些bug</li>
+<li>FIX #39 支持带有逗号（,）的参数</li>
+<li>OPT 插件适配2023.1</li>
+<li>OPT 升级依赖，全面优化代码</li>
+
+</ul>
+
+</div>
+
+<h1>22.10.28.2246-RE</h1>
 
 <ul>
 <li>OPT Plug in adapter 2022.3</li>
@@ -55,7 +82,6 @@
 <li>OPT 插件适配2022.3</li>
 
 </ul>
-</div>
 
 <h1>22.09.12.1922-RE</h1>
 
