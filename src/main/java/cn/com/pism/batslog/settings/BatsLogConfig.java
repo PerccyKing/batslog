@@ -29,7 +29,7 @@ public class BatsLogConfig {
     /**
      * 如果使用全局配置，除了数据库配置，都会以全局配置优先
      */
-    private Boolean useGlobalConfig = Boolean.FALSE;
+    private Boolean useGlobalConfig = Boolean.TRUE;
 
 
     /**

@@ -41,6 +41,11 @@ public class BatsLogGlobalConfigState extends BatsLogConfig implements Persisten
     }
 
     @Override
+    public Boolean getUseGlobalConfig() {
+        return Boolean.FALSE;
+    }
+
+    @Override
     public List<ConsoleColorConfig> getColorConfigs() {
         List<ConsoleColorConfig> colorConfigs = super.getColorConfigs();
         if (colorConfigs == null || colorConfigs.isEmpty()) {

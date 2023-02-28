@@ -13,10 +13,8 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,10 +142,7 @@ public class SqlFormatUtil {
         //提取全部的sql和params
         String[] lines = new String[0];
         if (StringUtils.isNotBlank(str)) {
-            Integer startSqlPrefixIndex = getSqlPrefixIndex(str, sqlPrefix);
-            if (startSqlPrefixIndex == null) {
-                return;
-            }
+            int startSqlPrefixIndex = StringUtils.indexOfAny(str, sqlPrefix.split(","));
             //先截断一次，从SQL_PREFIX 行开始解析
             String includeFirstLine = str.substring(0, startSqlPrefixIndex);
             String firstName = getLineName(includeFirstLine);
@@ -172,39 +167,6 @@ public class SqlFormatUtil {
             }
             nextLineIsParams = processLine(sqlList, paramsList, nameList, paramsPrefix, nextLineIsParams, currSqlPrefix, line);
         }
-    }
-
-    /**
-     * <p>
-     * 获取前缀位置
-     * </p>
-     *
-     * @param str       : 日志行
-     * @param sqlPrefix : 多个sql前缀
-     * @return {@link Integer}
-     * @author PerccyKing
-     * @since 2023/1/23 16:41
-     */
-
-    @Nullable
-    private static Integer getSqlPrefixIndex(String str, String sqlPrefix) {
-        String[] split = sqlPrefix.split(",");
-        Integer startSqlPrefixIndex = null;
-        for (String s : split) {
-            //找到SQL前缀位置
-            int i = str.indexOf(s);
-            if (startSqlPrefixIndex == null && i >= 0) {
-                //初始位置为空，并且在日志行中找到了前缀位置，将新位置赋值
-                startSqlPrefixIndex = i;
-            } else if (i >= 0) {
-                //如果找到了多个位置，取最小的前缀位置
-                startSqlPrefixIndex = NumberUtils.min(startSqlPrefixIndex, i);
-            } else {
-                //未找到前缀
-                return null;
-            }
-        }
-        return startSqlPrefixIndex;
     }
 
     /**
@@ -347,8 +309,8 @@ public class SqlFormatUtil {
             String params = paramsList.get(i);
             try {
                 //提取参数
-
                 List<Object> paramList = parseParamToList(params);
+
                 String formatSql = SQLUtils.format(sql, com.alibaba.druid.DbType.of(dbTypeStr.toLowerCase(Locale.ROOT)), paramList, formatOption);
                 if (!formatSql.endsWith(";")) {
                     formatSql = formatSql + ";";
