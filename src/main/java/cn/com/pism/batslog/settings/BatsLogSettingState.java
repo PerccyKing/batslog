@@ -8,10 +8,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+
+import static cn.com.pism.batslog.util.IntellijServiceUtil.getService;
 
 /**
  * @author PerccyKing
@@ -20,6 +23,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Slf4j
 @State(name = "BatsLogSettingState", storages = {
         @Storage(value = "BatsLog.xml", roamingType = RoamingType.DISABLED)
 })
@@ -37,7 +41,7 @@ public class BatsLogSettingState extends BatsLogConfig implements PersistentStat
     }
 
     public static BatsLogConfig getInstance(Project project) {
-        BatsLogConfig config = project.getComponent(BatsLogSettingState.class);
+        BatsLogConfig config = getService(project, BatsLogSettingState.class);
         if (Boolean.TRUE.equals(config.getUseGlobalConfig())) {
             config = BatsLogGlobalConfigState.getInstance();
         }
@@ -45,6 +49,6 @@ public class BatsLogSettingState extends BatsLogConfig implements PersistentStat
     }
 
     public static BatsLogSettingState getDefaultInstance(Project project) {
-        return project.getComponent(BatsLogSettingState.class);
+        return getService(project, BatsLogSettingState.class);
     }
 }

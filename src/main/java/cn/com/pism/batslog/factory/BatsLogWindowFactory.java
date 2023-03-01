@@ -11,7 +11,6 @@ import cn.com.pism.batslog.ui.MyConsoleViewImpl;
 import cn.com.pism.batslog.ui.SettingForm;
 import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
@@ -21,6 +20,8 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import icons.BatsLogIcons;
 import org.jetbrains.annotations.NotNull;
+
+import static cn.com.pism.batslog.util.IntellijServiceUtil.getService;
 
 
 /**
@@ -45,7 +46,7 @@ public class BatsLogWindowFactory implements ToolWindowFactory {
         boolean inBottom = ToolWindowAnchor.BOTTOM.equals(toolWindow.getAnchor());
         formatConsole.initConsoleToComponent(project, (MyConsoleViewImpl) GlobalVar.getConsoleView(project), inBottom);
         SettingForm settingForm = new SettingForm(project);
-        ContentFactory contentFactory = ApplicationManager.getApplication().getComponent(ContentFactory.class);
+        ContentFactory contentFactory = getService(null, ContentFactory.class);
         Content formatConsoleContent = contentFactory.createContent(formatConsole.getRoot(), BatsLogBundle.message("batslog.console"), false);
         Content errorListContent = contentFactory.createContent(new ErrorListPanel(project).getRoot(), BatsLogBundle.message("batslog.error"), false);
         Content settingFormContent = contentFactory.createContent(settingForm.getRoot(), BatsLogBundle.message("batslog.config"), false);

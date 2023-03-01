@@ -1,7 +1,6 @@
 package cn.com.pism.batslog.settings;
 
 import cn.com.pism.batslog.model.ConsoleColorConfig;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -15,6 +14,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import static cn.com.pism.batslog.util.GlobalVar.getDefaultColorConfigs;
+import static cn.com.pism.batslog.util.IntellijServiceUtil.getService;
 
 /**
  * @author PerccyKing
@@ -37,7 +37,7 @@ public class BatsLogGlobalConfigState extends BatsLogConfig implements Persisten
     }
 
     public static BatsLogGlobalConfigState getInstance() {
-        return ApplicationManager.getApplication().getComponent(BatsLogGlobalConfigState.class);
+        return getService(null, BatsLogGlobalConfigState.class);
     }
 
     @Override
