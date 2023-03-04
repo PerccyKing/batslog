@@ -8,7 +8,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +22,6 @@ import static cn.com.pism.batslog.util.IntellijServiceUtil.getService;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Slf4j
 @State(name = "BatsLogSettingState", storages = {
         @Storage(value = "BatsLog.xml", roamingType = RoamingType.DISABLED)
 })
