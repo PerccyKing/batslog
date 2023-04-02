@@ -4,6 +4,7 @@ import cn.com.pism.batslog.constants.BatsLogConstant;
 import cn.com.pism.batslog.constants.KeyWordsConstant;
 import cn.com.pism.batslog.enums.DbType;
 import cn.com.pism.batslog.model.BslErrorMod;
+import cn.com.pism.batslog.model.FormatIn;
 import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import com.alibaba.druid.sql.SQLUtils;
@@ -62,7 +63,7 @@ public class SqlFormatUtil {
      * @since 2023/1/23 14:14
      */
     public static void manualFormat(String str, Project project, CallBack callBack) {
-        format(str, project, Boolean.FALSE, null, callBack);
+        format(FormatIn.builder().log(str).project(project).printToConsole(Boolean.FALSE).callBack(callBack).build());
     }
 
     /**
@@ -77,49 +78,49 @@ public class SqlFormatUtil {
      * @since 2023/1/23 14:15
      */
     public static void format(String str, Project project, Boolean printToConsole) {
-        format(str, project, printToConsole, null, null);
+        format(FormatIn.builder().log(str).project(project).printToConsole(printToConsole).build());
     }
 
+    public static void format(String str,
+                              Project project,
+                              Boolean printToConsole,
+                              ConsoleViewImpl console,
+                              CallBack callBack) {
+        format(FormatIn.builder().log(str).project(project).printToConsole(printToConsole)
+                .console(console).callBack(callBack).build());
+    }
 
     /**
      * <p>
      * 格式化SQL
      * </p>
      *
-     * @param str            : 日志字符串
-     * @param project        : 项目对象
-     * @param printToConsole : 是否输出到console
-     * @param console        : console实例
-     * @param callBack       : 回调方法
+     * @param fi:格式化参数
      * @author PerccyKing
      * @since 2023/1/23 14:16
      */
-    public static void format(String str,
-                              Project project,
-                              Boolean printToConsole,
-                              ConsoleViewImpl console,
-                              CallBack callBack) {
+    public static void format(FormatIn fi) {
 
         List<String> sqlList = new ArrayList<>();
         List<String> paramsList = new ArrayList<>();
         List<String> nameList = new ArrayList<>();
 
-        BatsLogConfig service = BatsLogSettingState.getInstance(project);
+        BatsLogConfig service = BatsLogSettingState.getInstance(fi.getProject());
 
         String sqlPrefix = StringUtils.isBlank(service.getSqlPrefix()) ? SQL_PREFIX : service.getSqlPrefix();
         String paramsPrefix = StringUtils.isBlank(service.getParamsPrefix()) ? PARAMS_PREFIX : service.getParamsPrefix();
 
         //如果开启了多前缀模式，并且只有一个前缀的时候，也执行默认单前缀逻辑
         if (Boolean.TRUE.equals(service.getEnableMixedPrefix()) && sqlPrefix.split(",").length > 1) {
-            enabledMultiSqlPrefix(str, sqlList, paramsList, nameList, sqlPrefix, paramsPrefix);
+            enabledMultiSqlPrefix(fi.getLog(), sqlList, paramsList, nameList, sqlPrefix, paramsPrefix);
         } else {
-            notEnabledMultiSqlPrefix(str, sqlList, paramsList, nameList, sqlPrefix, paramsPrefix);
+            notEnabledMultiSqlPrefix(fi.getLog(), sqlList, paramsList, nameList, sqlPrefix, paramsPrefix);
         }
 
-        if (callBack != null) {
-            callBack.callback(!sqlList.isEmpty() ? sqlList.get(0) : "", !paramsList.isEmpty() ? paramsList.get(0) : "");
+        if (fi.getCallBack() != null) {
+            fi.getCallBack().callback(!sqlList.isEmpty() ? sqlList.get(0) : "", !paramsList.isEmpty() ? paramsList.get(0) : "");
         } else {
-            print(project, printToConsole, console, sqlList, paramsList, nameList, service);
+            print(fi.getProject(), fi.isPrintToConsole(), fi.getConsole(), sqlList, paramsList, nameList, service);
         }
     }
 
