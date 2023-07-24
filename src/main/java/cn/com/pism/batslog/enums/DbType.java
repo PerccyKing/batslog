@@ -33,7 +33,7 @@ public enum DbType {
     SQLITE("sqlite", JdbcConstants.SQLITE, AllIcons.Providers.Sqlite),
     POLARDB("polardb", JdbcConstants.POLARDB.name(), null),
     CLICKHOUSE("clickhouse", JdbcConstants.CLICKHOUSE.name(), AllIcons.Providers.ClickHouse),
-    TIDB("clickhouse", JdbcConstants.TIDB.name(), null),
+    TIDB("tidb", JdbcConstants.TIDB.name(), null),
     NONE("none", "none", null);
 
 
