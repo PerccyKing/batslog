@@ -475,7 +475,7 @@ public class SqlFormatUtil {
             String timeFormat = service.getTimeFormat();
             timestamp = " " + (StringUtils.isBlank(timeFormat) ? timeMillis : DateFormatUtils.format(timeMillis, timeFormat)) + " ";
         }
-        console.print(StringUtil.encoding("-- " + String.format("%04d", num), project), ColoringUtil.getNoteColor(project));
+        console.print(StringUtil.encoding("-- #" + String.format("%04d", num), project), ColoringUtil.getNoteColor(project));
         console.print(timestamp, ConsoleViewContentType.ERROR_OUTPUT);
         console.print(name + "\n", ColoringUtil.getNoteColor(project));
     }
