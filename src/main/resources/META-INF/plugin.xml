@@ -36,17 +36,9 @@
 
 <ul>
 
-<li>ADD Add Global Configuration</li>
-<li>FIX some bugs</li>
-<li>FIX #39 Parameters with comma (,) are supported</li>
-<li>OPT Plug in adapter 2023.1</li>
-<li>OPT Upgrade dependency and comprehensively optimize code</li>
+<li>OPT Plug in adapter 2023.2</li>
 
-<li>ADD 添加全局配置</li>
-<li>FIX 一些bug</li>
-<li>FIX #39 支持带有逗号（,）的参数</li>
-<li>OPT 插件适配2023.1</li>
-<li>OPT 升级依赖，全面优化代码</li>
+<li>OPT 插件适配2023.2</li>
 
 </ul>
 </div>
@@ -55,7 +47,14 @@
     <change-notes>
         <![CDATA[
       <div color='red'>
-<h1>Latest-BETA</h1>
+      <h1>Latest</h1>
+<li>OPT Plug in adapter 2023.2</li>
+
+<li>OPT 插件适配2023.2</li>
+
+</div>
+
+<h1>23.03.02.2009-RE</h1>
 
 <ul>
 <li>ADD Add Global Configuration</li>
@@ -71,8 +70,6 @@
 <li>OPT 升级依赖，全面优化代码</li>
 
 </ul>
-
-</div>
 
 <h1>22.10.28.2246-RE</h1>
 
