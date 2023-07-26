@@ -35,6 +35,8 @@ public class SqlFormatUtil {
 
     private static Set<String> keywords;
 
+    private static final String TYPE_VOID = "VOID";
+
 
     /**
      * <p>
@@ -516,6 +518,14 @@ public class SqlFormatUtil {
         if (StringUtils.isBlank(params)) {
             return new ArrayList<>();
         }
+        //【), null,】 增强
+        int nullMatches = StringUtils.countMatches(params, ", null,");
+        if (nullMatches > 0) {
+            for (int i = 0; i < nullMatches; i++) {
+                params = params.replace("), null,", String.format("), null(%s),", TYPE_VOID));
+            }
+        }
+
         String[] paramArr = params.split("\\),");
         List<Object> paramList = new ArrayList<>();
         //fix https://github.com/PerccyKing/batslog/issues/12 参数为空的时候会造成这种情况
@@ -548,6 +558,9 @@ public class SqlFormatUtil {
 
     public static Object pack(String par, String type) throws ClassNotFoundException {
         Object typeParam = null;
+        if (TYPE_VOID.equals(type)) {
+            return null;
+        }
         if (StringUtils.isBlank(type)) {
             String nullStr = "null";
             if (!nullStr.equals(par)) {
