@@ -519,7 +519,7 @@ public class SqlFormatUtil {
             return new ArrayList<>();
         }
         //【), null,】 增强
-        int nullMatches = StringUtils.countMatches(params, ", null,");
+        int nullMatches = StringUtils.countMatches(params, "null,");
         if (nullMatches > 0) {
             for (int i = 0; i < nullMatches; i++) {
                 params = params.replace("), null,", String.format("), null(%s),", TYPE_VOID));
