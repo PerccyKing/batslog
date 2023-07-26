@@ -52,7 +52,7 @@ intellij {
 }
 patchPluginXml {
     sinceBuild = '192'
-    untilBuild = '231.*'
+    untilBuild = '232.*'
 }
 
 runPluginVerifier {
