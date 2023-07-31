@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '1.2.0'
+    id "org.sonarqube" version "4.2.1.3168"
 }
 
 group 'cn.com.pism'
@@ -61,4 +62,12 @@ runPluginVerifier {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "PerccyKing_batslog"
+        property "sonar.organization", "perccyking"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
