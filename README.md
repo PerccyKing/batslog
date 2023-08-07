@@ -34,6 +34,8 @@
 
 
 ## 交流群
-<div align=center><img width="30%" src="./screenshot/chat_group.jpg" alt="群号：32782636"/></div>
+“BatsLog 沟通交流群”群的钉钉群号： 32782636
+
+![image](https://github.com/PerccyKing/batslog/assets/59950759/7159fa89-1abf-47f6-a795-4894aed57f3f)
 
 [![Stargazers over time](https://starchart.cc/PerccyKing/batslog.svg)](https://starchart.cc/PerccyKing/batslog)
