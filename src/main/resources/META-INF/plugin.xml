@@ -36,9 +36,7 @@
 
 <ul>
 
-<li>OPT Plug in adapter 2023.2</li>
-
-<li>OPT 插件适配2023.2</li>
+<li>FIX #50</li>
 
 </ul>
 </div>
@@ -48,11 +46,15 @@
         <![CDATA[
       <div color='red'>
       <h1>Latest</h1>
+<li>FIX #50</li>
+</div>
+
+<h1>23.07.26.1527-RE</h1>
+<ul>
 <li>OPT Plug in adapter 2023.2</li>
 
 <li>OPT 插件适配2023.2</li>
-
-</div>
+</ul>
 
 <h1>23.03.02.2009-RE</h1>
 
