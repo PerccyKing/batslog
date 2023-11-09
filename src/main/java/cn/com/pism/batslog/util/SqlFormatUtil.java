@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
+import java.util.function.Function;
 
 import static cn.com.pism.batslog.constants.BatsLogConstant.*;
 
@@ -36,6 +37,19 @@ public class SqlFormatUtil {
     private static Set<String> keywords;
 
     private static final String TYPE_VOID = "VOID";
+
+    private static final Map<Class<?>, Function<String, Object>> TYPE_CONVERT_MAP = new HashMap<>();
+
+    static {
+        TYPE_CONVERT_MAP.put(Integer.class, Integer::valueOf);
+        TYPE_CONVERT_MAP.put(Long.class, Long::valueOf);
+        TYPE_CONVERT_MAP.put(Double.class, Double::valueOf);
+        TYPE_CONVERT_MAP.put(Boolean.class, Boolean::valueOf);
+        TYPE_CONVERT_MAP.put(Byte.class, Byte::valueOf);
+        TYPE_CONVERT_MAP.put(Short.class, Short::valueOf);
+        TYPE_CONVERT_MAP.put(Float.class, Float::valueOf);
+        TYPE_CONVERT_MAP.put(String.class, String::valueOf);
+    }
 
 
     /**
@@ -561,6 +575,9 @@ public class SqlFormatUtil {
         if (TYPE_VOID.equals(type)) {
             return null;
         }
+        if (StringUtils.isNotBlank(type)) {
+            type = type.replace("(", "").replace(")", "");
+        }
         if (StringUtils.isBlank(type)) {
             String nullStr = "null";
             if (!nullStr.equals(par)) {
@@ -568,23 +585,7 @@ public class SqlFormatUtil {
             }
         } else if (TYPES.stream().anyMatch(type::equalsIgnoreCase)) {
             Class<?> aClass = Class.forName("java.lang." + type);
-            if (aClass == Integer.class) {
-                typeParam = Integer.valueOf(par);
-            } else if (aClass == Long.class) {
-                typeParam = Long.valueOf(par);
-            } else if (aClass == Double.class) {
-                typeParam = Double.valueOf(par);
-            } else if (aClass == Boolean.class) {
-                typeParam = Boolean.valueOf(par);
-            } else if (aClass == Byte.class) {
-                typeParam = Byte.valueOf(par);
-            } else if (aClass == Short.class) {
-                typeParam = Short.valueOf(par);
-            } else if (aClass == Float.class) {
-                typeParam = Float.valueOf(par);
-            } else {
-                typeParam = String.valueOf(par);
-            }
+            typeParam = TYPE_CONVERT_MAP.get(aClass).apply(par);
         } else {
             typeParam = par;
         }
