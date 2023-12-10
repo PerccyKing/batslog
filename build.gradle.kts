@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "cn.com.pism"
-version = "${System.getenv("CUSTOM_VERSION") ?: LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy.MM.dd.HHmm"))}-${project.findProperty("PUBLISH")}"
+version = "${project.findProperty("CUSTOM_VERSION") ?: LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy.MM.dd.HHmm"))}-${project.findProperty("PUBLISH")}"
 
 repositories {
     mavenCentral()
