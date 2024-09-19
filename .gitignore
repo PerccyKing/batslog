@@ -129,3 +129,4 @@ gradle-app.setting
 
 /.idea/
 /gradle/
+/.intellijPlatform/
