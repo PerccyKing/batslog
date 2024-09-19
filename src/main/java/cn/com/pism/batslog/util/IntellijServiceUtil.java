@@ -40,23 +40,10 @@ public class IntellijServiceUtil {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        try {
-            Class<ServiceManager> serviceManagerClass = ServiceManager.class;
-            if (project != null) {
-                getService = serviceManagerClass.getDeclaredMethod(METHOD_GET_SERVICE, Project.class, Class.class);
-                invoke = getService.invoke(null, project, serviceClass);
-            } else {
-                getService = serviceManagerClass.getDeclaredMethod(METHOD_GET_SERVICE, Class.class);
-                invoke = getService.invoke(null, serviceClass);
-            }
-            return (T) invoke;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
         if (project == null) {
-            instance = application.getComponent(serviceClass);
+            instance = application.getService(serviceClass);
         } else {
-            instance = project.getComponent(serviceClass);
+            instance = project.getService(serviceClass);
         }
         return instance;
     }

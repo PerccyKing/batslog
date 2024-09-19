@@ -130,3 +130,5 @@ gradle-app.setting
 /.idea/
 /gradle/
 /.intellijPlatform/
+/gradlew
+/gradlew.bat

@@ -3,9 +3,12 @@ package cn.com.pism.batslog.action;
 import cn.com.pism.batslog.settings.BatsLogConfig;
 import cn.com.pism.batslog.settings.BatsLogSettingState;
 import cn.com.pism.batslog.util.GlobalVar;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.project.Project;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +19,8 @@ import javax.swing.*;
  * @version 0.0.1
  * @since 2021/04/25 下午 09:47
  */
+@Setter
+@Getter
 public class BeautyAction extends ToggleAction {
 
     private Project project;
@@ -76,11 +81,8 @@ public class BeautyAction extends ToggleAction {
         GlobalVar.getPrettyFormat().setSelected(!prettyFormat);
     }
 
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return super.getActionUpdateThread();
     }
 }

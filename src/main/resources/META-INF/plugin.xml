@@ -47,6 +47,18 @@
       <div color='red'>
       <h1>Latest</h1>
 <ul>
+<li>OPT Plug in adapter 2024.3</li>
+
+<li>OPT 插件适配2024.3</li>
+</div>
+
+<h1>23.08.09.1822-RE</h1>
+</ul>
+<li>FIX #50</li>
+</ui>
+
+<h1>23.12.10.1205-RE</h1>
+<ul>
 <li>OPT Plug in adapter 2024.1</li>
 
 <li>OPT 插件适配2024.1</li>
@@ -345,6 +357,8 @@
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.json</depends>
+    <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->

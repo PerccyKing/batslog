@@ -1,6 +1,7 @@
 package cn.com.pism.batslog.ui;
 
 import com.intellij.ui.ColorChooser;
+import com.intellij.ui.ColorChooserService;
 import com.intellij.util.ui.JBUI;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,6 +62,7 @@ public class ColorButton extends JButton {
             selectColor = color;
         }
         addActionListener(e -> {
+//            Color color1 = ColorChooserService.getInstance().showDialog(new JPanel(), "选择颜色", selectColor);
             Color color1 = ColorChooser.chooseColor(new JPanel(), "选择颜色", selectColor);
             if (color1 != null) {
                 this.selectColor = color1;
