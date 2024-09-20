@@ -6,6 +6,7 @@ import cn.com.pism.batslog.util.BatsLogUtil;
 import cn.com.pism.batslog.util.GlobalVar;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -73,4 +74,8 @@ public class TailAction extends AnAction {
     }
 
 
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
+    }
 }

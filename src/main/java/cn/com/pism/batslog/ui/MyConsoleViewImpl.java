@@ -151,6 +151,11 @@ public class MyConsoleViewImpl extends ConsoleViewImpl {
             GlobalVar.setSqlNumber(0);
             myConsoleView.clear();
         }
+
+        @Override
+        public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.EDT;
+        }
     }
 
     public static class ClearAllAction extends DumbAwareAction {

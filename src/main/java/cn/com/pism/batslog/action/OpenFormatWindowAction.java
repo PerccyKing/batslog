@@ -3,6 +3,8 @@ package cn.com.pism.batslog.action;
 import cn.com.pism.batslog.ui.FormatWindow;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.WindowWrapper;
+import com.intellij.openapi.ui.WindowWrapperBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +24,9 @@ public class OpenFormatWindowAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        FormatWindow.show(e.getProject());
+        WindowWrapperBuilder windowWrapperBuilder = new WindowWrapperBuilder(WindowWrapper.Mode.FRAME, new FormatWindow(e.getProject()).getRoot());
+        windowWrapperBuilder.setProject(e.getProject());
+        windowWrapperBuilder.build().show();
     }
 
     /**

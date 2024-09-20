@@ -64,7 +64,7 @@ public class FormatWindow extends DialogWrapper {
      * @throws IllegalStateException if the dialog is invoked not on the event dispatch thread
      * @see DialogWrapper#DialogWrapper(Project, boolean)
      */
-    protected FormatWindow(@Nullable Project project) {
+    public FormatWindow(@Nullable Project project) {
         super(project);
         init();
         this.project = project;
@@ -73,7 +73,7 @@ public class FormatWindow extends DialogWrapper {
 
         initFormAction(project);
 
-        show();
+//        show();
     }
 
     private void initFormAction(@Nullable Project project) {

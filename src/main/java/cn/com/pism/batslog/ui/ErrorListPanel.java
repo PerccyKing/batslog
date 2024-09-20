@@ -113,6 +113,11 @@ public class ErrorListPanel {
             e.getPresentation().setEnabled(enabled);
         }
 
+        @Override
+        public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.EDT;
+        }
+
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -130,6 +135,11 @@ public class ErrorListPanel {
             super(text, "", icon);
             this.project = project;
             this.table = table;
+        }
+
+        @Override
+        public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.EDT;
         }
 
         @Override
@@ -186,6 +196,11 @@ public class ErrorListPanel {
             super.update(e);
             boolean enabled = table.getModel().getRowCount() > 0;
             e.getPresentation().setEnabled(enabled);
+        }
+
+        @Override
+        public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.EDT;
         }
     }
 }
