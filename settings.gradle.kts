@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Batalog"
+rootProject.name = "Batslog"
